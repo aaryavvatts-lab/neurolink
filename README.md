@@ -1,5 +1,7 @@
 # NeuroLink — decoding visual perception from human intracranial LFP
 
+**[Live results site →](https://neurolink-ecru.vercel.app)**
+
 Two people with subdural electrode arrays over occipital cortex viewed gratings and noise
 patterns for half a second at a time. This repo reconstructs what they were looking at from
 the raw voltage, and uses the same data to test a claim that is usually asserted rather than
@@ -10,7 +12,7 @@ It is not, and the reason is measurable.
 
 ---
 
-## The three findings
+## The findings
 
 **1. Decoding accuracy tracks encoder bandwidth, monotonically.**
 
@@ -29,19 +31,35 @@ lines up with exactly that ordering:
 Chance is 0.143. The EEG models are not bad models; they are the wrong instrument. Scaling
 them would not help, because the signal is filtered away before their first layer.
 
-**2. A transformer pretrained on 12 minutes of this dataset's own LFP beats the
+**2. A transformer pretrained on ~12 minutes of this dataset's own LFP beats the
 literature's hand-derived features.** ECoG-JEPA is 4.8 M parameters trained by masked
 spectrogram reconstruction on the continuous recording, with no stimulus labels and no event
 file. It reaches 0.924 against 0.895 for a feature set built directly from the published
 model of these signals — and its representational geometry matches DINOv2's roughly four
 times more closely.
 
-**3. Category decoding is near ceiling; individual-image identification is at chance, and
+**3. Contrastive alignment does not beat ridge regression — or lose to it.** Run on
+identical folds and features, the CLIP-style two-tower head lands within ±0.05 of ridge on
+2-way identification, winning for two encoders and losing for two. Worth stating plainly
+because the expectation going in was that ridge would win outright at n ≈ 175 training
+trials. It did not; the two are level. (They are also not perfectly comparable: ridge
+predicts into DINOv2's own space, while the contrastive head is scored inside a 128-d space
+trained to make matching easy.)
+
+**4. DINOv2 explains no neural variance beyond a Gabor filter bank.** Partial RSA on
+subject 1: DINOv2 given Gabor, ρ = +0.015 (*p* = 0.49); Gabor given DINOv2, ρ = +0.084
+(*p* = 0.003). For gratings and 1/f noise, a hand-built oriented-energy model of V1 captures
+the neural geometry at least as well as an 86 M-parameter self-supervised ViT. That is what
+the control was there to find out.
+
+**5. Category decoding is near ceiling; individual-image identification is at chance, and
 we can say exactly why.** Every grating in this set is at the same orientation, so within a
 condition the 30 exemplars differ in **spatial phase alone**. Decoding phase from the
 cortical surface is reliably above chance but very weak (circular *r* = 0.25, *p* = 0.007),
 which is what a phase-invariant broadband signal predicts. Within-condition top-1 retrieval
-is 0.024–0.029 against a chance level of 0.033. Overall top-5 over all 210 images looks
+is 0.024–0.029 against a chance level of 0.033. The measured noise ceiling explains why:
+broadband gamma on the most responsive electrodes replicates across repeat presentations of
+the same image at only *r* = 0.22 (95 % CI [0.11, 0.34]) for single trials. Overall top-5 over all 210 images looks
 impressive at 0.167, but that number is carried almost entirely by getting the category
 right.
 
@@ -125,6 +143,11 @@ but not a general image-reconstruction method. The pretrained EEG models are eva
 outside their design envelope — different modality, different sample rate, and a 500 ms
 response where SignalJEPA structurally requires a ≥1.5 s window; their showing here is a
 statement about fit to this problem, not about their quality on scalp EEG.
+
+## Links
+
+- Results site: <https://neurolink-ecru.vercel.app>
+- Repository: <https://github.com/aaryavvatts-lab/neurolink>
 
 ## Data
 
