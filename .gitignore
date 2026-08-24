@@ -1,0 +1,19 @@
+# Large regenerable analysis artifacts (make all rebuilds these).
+# site/public/{figures,video,stimuli,results.json} ARE committed -- the deployed
+# site is served from this repo and needs them.
+outputs/cache/
+outputs/models/
+outputs/figures/
+outputs/video/
+outputs/*.log
+
+# Environment
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# OS / tooling
+.DS_Store
+.vercel
+node_modules/

@@ -1,0 +1,104 @@
+# NeuroLink configuration — every hyperparameter lives here.
+
+paths:
+  bids_root: ".."                       # repo sits inside the BIDS root
+  outputs: "outputs"
+
+subjects:
+  sub-01: { runs: ["01"], hemi: "R" }
+  sub-02: { runs: ["01", "02"], hemi: "L" }
+
+stimuli:
+  n_images: 211
+  blank_file: "stim_211.png"
+  n_conditions: 7
+  exemplars_per_condition: 30
+  image_px: 900
+  visual_angle_deg: 25.0                # README: ~25x25 degrees
+
+preprocess:
+  line_freq: 60.0
+  notch_harmonics: 6                    # 60,120,...,360 (clipped to Nyquist)
+  notch_width: 2.0
+  reference: "car"                      # common average over good channels
+  epoch_tmin: -0.200
+  epoch_tmax:  0.700
+  baseline: [-0.200, 0.0]
+  bad_channel:
+    var_z_thresh: 4.0                   # log-variance robust z
+    line_ratio_thresh: 4.0              # 60Hz power / broadband, robust z
+    flat_thresh: 1.0e-3                   # relative to median std
+    spike_z_thresh: 5.0                 # robust z of log(max amplitude / MAD)
+
+# Spectral decomposition follows Hermes/Winawer (eLife 2019, doi:10.7554/eLife.47035),
+# the image-computable-gamma paper built on this dataset's lineage:
+#   F(x) = (beta_broadband - n*x) + beta_narrowband * G(x | mu, sigma),  x = log10(f)
+# with the 1/f slope n fixed per electrode from its own baseline spectrum, and the
+# narrowband Gaussian constrained to 30 Hz < 10^mu < 80 Hz, 0.03 < sigma < 0.08.
+features:
+  window: [0.0, 0.50]                   # stimulus-evoked window (paper: 0-500 ms)
+  baseline_window: [-0.20, 0.0]
+  welch:
+    win_s: 0.200                        # 200 ms Hann window
+    overlap_s: 0.100                    # 100 ms overlap
+  fit_range: [30.0, 200.0]              # log-log fit range
+  line_exclude_hz: [60.0, 120.0, 180.0] # line noise + harmonics
+  line_exclude_halfwidth: 5.0
+  narrowband_peak_hz: [30.0, 80.0]      # 10^mu constraint
+  narrowband_sigma_log10: [0.03, 0.08]  # sigma constraint (log10 units)
+  broadband_report: [80.0, 200.0]       # band for the simple broadband summary
+  bands:
+    alpha: [8.0, 13.0]
+    beta:  [13.0, 30.0]
+  erp_windows: [[0.0, 0.20], [0.20, 0.50]]
+
+vision:
+  dino_model: "facebook/dinov2-base"
+  dino_v3_model: "facebook/dinov3-vitl16-pretrain-lvd1689m"
+  image_sizes: [224, 518]
+  gabor:
+    n_orientations: 8
+    n_scales: 6
+    freq_lo_cpd: 0.08
+    freq_hi_cpd: 2.6
+
+ecogjepa:
+  sfreq_target: 512.0                   # resample for STFT; keeps 0-256 Hz
+  nperseg: 256
+  noverlap: 192
+  fmax: 200.0
+  n_freq_bins: 64                       # log-spaced bins 2-200 Hz
+  patch_time: 4                         # frames per patch
+  d_model: 256
+  n_layers: 6
+  n_heads: 8
+  mask_ratio: 0.40
+  dropout: 0.0
+  epochs: 30
+  steps_per_epoch: 140
+  batch_size: 128
+  lr: 3.0e-4
+  weight_decay: 0.01
+  seed: 0
+
+align:
+  ridge_alphas_log: [-2, 8, 41]         # logspace(-2, 8, 41)
+  n_pca_neural: 128
+  contrastive:
+    dim: 128
+    hidden: 512
+    dropout: 0.5
+    weight_decay: 0.05
+    lr: 1.0e-3
+    epochs: 300
+    patience: 40
+  n_folds: 6
+  n_permutations: 1000
+  n_bootstrap: 2000
+  seed: 0
+
+braintv:
+  window_s: 0.50
+  hop_s: 0.05
+  fps: 20
+  max_seconds: 60                       # keep the mp4 small; 0 = full recording

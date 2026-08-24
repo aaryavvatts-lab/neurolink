@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeuroLink — Decoding Vision from Intracranial Brain Signals</title>
+<meta name="description" content="Reconstructing what a person was looking at from raw ECoG, and a head-to-head test of whether EEG foundation models can see what electrodes on the brain actually record.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<button class="toggle" id="themeToggle" aria-label="Toggle colour theme">◐</button>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Intracranial EEG · Visual decoding · OpenNeuro ds005953</div>
+    <h1>Reading vision out of the human brain</h1>
+    <p class="lede">
+      Two people had electrode arrays placed directly on their visual cortex. They watched
+      gratings and noise patterns flash by, half a second each. This is what we could
+      recover from the raw voltage — and, just as importantly, what we could not.
+    </p>
+    <div class="split">
+      <div class="claim">
+        <h4>The pitch</h4>
+        <p>Embed videos with Meta's DINO. Embed brain signals with a brain foundation model.
+           Align the two latent spaces. Reconstruct what the person was seeing.</p>
+      </div>
+      <div class="reality">
+        <h4>What the data actually allows</h4>
+        <p>The stimuli are static gratings and noise, not video. And every off-the-shelf
+           "brain foundation model" is trained on scalp EEG, which cannot represent the
+           frequency band where this signal lives. Both facts became the experiment.</p>
+      </div>
+    </div>
+    <div class="stats" id="heroStats"></div>
+  </div>
+</header>
+
+<section id="data">
+  <div class="wrap">
+    <div class="section-num">01 — THE RECORDING</div>
+    <h2>What was measured</h2>
+    <p id="dataPara"></p>
+    <div class="table-scroll"><table id="subjTable"></table></div>
+    <h3>The stimulus set, measured from pixels rather than trusted from a label</h3>
+    <p>Every image was characterised by its own Fourier statistics, so the reconstruction
+       target is verifiable rather than assumed. The recovered parameters match the
+       dataset's documentation exactly.</p>
+    <div class="table-scroll"><table id="stimTable"></table></div>
+    <div class="callout" id="phaseNote"></div>
+  </div>
+</section>
+
+<section id="replication">
+  <div class="wrap">
+    <div class="section-num">02 — THE GATE</div>
+    <h2>First, does the preprocessing reproduce known physiology?</h2>
+    <p>
+      Before any decoding claim is worth making, the pipeline has to recover an effect that
+      is already established. Hermes et al. showed that gratings drive a <em>narrowband
+      gamma oscillation</em> — a genuine spectral bump around 30–80 Hz — while noise patterns
+      drive broadband elevation with no peak at all. If our preprocessing cannot see that,
+      nothing downstream is trustworthy.
+    </p>
+    <figure id="spectraFig"></figure>
+    <div class="callout" id="replNote"></div>
+  </div>
+</section>
+
+<section id="encoders">
+  <div class="wrap">
+    <div class="section-num">03 — THE EXPERIMENT</div>
+    <h2>Three ways to encode a brain signal</h2>
+    <p>
+      The brief calls for a "brain foundation model." We ran three families head to head,
+      each mapped into DINOv2's image space by cross-validated ridge regression, and let
+      the comparison be the result.
+    </p>
+    <div class="table-scroll"><table id="encoderTable"></table></div>
+    <figure id="encFig"></figure>
+    <div class="callout warn" id="bandwidthNote"></div>
+    <h3>Where the confusions fall</h3>
+    <figure id="confusionFig"></figure>
+  </div>
+</section>
+
+<section id="limits">
+  <div class="wrap">
+    <div class="section-num">04 — THE CEILING</div>
+    <h2>Category, yes. Individual image, barely.</h2>
+    <p>
+      Overall retrieval numbers flatter a decoder: getting the <em>condition</em> right
+      already narrows 210 candidates to 30. The honest test restricts the candidate pool to
+      same-condition exemplars, which differ only in spatial phase.
+    </p>
+    <div class="table-scroll"><table id="withinTable"></table></div>
+    <div class="callout" id="phaseFinding"></div>
+    <h3>Continuous stimulus parameters, decoded</h3>
+    <figure id="paramsFig"></figure>
+  </div>
+</section>
+
+<section id="recon">
+  <div class="wrap">
+    <div class="section-num">05 — RECONSTRUCTION</div>
+    <h2>Re-rendering what they saw</h2>
+    <p>
+      Rather than hallucinate pixels with a generative model that 210 trials cannot
+      constrain, we decode the stimulus's generative parameters — spatial frequency, noise
+      exponent, contrast, phase — and re-render the image from those numbers. Every pixel
+      below traces back to a decoded value.
+    </p>
+    <figure id="galleryFig"></figure>
+    <div class="gallery" id="galleryGrid"></div>
+  </div>
+</section>
+
+<section id="braintv">
+  <div class="wrap">
+    <div class="section-num">06 — BRAIN TV</div>
+    <h2>Decoding the recording continuously</h2>
+    <p id="braintvPara"></p>
+    <div id="braintvHolder"></div>
+  </div>
+</section>
+
+<section id="anatomy">
+  <div class="wrap">
+    <div class="section-num">07 — ANATOMY</div>
+    <h2>Where the signal lives</h2>
+    <p>
+      A decoder can be right for the wrong reasons. If the information is genuinely visual,
+      the informative electrodes should sit over early visual cortex rather than scatter
+      across the array. Each electrode is coloured by its own cross-validated accuracy when
+      used <em>alone</em>.
+    </p>
+    <div class="brains" id="brainFigs"></div>
+    <figure id="electrodeProfileFig"></figure>
+    <div class="callout" id="anatNote"></div>
+  </div>
+</section>
+
+<section id="explorer">
+  <div class="wrap">
+    <div class="section-num">08 — EXPLORER</div>
+    <h2>Trial by trial</h2>
+    <p>Pick any held-out trial and see the image presented, the parameters decoded from the
+       brain, and the reconstruction rendered from them.</p>
+    <div class="explorer">
+      <div class="controls">
+        <label>Subject <select id="expSub"></select></label>
+        <label>Condition <select id="expCond"></select></label>
+        <button id="expPrev">‹ Prev</button>
+        <button id="expNext">Next ›</button>
+        <button id="expRandom">Random</button>
+      </div>
+      <div class="trialview" id="expView"></div>
+    </div>
+  </div>
+</section>
+
+<section id="methods">
+  <div class="wrap">
+    <div class="section-num">09 — METHODS</div>
+    <h2>How this was done</h2>
+    <div id="methodsBody"></div>
+    <h3>Limitations</h3>
+    <ul id="limitations"></ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Data.</strong> OpenNeuro <span class="mono" id="dsdoi"></span> — Hermes, Miller,
+      Wandell &amp; Winawer. Released CC0. This project is an independent reanalysis.</p>
+    <h3>References</h3>
+    <ul class="refs">
+      <li>Hermes D, Miller KJ, Wandell BA, Winawer J (2015). Stimulus dependence of gamma
+        oscillations in human visual cortex. <em>Cerebral Cortex</em> 25(9):2951–9.</li>
+      <li>Hermes D, Petridou N, Kay KN, Winawer J (2019). An image-computable model for the
+        stimulus selectivity of gamma oscillations. <em>eLife</em> 8:e47035.</li>
+      <li>Oquab M et al. (2023). DINOv2: Learning robust visual features without supervision.</li>
+      <li>Wang C et al. (2023). BrainBERT: Self-supervised representation learning for
+        intracranial recordings. <em>ICLR</em>.</li>
+      <li>Guetschel P et al. (2024). Signal-JEPA: self-supervised pretraining for EEG.</li>
+    </ul>
+    <p id="builtline"></p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
