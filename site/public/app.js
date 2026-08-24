@@ -189,6 +189,24 @@ function encoderSection() {
       `and cannot represent the 70–200 Hz broadband gamma this task depends on.`;
   }
 
+  const CN = R.contrastive;
+  if (CN) {
+    const rows = [];
+    for (const [sub, encs] of Object.entries(CN.subjects)) {
+      for (const [enc, r] of Object.entries(encs)) {
+        const dr = r.contrastive.two_way - r.ridge.two_way;
+        rows.push([sub, r.label,
+          fmt(r.ridge.two_way), fmt(r.contrastive.two_way),
+          el("td", { class: dr > 0 ? "win" : "chance" },
+             (dr >= 0 ? "+" : "") + fmt(dr)),
+          fmt(r.ridge.top5, 3), fmt(r.contrastive.top5, 3)]);
+      }
+    }
+    $("contrastiveTable").replaceChildren(...table(
+      ["Subject", "Encoder", "Ridge 2-way", "Contrastive 2-way", "Δ",
+       "Ridge top-5", "Contrastive top-5"], rows).childNodes);
+  }
+
   const cf = Object.keys(fg).filter((k) => k.startsWith("confusion_"));
   if (cf.length) $("confusionFig").replaceChildren(figImg(
     "figures/" + fg[cf[0]],

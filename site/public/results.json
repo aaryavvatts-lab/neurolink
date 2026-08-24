@@ -1,0 +1,4054 @@
+{
+  "dataset": {
+    "name": "OpenNeuro ds005953 (Hermes et al.)",
+    "doi": "10.18112/openneuro.ds005953.v1.0.0",
+    "subjects": {
+      "sub-01": {
+        "runs": [
+          "01"
+        ],
+        "hemi": "R",
+        "sfreq": 3051.9999755840004,
+        "n_good_channels": 110,
+        "n_bad_channels": 8,
+        "trials_per_run": 210
+      },
+      "sub-02": {
+        "runs": [
+          "01",
+          "02"
+        ],
+        "hemi": "L",
+        "sfreq": 1525.9999877920002,
+        "n_good_channels": 61,
+        "n_bad_channels": 35,
+        "trials_per_run": 210
+      }
+    },
+    "n_images": 211,
+    "visual_angle_deg": 25.0,
+    "stimulus_duration_s": 0.5,
+    "conditions": {
+      "1": "noise k/f^0",
+      "2": "noise k/f^2",
+      "3": "noise k/f^4",
+      "4": "grating 0.16 cpd",
+      "5": "grating 0.32 cpd",
+      "6": "grating 0.64 cpd",
+      "7": "grating 1.28 cpd",
+      "8": "blank"
+    }
+  },
+  "figures": {
+    "spectra_sub-01": "spectra_sub-01.png",
+    "spectra_sub-02": "spectra_sub-02.png",
+    "encoders_condition": "encoders_condition.png",
+    "encoders_twoway": "encoders_twoway.png",
+    "confusion_sub-01": "confusion_sub-01.png",
+    "confusion_sub-02": "confusion_sub-02.png",
+    "params_sub-01": "params_sub-01.png",
+    "gallery_sub-01": "gallery_sub-01.png",
+    "params_sub-02": "params_sub-02.png",
+    "gallery_sub-02": "gallery_sub-02.png",
+    "jepa_all": "jepa_all.png",
+    "electrodes_sub-01": "electrodes_sub-01.png",
+    "brain_sub-01_posterior": "brain_sub-01_posterior.png",
+    "brain_sub-01_lateral": "brain_sub-01_lateral.png",
+    "brain_sub-01_ventral": "brain_sub-01_ventral.png",
+    "electrodes_sub-02": "electrodes_sub-02.png",
+    "brain_sub-02_posterior": "brain_sub-02_posterior.png",
+    "brain_sub-02_lateral": "brain_sub-02_lateral.png",
+    "brain_sub-02_ventral": "brain_sub-02_ventral.png"
+  },
+  "condition_labels": {
+    "1": "noise k/f^0",
+    "2": "noise k/f^2",
+    "3": "noise k/f^4",
+    "4": "grating 0.16 cpd",
+    "5": "grating 0.32 cpd",
+    "6": "grating 0.64 cpd",
+    "7": "grating 1.28 cpd",
+    "8": "blank"
+  },
+  "encoder_labels": {
+    "spectral": "Spectral (Hermes)",
+    "ecogjepa_all": "ECoG-JEPA (ours)",
+    "ecogjepa_sub-02": "ECoG-JEPA (sub-02 only)",
+    "signal_jepa": "SignalJEPA (EEG)",
+    "cbramod": "CBraMod (EEG)"
+  },
+  "encoder_family": {
+    "spectral": "A: hand-crafted",
+    "ecogjepa_all": "C: self-pretrained on this ECoG",
+    "ecogjepa_sub-02": "C: self-pretrained on this ECoG",
+    "signal_jepa": "B: off-the-shelf EEG foundation model",
+    "cbramod": "B: off-the-shelf EEG foundation model"
+  },
+  "stimulus_parameters": [
+    {
+      "condition": 1,
+      "label": "noise k/f^0",
+      "n": 30,
+      "spatial_freq_cpd": 0.4546666666666667,
+      "noise_exponent": -0.01673228473047104,
+      "rms_contrast": 0.052841304774643084,
+      "orient_concentration": 0.09498090464497476,
+      "phase_sd_rad": 1.3743438817251379,
+      "orientation_sd_deg": 50.22475987375352
+    },
+    {
+      "condition": 2,
+      "label": "noise k/f^2",
+      "n": 30,
+      "spatial_freq_cpd": 0.046666666666666676,
+      "noise_exponent": 1.957406026928305,
+      "rms_contrast": 0.10133035778023175,
+      "orient_concentration": 0.23305727554759226,
+      "phase_sd_rad": 2.092722780872484,
+      "orientation_sd_deg": 49.95748843179162
+    },
+    {
+      "condition": 3,
+      "label": "noise k/f^4",
+      "n": 30,
+      "spatial_freq_cpd": 0.04133333333333334,
+      "noise_exponent": 3.770704592856669,
+      "rms_contrast": 0.1991381099911179,
+      "orient_concentration": 0.2574528988990947,
+      "phase_sd_rad": 2.0602117446050316,
+      "orientation_sd_deg": 61.8217828357064
+    },
+    {
+      "condition": 4,
+      "label": "grating 0.16 cpd",
+      "n": 30,
+      "spatial_freq_cpd": 0.16000000000000003,
+      "noise_exponent": 2.323706960262037,
+      "rms_contrast": 0.4950070026627952,
+      "orient_concentration": 0.9583002638542857,
+      "phase_sd_rad": 1.1183494299788657,
+      "orientation_sd_deg": 0.0
+    },
+    {
+      "condition": 5,
+      "label": "grating 0.32 cpd",
+      "n": 30,
+      "spatial_freq_cpd": 0.32000000000000006,
+      "noise_exponent": 2.2371756676744172,
+      "rms_contrast": 0.4919365814532403,
+      "orient_concentration": 0.9895412553764084,
+      "phase_sd_rad": 0.9050647491193744,
+      "orientation_sd_deg": 0.0
+    },
+    {
+      "condition": 6,
+      "label": "grating 0.64 cpd",
+      "n": 30,
+      "spatial_freq_cpd": 0.6400000000000001,
+      "noise_exponent": 1.555540435575538,
+      "rms_contrast": 0.4856622868878914,
+      "orient_concentration": 0.9973847768242324,
+      "phase_sd_rad": 1.4947181324487915,
+      "orientation_sd_deg": 0.0
+    },
+    {
+      "condition": 7,
+      "label": "grating 1.28 cpd",
+      "n": 30,
+      "spatial_freq_cpd": 1.2800000000000002,
+      "noise_exponent": 1.3776155334730864,
+      "rms_contrast": 0.47283980967411166,
+      "orient_concentration": 0.9993458774559468,
+      "phase_sd_rad": 1.5962138421309249,
+      "orientation_sd_deg": 0.0
+    }
+  ],
+  "alignment": {
+    "config": {
+      "n_folds": 6,
+      "n_permutations": 1000
+    },
+    "subjects": {
+      "sub-01": {
+        "n_trials": 210,
+        "n_channels": 110,
+        "encoders": {
+          "spectral": {
+            "dim": 880,
+            "label": "Spectral (Hermes)",
+            "family": "A: hand-crafted",
+            "condition": {
+              "accuracy": 0.8952380952380953,
+              "p": 0.000999000999000999,
+              "null_mean": 0.1443047619047619,
+              "ci": [
+                0.8523809523809524,
+                0.9380952380952381
+              ],
+              "confusion": [
+                [
+                  30,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  30,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0,
+                  29,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  27,
+                  3,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  6,
+                  21,
+                  2,
+                  1
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  3,
+                  23,
+                  4
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  2,
+                  28
+                ]
+              ]
+            },
+            "spaces": {
+              "dino224": {
+                "two_way": 0.8961494645705171,
+                "top1": 0.01904761904761905,
+                "top5": 0.11904761904761904,
+                "top10": 0.2714285714285714,
+                "median_rank": 17.5,
+                "n_candidates": 210,
+                "percentile_rank": 0.8966279334700388,
+                "within_condition": {
+                  "top1": 0.02857142857142857,
+                  "top5": 0.14285714285714285,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.513136288998358,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.49970277967646387,
+                "top5_null_mean": 0.023714285714285716,
+                "rsa": {
+                  "rho": 0.1430954374307667,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0014193022650533383,
+                  "null_sd": 0.022225810049962713,
+                  "n_stimuli": 210
+                }
+              },
+              "dino518": {
+                "two_way": 0.9123718386876282,
+                "top1": 0.02857142857142857,
+                "top5": 0.16666666666666666,
+                "top10": 0.2714285714285714,
+                "median_rank": 18.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.9128047391205286,
+                "within_condition": {
+                  "top1": 0.0380952380952381,
+                  "top5": 0.19523809523809524,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.4947454844006568,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.49926315789473685,
+                "top5_null_mean": 0.022619047619047622,
+                "rsa": {
+                  "rho": 0.15913108848360324,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.001157895594405809,
+                  "null_sd": 0.021555047358996368,
+                  "n_stimuli": 210
+                }
+              },
+              "gabor": {
+                "two_way": 0.7577808156755526,
+                "top1": 0.01904761904761905,
+                "top5": 0.0761904761904762,
+                "top10": 0.1619047619047619,
+                "median_rank": 25.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.7582592845750741,
+                "within_condition": {
+                  "top1": 0.023809523809523808,
+                  "top5": 0.10476190476190476,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.4200328407224958,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.4982783094098883,
+                "top5_null_mean": 0.023047619047619046,
+                "rsa": {
+                  "rho": 0.16733893767604593,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.00146608141772364,
+                  "null_sd": 0.030131850934998334,
+                  "n_stimuli": 210
+                }
+              }
+            }
+          },
+          "ecogjepa_all": {
+            "dim": 28160,
+            "label": "ECoG-JEPA (ours)",
+            "family": "C: self-pretrained on this ECoG",
+            "condition": {
+              "accuracy": 0.9238095238095239,
+              "p": 0.000999000999000999,
+              "null_mean": 0.14402857142857142,
+              "ci": [
+                0.8857142857142857,
+                0.9571428571428572
+              ],
+              "confusion": [
+                [
+                  30,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  30,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  30,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  30,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  26,
+                  4,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  4,
+                  21,
+                  5
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  3,
+                  27
+                ]
+              ]
+            },
+            "spaces": {
+              "dino224": {
+                "two_way": 0.896308954203691,
+                "top1": 0.014285714285714285,
+                "top5": 0.13333333333333333,
+                "top10": 0.2857142857142857,
+                "median_rank": 18.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.8967874231032126,
+                "within_condition": {
+                  "top1": 0.023809523809523808,
+                  "top5": 0.16666666666666666,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5167487684729064,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.500043062200957,
+                "top5_null_mean": 0.02342857142857143,
+                "rsa": {
+                  "rho": 0.6459255343747722,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0002548938969281612,
+                  "null_sd": 0.01609620880395267,
+                  "n_stimuli": 210
+                }
+              },
+              "dino518": {
+                "two_way": 0.9151970836181362,
+                "top1": 0.01904761904761905,
+                "top5": 0.1619047619047619,
+                "top10": 0.3047619047619048,
+                "median_rank": 16.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.915561631351105,
+                "within_condition": {
+                  "top1": 0.023809523809523808,
+                  "top5": 0.19047619047619047,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5175697865353038,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.4999231032125769,
+                "top5_null_mean": 0.02307142857142857,
+                "rsa": {
+                  "rho": 0.6627114019426599,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0001855244191215149,
+                  "null_sd": 0.015424156373905724,
+                  "n_stimuli": 210
+                }
+              },
+              "gabor": {
+                "two_way": 0.8026657552973343,
+                "top1": 0.01904761904761905,
+                "top5": 0.09047619047619047,
+                "top10": 0.2,
+                "median_rank": 23.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.8031670084301663,
+                "within_condition": {
+                  "top1": 0.023809523809523808,
+                  "top5": 0.10476190476190476,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.43875205254515603,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.49796958304853045,
+                "top5_null_mean": 0.02392857142857143,
+                "rsa": {
+                  "rho": 0.5603214690483242,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0005630375642313003,
+                  "null_sd": 0.020612655298266218,
+                  "n_stimuli": 210
+                }
+              }
+            }
+          },
+          "signal_jepa": {
+            "dim": 7040,
+            "label": "SignalJEPA (EEG)",
+            "family": "B: off-the-shelf EEG foundation model",
+            "condition": {
+              "accuracy": 0.7238095238095238,
+              "p": 0.000999000999000999,
+              "null_mean": 0.14436190476190477,
+              "ci": [
+                0.6619047619047619,
+                0.7857142857142857
+              ],
+              "confusion": [
+                [
+                  26,
+                  2,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  26,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  2,
+                  24,
+                  0,
+                  1,
+                  1,
+                  1
+                ],
+                [
+                  1,
+                  0,
+                  0,
+                  21,
+                  5,
+                  3,
+                  0
+                ],
+                [
+                  0,
+                  1,
+                  0,
+                  10,
+                  14,
+                  3,
+                  2
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  1,
+                  4,
+                  17,
+                  8
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  6,
+                  24
+                ]
+              ]
+            },
+            "spaces": {
+              "dino224": {
+                "two_way": 0.835315561631351,
+                "top1": 0.014285714285714285,
+                "top5": 0.1,
+                "top10": 0.23809523809523808,
+                "median_rank": 21.5,
+                "n_candidates": 210,
+                "percentile_rank": 0.8356573251310093,
+                "within_condition": {
+                  "top1": 0.0380952380952381,
+                  "top5": 0.17142857142857143,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5164203612479474,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.4988621553884711,
+                "top5_null_mean": 0.024452380952380955,
+                "rsa": {
+                  "rho": 0.24986971048757056,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0012931063930661812,
+                  "null_sd": 0.016779415308642895,
+                  "n_stimuli": 210
+                }
+              },
+              "dino518": {
+                "two_way": 0.8420369104579631,
+                "top1": 0.01904761904761905,
+                "top5": 0.11904761904761904,
+                "top10": 0.2,
+                "median_rank": 23.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.842447026657553,
+                "within_condition": {
+                  "top1": 0.03333333333333333,
+                  "top5": 0.17142857142857143,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.49211822660098514,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.4988017771701982,
+                "top5_null_mean": 0.023428571428571424,
+                "rsa": {
+                  "rho": 0.26057220668533043,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0010961665802833895,
+                  "null_sd": 0.016233482609878454,
+                  "n_stimuli": 210
+                }
+              },
+              "gabor": {
+                "two_way": 0.6291410344041923,
+                "top1": 0.009523809523809525,
+                "top5": 0.06190476190476191,
+                "top10": 0.10476190476190476,
+                "median_rank": 54.5,
+                "n_candidates": 210,
+                "percentile_rank": 0.6296195033037139,
+                "within_condition": {
+                  "top1": 0.023809523809523808,
+                  "top5": 0.13333333333333333,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.4504105090311987,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.49895249487354754,
+                "top5_null_mean": 0.023785714285714285,
+                "rsa": {
+                  "rho": 0.2563062063768181,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0013036715889843593,
+                  "null_sd": 0.021876435025937627,
+                  "n_stimuli": 210
+                }
+              }
+            }
+          },
+          "cbramod": {
+            "dim": 22000,
+            "label": "CBraMod (EEG)",
+            "family": "B: off-the-shelf EEG foundation model",
+            "condition": {
+              "accuracy": 0.861904761904762,
+              "p": 0.000999000999000999,
+              "null_mean": 0.14423809523809525,
+              "ci": [
+                0.8142857142857143,
+                0.9095238095238095
+              ],
+              "confusion": [
+                [
+                  28,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  28,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0,
+                  29,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  1,
+                  26,
+                  3,
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  3,
+                  19,
+                  8,
+                  0
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  4,
+                  22,
+                  4
+                ],
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  29
+                ]
+              ]
+            },
+            "spaces": {
+              "dino224": {
+                "two_way": 0.8936887673729779,
+                "top1": 0.004761904761904762,
+                "top5": 0.12380952380952381,
+                "top10": 0.2857142857142857,
+                "median_rank": 18.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.8940077466393256,
+                "within_condition": {
+                  "top1": 0.014285714285714285,
+                  "top5": 0.1523809523809524,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5182266009852217,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.4997388926862611,
+                "top5_null_mean": 0.02345238095238095,
+                "rsa": {
+                  "rho": 0.41199052956538657,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0010065629397634148,
+                  "null_sd": 0.02078226845069565,
+                  "n_stimuli": 210
+                }
+              },
+              "dino518": {
+                "two_way": 0.9084529505582137,
+                "top1": 0.02857142857142857,
+                "top5": 0.12857142857142856,
+                "top10": 0.3,
+                "median_rank": 17.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.9088174982911825,
+                "within_condition": {
+                  "top1": 0.03333333333333333,
+                  "top5": 0.15714285714285714,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5149425287356322,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.49973877876509454,
+                "top5_null_mean": 0.02373809523809524,
+                "rsa": {
+                  "rho": 0.41792669807618543,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.000995897373945196,
+                  "null_sd": 0.020152834466590372,
+                  "n_stimuli": 210
+                }
+              },
+              "gabor": {
+                "two_way": 0.7855092276144908,
+                "top1": 0.014285714285714285,
+                "top5": 0.12380952380952381,
+                "top10": 0.23333333333333334,
+                "median_rank": 23.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.7860788334472545,
+                "within_condition": {
+                  "top1": 0.03333333333333333,
+                  "top5": 0.1523809523809524,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.4717569786535304,
+                  "mean_pool": 30.0,
+                  "n_trials": 210
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.49799498746867166,
+                "top5_null_mean": 0.022976190476190473,
+                "rsa": {
+                  "rho": 0.34514542720752783,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0010181800935098696,
+                  "null_sd": 0.02759877705524386,
+                  "n_stimuli": 210
+                }
+              }
+            }
+          }
+        },
+        "chance": {
+          "two_way": 0.5,
+          "condition_acc": 0.14285714285714285,
+          "top1": 0.004761904761904762,
+          "top5": 0.023809523809523808
+        },
+        "partial_rsa": {
+          "dino_given_gabor": {
+            "rho_partial": 0.015425155781222421,
+            "p": 0.4915084915084915,
+            "n_stimuli": 210
+          },
+          "gabor_given_dino": {
+            "rho_partial": 0.08397117165599532,
+            "p": 0.002997002997002997,
+            "n_stimuli": 210
+          }
+        }
+      },
+      "sub-02": {
+        "n_trials": 420,
+        "n_channels": 61,
+        "encoders": {
+          "spectral": {
+            "dim": 488,
+            "label": "Spectral (Hermes)",
+            "family": "A: hand-crafted",
+            "condition": {
+              "accuracy": 0.32142857142857145,
+              "p": 0.000999000999000999,
+              "null_mean": 0.14273095238095238,
+              "ci": [
+                0.27380952380952384,
+                0.36666666666666664
+              ],
+              "confusion": [
+                [
+                  16,
+                  17,
+                  9,
+                  6,
+                  4,
+                  2,
+                  6
+                ],
+                [
+                  16,
+                  20,
+                  2,
+                  11,
+                  9,
+                  1,
+                  1
+                ],
+                [
+                  6,
+                  6,
+                  45,
+                  0,
+                  1,
+                  2,
+                  0
+                ],
+                [
+                  8,
+                  5,
+                  6,
+                  13,
+                  14,
+                  5,
+                  9
+                ],
+                [
+                  2,
+                  8,
+                  0,
+                  15,
+                  12,
+                  11,
+                  12
+                ],
+                [
+                  4,
+                  1,
+                  2,
+                  9,
+                  15,
+                  17,
+                  12
+                ],
+                [
+                  4,
+                  3,
+                  0,
+                  13,
+                  11,
+                  17,
+                  12
+                ]
+              ]
+            },
+            "spaces": {
+              "dino224": {
+                "two_way": 0.6576315490396636,
+                "top1": 0.011904761904761904,
+                "top5": 0.05476190476190476,
+                "top10": 0.09523809523809523,
+                "median_rank": 61.5,
+                "n_candidates": 210,
+                "percentile_rank": 0.6596946912736386,
+                "within_condition": {
+                  "top1": 0.05,
+                  "top5": 0.16428571428571428,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5066502463054188,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.49779509035117625,
+                "top5_null_mean": 0.023964285714285712,
+                "rsa": {
+                  "rho": -0.004301154400065884,
+                  "p": 0.7702297702297702,
+                  "null_mean": -0.00028034734406860446,
+                  "null_sd": 0.015792537683369155,
+                  "n_stimuli": 210
+                }
+              },
+              "dino518": {
+                "two_way": 0.6628707807705421,
+                "top1": 0.014285714285714285,
+                "top5": 0.05714285714285714,
+                "top10": 0.11666666666666667,
+                "median_rank": 58.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.6648894964684439,
+                "within_condition": {
+                  "top1": 0.0380952380952381,
+                  "top5": 0.1595238095238095,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.49729064039408855,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.4976893965223321,
+                "top5_null_mean": 0.02327380952380952,
+                "rsa": {
+                  "rho": -0.00467055358986912,
+                  "p": 0.7622377622377622,
+                  "null_mean": -0.0004531513338930764,
+                  "null_sd": 0.015522356702557026,
+                  "n_stimuli": 210
+                }
+              },
+              "gabor": {
+                "two_way": 0.559722695760882,
+                "top1": 0.004761904761904762,
+                "top5": 0.02857142857142857,
+                "top10": 0.05714285714285714,
+                "median_rank": 90.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.561494645705172,
+                "within_condition": {
+                  "top1": 0.047619047619047616,
+                  "top5": 0.1595238095238095,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.485303776683087,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.2736318407960199,
+                "two_way_null_mean": 0.49795033526537114,
+                "top5_null_mean": 0.023023809523809523,
+                "rsa": {
+                  "rho": -0.01801493873421922,
+                  "p": 0.38161838161838163,
+                  "null_mean": -0.00011310382062087405,
+                  "null_sd": 0.020762013356047326,
+                  "n_stimuli": 210
+                }
+              }
+            }
+          },
+          "ecogjepa_all": {
+            "dim": 15616,
+            "label": "ECoG-JEPA (ours)",
+            "family": "C: self-pretrained on this ECoG",
+            "condition": {
+              "accuracy": 0.4238095238095238,
+              "p": 0.000999000999000999,
+              "null_mean": 0.14293571428571428,
+              "ci": [
+                0.3761904761904762,
+                0.4714285714285714
+              ],
+              "confusion": [
+                [
+                  18,
+                  21,
+                  8,
+                  3,
+                  5,
+                  3,
+                  2
+                ],
+                [
+                  16,
+                  26,
+                  6,
+                  6,
+                  5,
+                  1,
+                  0
+                ],
+                [
+                  4,
+                  5,
+                  51,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                [
+                  5,
+                  5,
+                  6,
+                  17,
+                  18,
+                  5,
+                  4
+                ],
+                [
+                  1,
+                  5,
+                  0,
+                  19,
+                  17,
+                  11,
+                  7
+                ],
+                [
+                  1,
+                  1,
+                  2,
+                  6,
+                  7,
+                  22,
+                  21
+                ],
+                [
+                  0,
+                  2,
+                  0,
+                  4,
+                  4,
+                  23,
+                  27
+                ]
+              ]
+            },
+            "spaces": {
+              "dino224": {
+                "two_way": 0.692328673712922,
+                "top1": 0.016666666666666666,
+                "top5": 0.05476190476190476,
+                "top10": 0.11666666666666667,
+                "median_rank": 56.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.6944178628389155,
+                "within_condition": {
+                  "top1": 0.04523809523809524,
+                  "top5": 0.14523809523809525,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.48472906403940896,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.4982361063757245,
+                "top5_null_mean": 0.02361904761904762,
+                "rsa": {
+                  "rho": 0.25366047364311006,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0019159722518697557,
+                  "null_sd": 0.029061818693708816,
+                  "n_stimuli": 210
+                }
+              },
+              "dino518": {
+                "two_way": 0.6967155358563473,
+                "top1": 0.004761904761904762,
+                "top5": 0.06666666666666667,
+                "top10": 0.15,
+                "median_rank": 49.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.6988721804511278,
+                "within_condition": {
+                  "top1": 0.030952380952380953,
+                  "top5": 0.1619047619047619,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.504351395730706,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.4983169110126151,
+                "top5_null_mean": 0.023047619047619046,
+                "rsa": {
+                  "rho": 0.224377399810545,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.001463761280506312,
+                  "null_sd": 0.028148576968606277,
+                  "n_stimuli": 210
+                }
+              },
+              "gabor": {
+                "two_way": 0.5857370155699512,
+                "top1": 0.002380952380952381,
+                "top5": 0.02857142857142857,
+                "top10": 0.05952380952380952,
+                "median_rank": 74.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.5875484164957849,
+                "within_condition": {
+                  "top1": 0.04285714285714286,
+                  "top5": 0.15714285714285714,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.4935960591133005,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.25870646766169153,
+                "two_way_null_mean": 0.49815791567223544,
+                "top5_null_mean": 0.023285714285714285,
+                "rsa": {
+                  "rho": 0.2748193310738855,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.0021625456794382002,
+                  "null_sd": 0.03934267779350372,
+                  "n_stimuli": 210
+                }
+              }
+            }
+          },
+          "signal_jepa": {
+            "dim": 3904,
+            "label": "SignalJEPA (EEG)",
+            "family": "B: off-the-shelf EEG foundation model",
+            "condition": {
+              "accuracy": 0.2523809523809524,
+              "p": 0.000999000999000999,
+              "null_mean": 0.14278333333333332,
+              "ci": [
+                0.21428571428571427,
+                0.29523809523809524
+              ],
+              "confusion": [
+                [
+                  12,
+                  17,
+                  9,
+                  8,
+                  5,
+                  3,
+                  6
+                ],
+                [
+                  11,
+                  18,
+                  15,
+                  4,
+                  4,
+                  5,
+                  3
+                ],
+                [
+                  10,
+                  8,
+                  22,
+                  12,
+                  3,
+                  2,
+                  3
+                ],
+                [
+                  8,
+                  5,
+                  7,
+                  13,
+                  14,
+                  5,
+                  8
+                ],
+                [
+                  8,
+                  1,
+                  3,
+                  13,
+                  8,
+                  14,
+                  13
+                ],
+                [
+                  6,
+                  2,
+                  4,
+                  12,
+                  13,
+                  17,
+                  6
+                ],
+                [
+                  5,
+                  2,
+                  2,
+                  9,
+                  17,
+                  9,
+                  16
+                ]
+              ]
+            },
+            "spaces": {
+              "dino224": {
+                "two_way": 0.580327309921582,
+                "top1": 0.004761904761904762,
+                "top5": 0.030952380952380953,
+                "top10": 0.06666666666666667,
+                "median_rank": 81.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.5820802005012531,
+                "within_condition": {
+                  "top1": 0.04047619047619048,
+                  "top5": 0.16904761904761906,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5064039408866995,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.15422885572139303,
+                "two_way_null_mean": 0.4978408910103421,
+                "top5_null_mean": 0.02386904761904762,
+                "rsa": {
+                  "rho": 0.0933116929570541,
+                  "p": 0.000999000999000999,
+                  "null_mean": -0.0002468855958849305,
+                  "null_sd": 0.014063096965077827,
+                  "n_stimuli": 210
+                }
+              },
+              "dino518": {
+                "two_way": 0.5813501534265257,
+                "top1": 0.007142857142857143,
+                "top5": 0.03571428571428571,
+                "top10": 0.06904761904761905,
+                "median_rank": 80.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.5831852358168148,
+                "within_condition": {
+                  "top1": 0.0380952380952381,
+                  "top5": 0.16428571428571428,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5014778325123153,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.06965174129353234,
+                "two_way_null_mean": 0.4980589839754518,
+                "top5_null_mean": 0.023678571428571427,
+                "rsa": {
+                  "rho": 0.0919338965042771,
+                  "p": 0.000999000999000999,
+                  "null_mean": -7.155797925870808e-05,
+                  "null_sd": 0.01378268954266684,
+                  "n_stimuli": 210
+                }
+              },
+              "gabor": {
+                "two_way": 0.5118536197295147,
+                "top1": 0.004761904761904762,
+                "top5": 0.02619047619047619,
+                "top10": 0.05,
+                "median_rank": 100.5,
+                "n_candidates": 210,
+                "percentile_rank": 0.5135110503531557,
+                "within_condition": {
+                  "top1": 0.04047619047619048,
+                  "top5": 0.16428571428571428,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.4945812807881774,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.3681592039800995,
+                "two_way_null_mean": 0.4986109216956472,
+                "top5_null_mean": 0.022809523809523807,
+                "rsa": {
+                  "rho": 0.09714681689504999,
+                  "p": 0.000999000999000999,
+                  "null_mean": 0.00027816139254707874,
+                  "null_sd": 0.018414695987483805,
+                  "n_stimuli": 210
+                }
+              }
+            }
+          },
+          "cbramod": {
+            "dim": 12200,
+            "label": "CBraMod (EEG)",
+            "family": "B: off-the-shelf EEG foundation model",
+            "condition": {
+              "accuracy": 0.35,
+              "p": 0.000999000999000999,
+              "null_mean": 0.14290714285714284,
+              "ci": [
+                0.3047619047619048,
+                0.3952380952380952
+              ],
+              "confusion": [
+                [
+                  21,
+                  10,
+                  16,
+                  2,
+                  6,
+                  2,
+                  3
+                ],
+                [
+                  12,
+                  20,
+                  11,
+                  7,
+                  3,
+                  2,
+                  5
+                ],
+                [
+                  10,
+                  16,
+                  26,
+                  6,
+                  2,
+                  0,
+                  0
+                ],
+                [
+                  4,
+                  3,
+                  9,
+                  16,
+                  17,
+                  6,
+                  5
+                ],
+                [
+                  6,
+                  3,
+                  1,
+                  15,
+                  18,
+                  4,
+                  13
+                ],
+                [
+                  0,
+                  3,
+                  2,
+                  9,
+                  9,
+                  26,
+                  11
+                ],
+                [
+                  2,
+                  3,
+                  0,
+                  5,
+                  9,
+                  21,
+                  20
+                ]
+              ]
+            },
+            "spaces": {
+              "dino224": {
+                "two_way": 0.6863507216729174,
+                "top1": 0.009523809523809525,
+                "top5": 0.06904761904761905,
+                "top10": 0.1261904761904762,
+                "median_rank": 56.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.6884597858282069,
+                "within_condition": {
+                  "top1": 0.0380952380952381,
+                  "top5": 0.16428571428571428,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5038587848932676,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.4988152630980794,
+                "top5_null_mean": 0.023690476190476192,
+                "rsa": {
+                  "rho": 0.30811309554926847,
+                  "p": 0.000999000999000999,
+                  "null_mean": -0.0007923808394394474,
+                  "null_sd": 0.0229653321661608,
+                  "n_stimuli": 210
+                }
+              },
+              "dino518": {
+                "two_way": 0.6914422093419706,
+                "top1": 0.011904761904761904,
+                "top5": 0.05714285714285714,
+                "top10": 0.11666666666666667,
+                "median_rank": 53.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.6934267486899066,
+                "within_condition": {
+                  "top1": 0.02857142857142857,
+                  "top5": 0.1595238095238095,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.5034482758620689,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.004975124378109453,
+                "two_way_null_mean": 0.498593476531424,
+                "top5_null_mean": 0.02461904761904762,
+                "rsa": {
+                  "rho": 0.28037968506072536,
+                  "p": 0.000999000999000999,
+                  "null_mean": -0.0007319257387442159,
+                  "null_sd": 0.022491898003080307,
+                  "n_stimuli": 210
+                }
+              },
+              "gabor": {
+                "two_way": 0.5808841913853847,
+                "top1": 0.002380952380952381,
+                "top5": 0.0380952380952381,
+                "top10": 0.07857142857142857,
+                "median_rank": 76.0,
+                "n_candidates": 210,
+                "percentile_rank": 0.582740943267259,
+                "within_condition": {
+                  "top1": 0.04047619047619048,
+                  "top5": 0.1619047619047619,
+                  "chance_top1": 0.033333333333333326,
+                  "chance_top5": 0.16666666666666666,
+                  "percentile_rank": 0.4925287356321839,
+                  "mean_pool": 30.0,
+                  "n_trials": 420
+                },
+                "two_way_p": 0.004975124378109453,
+                "top5_p": 0.05472636815920398,
+                "two_way_null_mean": 0.4987423002613934,
+                "top5_null_mean": 0.023690476190476192,
+                "rsa": {
+                  "rho": 0.2673626683949645,
+                  "p": 0.000999000999000999,
+                  "null_mean": -0.0014374365498461459,
+                  "null_sd": 0.03138348330188434,
+                  "n_stimuli": 210
+                }
+              }
+            }
+          }
+        },
+        "chance": {
+          "two_way": 0.5,
+          "condition_acc": 0.14285714285714285,
+          "top1": 0.004761904761904762,
+          "top5": 0.023809523809523808
+        },
+        "partial_rsa": {
+          "dino_given_gabor": {
+            "rho_partial": 0.019194240598795098,
+            "p": 0.2057942057942058,
+            "n_stimuli": 210
+          },
+          "gabor_given_dino": {
+            "rho_partial": -0.022781528190440024,
+            "p": 0.25574425574425574,
+            "n_stimuli": 210
+          }
+        }
+      }
+    },
+    "cross_subject": {},
+    "encoder_labels": {
+      "spectral": "Spectral (Hermes)",
+      "ecogjepa_all": "ECoG-JEPA (ours)",
+      "ecogjepa_sub-02": "ECoG-JEPA (sub-02 only)",
+      "signal_jepa": "SignalJEPA (EEG)",
+      "cbramod": "CBraMod (EEG)"
+    },
+    "encoder_family": {
+      "spectral": "A: hand-crafted",
+      "ecogjepa_all": "C: self-pretrained on this ECoG",
+      "ecogjepa_sub-02": "C: self-pretrained on this ECoG",
+      "signal_jepa": "B: off-the-shelf EEG foundation model",
+      "cbramod": "B: off-the-shelf EEG foundation model"
+    },
+    "noise_ceiling": {
+      "spectral": {
+        "mean_r": 0.016750043258070946,
+        "ci_lo": -0.013510393910109997,
+        "ci_hi": 0.047653939574956894,
+        "n_stimuli": 210
+      },
+      "ecogjepa_all": {
+        "mean_r": 0.01625339314341545,
+        "ci_lo": 0.0032831013668328524,
+        "ci_hi": 0.029267437756061554,
+        "n_stimuli": 210
+      },
+      "signal_jepa": {
+        "mean_r": 0.006984994746744633,
+        "ci_lo": -0.0036984803155064583,
+        "ci_hi": 0.017790760844945908,
+        "n_stimuli": 210
+      },
+      "cbramod": {
+        "mean_r": 0.050201188772916794,
+        "ci_lo": 0.018820976838469505,
+        "ci_hi": 0.07851431518793106,
+        "n_stimuli": 210
+      }
+    },
+    "noise_ceiling_physiological": {
+      "subject": "sub-02",
+      "n_stimuli": 210,
+      "n_electrodes": 10,
+      "definition": "Pearson r between run-01 and run-02 single-trial responses to the same image, on the most visually driven electrodes",
+      "features": {
+        "broadband": {
+          "r": 0.22056472301483154,
+          "p": 0.0012957496801391244,
+          "ci": [
+            0.10541469603776932,
+            0.340117484331131
+          ],
+          "median_per_electrode_r": 0.11057206988334656,
+          "max_per_electrode_r": 0.3289142847061157
+        },
+        "gamma_amp": {
+          "r": 0.15286485850811005,
+          "p": 0.026757726445794106,
+          "ci": [
+            -0.003963617607951164,
+            0.2981700003147125
+          ],
+          "median_per_electrode_r": 0.04613976925611496,
+          "max_per_electrode_r": 0.5313736200332642
+        },
+        "alpha": {
+          "r": -0.03137293830513954,
+          "p": 0.6512442827224731,
+          "ci": [
+            -0.16578154265880585,
+            0.09519243985414505
+          ],
+          "median_per_electrode_r": 0.03835931420326233,
+          "max_per_electrode_r": 0.09034772217273712
+        }
+      }
+    },
+    "noise_ceiling_note": "The full-feature noise ceiling is an unweighted pattern correlation and is biased toward zero by uninformative dimensions; the physiological version is the interpretable one."
+  },
+  "reconstruction": {
+    "encoder": "ecogjepa_all",
+    "subjects": {
+      "sub-01": {
+        "scores": {
+          "all": {
+            "log_spatial_freq": {
+              "r": 0.8999668376844201,
+              "p": 0.000999000999000999,
+              "n": 210
+            },
+            "noise_exponent": {
+              "r": 0.9002616798802098,
+              "p": 0.000999000999000999,
+              "n": 210
+            },
+            "rms_contrast": {
+              "r": 0.983952321930211,
+              "p": 0.000999000999000999,
+              "n": 210
+            },
+            "orient_concentration": {
+              "r": 0.9683076050777177,
+              "p": 0.000999000999000999,
+              "n": 210
+            },
+            "phase_rad": {
+              "circular_r": 0.25573906874950136,
+              "p": 0.001998001998001998,
+              "n": 210
+            }
+          },
+          "gratings_only": {
+            "log_spatial_freq": {
+              "r": 0.9392642470624046,
+              "p": 0.000999000999000999,
+              "n": 120
+            },
+            "noise_exponent": {
+              "r": 0.8552705074486404,
+              "p": 0.000999000999000999,
+              "n": 120
+            },
+            "rms_contrast": {
+              "r": -0.09568977417303202,
+              "p": 0.3026973026973027,
+              "n": 120
+            },
+            "orient_concentration": {
+              "r": 0.7234256615285202,
+              "p": 0.000999000999000999,
+              "n": 120
+            },
+            "phase_rad": {
+              "circular_r": 0.38932167902058634,
+              "p": 0.000999000999000999,
+              "n": 120
+            }
+          },
+          "noise_only": {
+            "log_spatial_freq": {
+              "r": 0.7380799269909146,
+              "p": 0.000999000999000999,
+              "n": 90
+            },
+            "noise_exponent": {
+              "r": 0.9523376513339418,
+              "p": 0.000999000999000999,
+              "n": 90
+            },
+            "rms_contrast": {
+              "r": 0.8394564334986321,
+              "p": 0.000999000999000999,
+              "n": 90
+            },
+            "orient_concentration": {
+              "r": 0.39879466982328876,
+              "p": 0.000999000999000999,
+              "n": 90
+            },
+            "phase_rad": {
+              "circular_r": -0.3735928232304155,
+              "p": 0.000999000999000999,
+              "n": 90
+            }
+          }
+        },
+        "gallery": {
+          "best": [
+            {
+              "trial": 65,
+              "stim_id": 119,
+              "true_condition": 4,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.15963757898712794,
+                "phase_rad": -1.457487225209589,
+                "contrast": 0.4621811509132385,
+                "condition": 4
+              },
+              "recon_png": "recon_sub-01_119.png"
+            },
+            {
+              "trial": 70,
+              "stim_id": 170,
+              "true_condition": 6,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.6419232074981207,
+                "phase_rad": -1.6068359285692486,
+                "contrast": 0.4932817816734314,
+                "condition": 6
+              },
+              "recon_png": "recon_sub-01_170.png"
+            },
+            {
+              "trial": 3,
+              "stim_id": 145,
+              "true_condition": 5,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.32174521188873206,
+                "phase_rad": -1.5804826447316855,
+                "contrast": 0.5,
+                "condition": 5
+              },
+              "recon_png": "recon_sub-01_145.png"
+            },
+            {
+              "trial": 103,
+              "stim_id": 117,
+              "true_condition": 4,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.16111641508308608,
+                "phase_rad": -1.3116432904486532,
+                "contrast": 0.43635523319244385,
+                "condition": 4
+              },
+              "recon_png": "recon_sub-01_117.png"
+            },
+            {
+              "trial": 127,
+              "stim_id": 157,
+              "true_condition": 6,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.6446131650947081,
+                "phase_rad": -1.397600028869639,
+                "contrast": 0.4916972815990448,
+                "condition": 6
+              },
+              "recon_png": "recon_sub-01_157.png"
+            },
+            {
+              "trial": 122,
+              "stim_id": 130,
+              "true_condition": 5,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.32354222535288274,
+                "phase_rad": -1.9148371575777132,
+                "contrast": 0.49334681034088135,
+                "condition": 5
+              },
+              "recon_png": "recon_sub-01_130.png"
+            }
+          ],
+          "median": [
+            {
+              "trial": 63,
+              "stim_id": 182,
+              "true_condition": 7,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.9391561118453976,
+                "phase_rad": -1.8963273898854738,
+                "contrast": 0.4957226514816284,
+                "condition": 7
+              },
+              "recon_png": "recon_sub-01_182.png"
+            },
+            {
+              "trial": 34,
+              "stim_id": 177,
+              "true_condition": 6,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.4674818533581342,
+                "phase_rad": -1.8741453124051932,
+                "contrast": 0.4780641198158264,
+                "condition": 6
+              },
+              "recon_png": "recon_sub-01_177.png"
+            },
+            {
+              "trial": 72,
+              "stim_id": 133,
+              "true_condition": 5,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.23371184051605437,
+                "phase_rad": -1.7951307556857654,
+                "contrast": 0.48357129096984863,
+                "condition": 5
+              },
+              "recon_png": "recon_sub-01_133.png"
+            },
+            {
+              "trial": 125,
+              "stim_id": 191,
+              "true_condition": 7,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.9339337122563677,
+                "phase_rad": -1.791807507842999,
+                "contrast": 0.4810299873352051,
+                "condition": 7
+              },
+              "recon_png": "recon_sub-01_191.png"
+            },
+            {
+              "trial": 124,
+              "stim_id": 78,
+              "true_condition": 3,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.9937644004821777,
+                "contrast": 0.21661923825740814,
+                "condition": 3
+              },
+              "recon_png": "recon_sub-01_78.png"
+            },
+            {
+              "trial": 196,
+              "stim_id": 200,
+              "true_condition": 7,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.9338493752601312,
+                "phase_rad": -1.7347745794651244,
+                "contrast": 0.45332130789756775,
+                "condition": 7
+              },
+              "recon_png": "recon_sub-01_200.png"
+            }
+          ],
+          "worst": [
+            {
+              "trial": 118,
+              "stim_id": 10,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 0.5673893690109253,
+                "contrast": 0.03660362958908081,
+                "condition": 1
+              },
+              "recon_png": "recon_sub-01_10.png"
+            },
+            {
+              "trial": 119,
+              "stim_id": 24,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 0.8296329975128174,
+                "contrast": 0.05813077092170715,
+                "condition": 1
+              },
+              "recon_png": "recon_sub-01_24.png"
+            },
+            {
+              "trial": 37,
+              "stim_id": 30,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 0.8564306497573853,
+                "contrast": 0.06684145331382751,
+                "condition": 1
+              },
+              "recon_png": "recon_sub-01_30.png"
+            },
+            {
+              "trial": 184,
+              "stim_id": 19,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 1.1011909246444702,
+                "contrast": 0.19056664407253265,
+                "condition": 1
+              },
+              "recon_png": "recon_sub-01_19.png"
+            },
+            {
+              "trial": 71,
+              "stim_id": 13,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 0.8263143301010132,
+                "contrast": 0.05317986011505127,
+                "condition": 1
+              },
+              "recon_png": "recon_sub-01_13.png"
+            },
+            {
+              "trial": 155,
+              "stim_id": 25,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 0.7226763963699341,
+                "contrast": 0.0682385265827179,
+                "condition": 1
+              },
+              "recon_png": "recon_sub-01_25.png"
+            }
+          ]
+        },
+        "cols": [
+          "log_spatial_freq",
+          "noise_exponent",
+          "rms_contrast",
+          "orient_concentration",
+          "phase_sin",
+          "phase_cos"
+        ],
+        "n_trials": 210
+      },
+      "sub-02": {
+        "scores": {
+          "all": {
+            "log_spatial_freq": {
+              "r": 0.7124475246682425,
+              "p": 0.000999000999000999,
+              "n": 420
+            },
+            "noise_exponent": {
+              "r": 0.46352031720083287,
+              "p": 0.000999000999000999,
+              "n": 420
+            },
+            "rms_contrast": {
+              "r": 0.7395459933254148,
+              "p": 0.000999000999000999,
+              "n": 420
+            },
+            "orient_concentration": {
+              "r": 0.7802525887103271,
+              "p": 0.000999000999000999,
+              "n": 420
+            },
+            "phase_rad": {
+              "circular_r": -0.014092007355625373,
+              "p": 0.7812187812187812,
+              "n": 420
+            }
+          },
+          "gratings_only": {
+            "log_spatial_freq": {
+              "r": 0.6145856180801657,
+              "p": 0.000999000999000999,
+              "n": 240
+            },
+            "noise_exponent": {
+              "r": 0.1979759505330561,
+              "p": 0.004995004995004995,
+              "n": 240
+            },
+            "rms_contrast": {
+              "r": -0.4075233715703306,
+              "p": 0.000999000999000999,
+              "n": 240
+            },
+            "orient_concentration": {
+              "r": 0.4951198851457272,
+              "p": 0.000999000999000999,
+              "n": 240
+            },
+            "phase_rad": {
+              "circular_r": -0.029429840701291714,
+              "p": 0.6613386613386614,
+              "n": 240
+            }
+          },
+          "noise_only": {
+            "log_spatial_freq": {
+              "r": 0.280360601236895,
+              "p": 0.000999000999000999,
+              "n": 180
+            },
+            "noise_exponent": {
+              "r": 0.6116021497632238,
+              "p": 0.000999000999000999,
+              "n": 180
+            },
+            "rms_contrast": {
+              "r": -0.36921204432797694,
+              "p": 0.000999000999000999,
+              "n": 180
+            },
+            "orient_concentration": {
+              "r": -0.13534209970830396,
+              "p": 0.07292707292707293,
+              "n": 180
+            },
+            "phase_rad": {
+              "circular_r": 0.0319920801427096,
+              "p": 0.6683316683316683,
+              "n": 180
+            }
+          }
+        },
+        "gallery": {
+          "best": [
+            {
+              "trial": 248,
+              "stim_id": 171,
+              "true_condition": 6,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.6396239010471754,
+                "phase_rad": -1.6011625137348051,
+                "contrast": 0.5,
+                "condition": 7
+              },
+              "recon_png": "recon_sub-02_171.png"
+            },
+            {
+              "trial": 81,
+              "stim_id": 106,
+              "true_condition": 4,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.1382522583007812,
+                "contrast": 0.2144179493188858,
+                "condition": 3
+              },
+              "recon_png": "recon_sub-02_106.png"
+            },
+            {
+              "trial": 221,
+              "stim_id": 93,
+              "true_condition": 4,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.109847068786621,
+                "contrast": 0.35010775923728943,
+                "condition": 2
+              },
+              "recon_png": "recon_sub-02_93.png"
+            },
+            {
+              "trial": 234,
+              "stim_id": 8,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 1.9139289855957031,
+                "contrast": 0.20942828059196472,
+                "condition": 2
+              },
+              "recon_png": "recon_sub-02_8.png"
+            },
+            {
+              "trial": 132,
+              "stim_id": 126,
+              "true_condition": 5,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.31709052964741613,
+                "phase_rad": -1.7360917718754731,
+                "contrast": 0.45946168899536133,
+                "condition": 4
+              },
+              "recon_png": "recon_sub-02_126.png"
+            },
+            {
+              "trial": 141,
+              "stim_id": 142,
+              "true_condition": 5,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.32402068178261634,
+                "phase_rad": -1.5632169994341132,
+                "contrast": 0.35533764958381653,
+                "condition": 6
+              },
+              "recon_png": "recon_sub-02_142.png"
+            }
+          ],
+          "median": [
+            {
+              "trial": 257,
+              "stim_id": 80,
+              "true_condition": 3,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.77117657661438,
+                "contrast": 0.24744144082069397,
+                "condition": 3
+              },
+              "recon_png": "recon_sub-02_80.png"
+            },
+            {
+              "trial": 321,
+              "stim_id": 100,
+              "true_condition": 4,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.3026842849364129,
+                "phase_rad": -1.786912612146899,
+                "contrast": 0.3612062931060791,
+                "condition": 5
+              },
+              "recon_png": "recon_sub-02_100.png"
+            },
+            {
+              "trial": 375,
+              "stim_id": 61,
+              "true_condition": 3,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.9798927307128906,
+                "contrast": 0.24656426906585693,
+                "condition": 3
+              },
+              "recon_png": "recon_sub-02_61.png"
+            },
+            {
+              "trial": 158,
+              "stim_id": 164,
+              "true_condition": 6,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.33618696472986714,
+                "phase_rad": -1.6562004400004957,
+                "contrast": 0.40053489804267883,
+                "condition": 6
+              },
+              "recon_png": "recon_sub-02_164.png"
+            },
+            {
+              "trial": 152,
+              "stim_id": 76,
+              "true_condition": 3,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.9107651710510254,
+                "contrast": 0.2641119360923767,
+                "condition": 3
+              },
+              "recon_png": "recon_sub-02_76.png"
+            },
+            {
+              "trial": 334,
+              "stim_id": 78,
+              "true_condition": 3,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.7498373985290527,
+                "contrast": 0.23042689263820648,
+                "condition": 3
+              },
+              "recon_png": "recon_sub-02_78.png"
+            }
+          ],
+          "worst": [
+            {
+              "trial": 281,
+              "stim_id": 13,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 1.5500226020812988,
+                "contrast": 0.2037840038537979,
+                "condition": 2
+              },
+              "recon_png": "recon_sub-02_13.png"
+            },
+            {
+              "trial": 207,
+              "stim_id": 11,
+              "true_condition": 1,
+              "info": {
+                "kind": "grating",
+                "spatial_freq_cpd": 0.4080360932408048,
+                "phase_rad": -1.6515354970400413,
+                "contrast": 0.31928205490112305,
+                "condition": 7
+              },
+              "recon_png": "recon_sub-02_11.png"
+            },
+            {
+              "trial": 155,
+              "stim_id": 25,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 1.7257860898971558,
+                "contrast": 0.32486239075660706,
+                "condition": 1
+              },
+              "recon_png": "recon_sub-02_25.png"
+            },
+            {
+              "trial": 358,
+              "stim_id": 15,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.9911975860595703,
+                "contrast": 0.15233848989009857,
+                "condition": 3
+              },
+              "recon_png": "recon_sub-02_15.png"
+            },
+            {
+              "trial": 365,
+              "stim_id": 25,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.3131461143493652,
+                "contrast": 0.27575933933258057,
+                "condition": 3
+              },
+              "recon_png": "recon_sub-02_25.png"
+            },
+            {
+              "trial": 247,
+              "stim_id": 30,
+              "true_condition": 1,
+              "info": {
+                "kind": "noise",
+                "noise_exponent": 2.7382712364196777,
+                "contrast": 0.1912824958562851,
+                "condition": 3
+              },
+              "recon_png": "recon_sub-02_30.png"
+            }
+          ]
+        },
+        "cols": [
+          "log_spatial_freq",
+          "noise_exponent",
+          "rms_contrast",
+          "orient_concentration",
+          "phase_sin",
+          "phase_cos"
+        ],
+        "n_trials": 420
+      }
+    }
+  },
+  "electrodes": {
+    "sub-01": {
+      "ch_names": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "14",
+        "15",
+        "16",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "53",
+        "54",
+        "55",
+        "56",
+        "57",
+        "58",
+        "59",
+        "60",
+        "61",
+        "62",
+        "63",
+        "64",
+        "65",
+        "66",
+        "67",
+        "68",
+        "69",
+        "70",
+        "71",
+        "72",
+        "73",
+        "74",
+        "75",
+        "76",
+        "78",
+        "79",
+        "80",
+        "82",
+        "83",
+        "84",
+        "85",
+        "86",
+        "87",
+        "88",
+        "89",
+        "90",
+        "91",
+        "92",
+        "93",
+        "94",
+        "96",
+        "97",
+        "98",
+        "99",
+        "100",
+        "101",
+        "102",
+        "103",
+        "104",
+        "105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "110",
+        "111",
+        "112",
+        "113",
+        "114",
+        "115",
+        "117"
+      ],
+      "coords_mm": [
+        [
+          19.0,
+          -39.0,
+          -16.0
+        ],
+        [
+          23.0,
+          -40.0,
+          -19.0
+        ],
+        [
+          27.0,
+          -42.0,
+          -21.0
+        ],
+        [
+          31.0,
+          -44.0,
+          -23.0
+        ],
+        [
+          35.0,
+          -45.0,
+          -25.0
+        ],
+        [
+          39.0,
+          -46.0,
+          -26.0
+        ],
+        [
+          44.0,
+          -49.0,
+          -27.0
+        ],
+        [
+          50.0,
+          -50.0,
+          -29.0
+        ],
+        [
+          21.0,
+          -34.0,
+          -19.0
+        ],
+        [
+          24.0,
+          -36.0,
+          -21.0
+        ],
+        [
+          26.0,
+          -37.0,
+          -22.0
+        ],
+        [
+          31.0,
+          -39.0,
+          -24.0
+        ],
+        [
+          41.0,
+          -41.0,
+          -28.0
+        ],
+        [
+          45.0,
+          -43.0,
+          -29.0
+        ],
+        [
+          51.0,
+          -45.0,
+          -31.0
+        ],
+        [
+          22.0,
+          -30.0,
+          -21.0
+        ],
+        [
+          25.0,
+          -30.0,
+          -24.0
+        ],
+        [
+          30.0,
+          -32.0,
+          -26.0
+        ],
+        [
+          34.0,
+          -32.0,
+          -28.0
+        ],
+        [
+          39.0,
+          -33.0,
+          -29.0
+        ],
+        [
+          43.0,
+          -34.0,
+          -30.0
+        ],
+        [
+          48.0,
+          -35.0,
+          -31.0
+        ],
+        [
+          21.0,
+          -23.0,
+          -13.0
+        ],
+        [
+          22.0,
+          -25.0,
+          -23.0
+        ],
+        [
+          25.0,
+          -26.0,
+          -26.0
+        ],
+        [
+          29.0,
+          -28.0,
+          -27.0
+        ],
+        [
+          34.0,
+          -28.0,
+          -29.0
+        ],
+        [
+          39.0,
+          -29.0,
+          -30.0
+        ],
+        [
+          44.0,
+          -30.0,
+          -31.0
+        ],
+        [
+          50.0,
+          -31.0,
+          -32.0
+        ],
+        [
+          4.0,
+          -71.0,
+          48.0
+        ],
+        [
+          13.0,
+          -69.0,
+          53.0
+        ],
+        [
+          21.0,
+          -62.0,
+          53.0
+        ],
+        [
+          29.0,
+          -55.0,
+          52.0
+        ],
+        [
+          10.0,
+          -80.0,
+          44.0
+        ],
+        [
+          19.0,
+          -77.0,
+          47.0
+        ],
+        [
+          27.0,
+          -70.0,
+          48.0
+        ],
+        [
+          35.0,
+          -60.0,
+          46.0
+        ],
+        [
+          14.0,
+          -86.0,
+          38.0
+        ],
+        [
+          22.0,
+          -82.0,
+          40.0
+        ],
+        [
+          32.0,
+          -75.0,
+          41.0
+        ],
+        [
+          40.0,
+          -68.0,
+          40.0
+        ],
+        [
+          17.0,
+          -90.0,
+          31.0
+        ],
+        [
+          26.0,
+          -87.0,
+          33.0
+        ],
+        [
+          37.0,
+          -81.0,
+          32.0
+        ],
+        [
+          46.0,
+          -74.0,
+          31.0
+        ],
+        [
+          20.0,
+          -94.0,
+          25.0
+        ],
+        [
+          29.0,
+          -92.0,
+          24.0
+        ],
+        [
+          40.0,
+          -85.0,
+          23.0
+        ],
+        [
+          20.0,
+          -99.0,
+          14.0
+        ],
+        [
+          30.0,
+          -95.0,
+          13.0
+        ],
+        [
+          40.0,
+          -89.0,
+          12.0
+        ],
+        [
+          48.0,
+          -81.0,
+          10.0
+        ],
+        [
+          20.0,
+          -102.0,
+          4.0
+        ],
+        [
+          30.0,
+          -97.0,
+          3.0
+        ],
+        [
+          40.0,
+          -90.0,
+          2.0
+        ],
+        [
+          47.0,
+          -82.0,
+          -1.0
+        ],
+        [
+          22.0,
+          -104.0,
+          -5.0
+        ],
+        [
+          30.0,
+          -99.0,
+          -7.0
+        ],
+        [
+          38.0,
+          -92.0,
+          -9.0
+        ],
+        [
+          45.0,
+          -83.0,
+          -11.0
+        ],
+        [
+          -1.0,
+          -76.0,
+          -11.0
+        ],
+        [
+          -2.0,
+          -77.0,
+          -7.0
+        ],
+        [
+          -3.0,
+          -79.0,
+          -2.0
+        ],
+        [
+          -3.0,
+          -81.0,
+          2.0
+        ],
+        [
+          -3.0,
+          -83.0,
+          6.0
+        ],
+        [
+          -2.0,
+          -85.0,
+          11.0
+        ],
+        [
+          -1.0,
+          -86.0,
+          15.0
+        ],
+        [
+          1.0,
+          -88.0,
+          20.0
+        ],
+        [
+          5.0,
+          -91.0,
+          26.0
+        ],
+        [
+          -1.0,
+          -80.0,
+          -13.5
+        ],
+        [
+          -2.0,
+          -81.5,
+          -9.5
+        ],
+        [
+          -3.0,
+          -83.5,
+          -4.5
+        ],
+        [
+          -2.5,
+          -87.0,
+          4.0
+        ],
+        [
+          -1.5,
+          -90.0,
+          9.0
+        ],
+        [
+          0.5,
+          -91.5,
+          14.0
+        ],
+        [
+          7.0,
+          -94.0,
+          23.0
+        ],
+        [
+          -1.0,
+          -84.0,
+          -16.0
+        ],
+        [
+          -2.0,
+          -86.0,
+          -12.0
+        ],
+        [
+          -3.0,
+          -88.0,
+          -7.0
+        ],
+        [
+          -3.0,
+          -90.0,
+          -2.0
+        ],
+        [
+          -2.0,
+          -91.0,
+          2.0
+        ],
+        [
+          -1.0,
+          -95.0,
+          7.0
+        ],
+        [
+          2.0,
+          -97.0,
+          13.0
+        ],
+        [
+          5.0,
+          -97.0,
+          17.0
+        ],
+        [
+          9.0,
+          -97.0,
+          20.0
+        ],
+        [
+          1.0,
+          -87.0,
+          -22.0
+        ],
+        [
+          8.0,
+          -88.0,
+          -28.0
+        ],
+        [
+          18.0,
+          -89.0,
+          -30.0
+        ],
+        [
+          35.0,
+          -93.0,
+          -19.0
+        ],
+        [
+          3.0,
+          -78.0,
+          -19.0
+        ],
+        [
+          11.0,
+          -79.0,
+          -24.0
+        ],
+        [
+          20.0,
+          -80.0,
+          -27.0
+        ],
+        [
+          30.0,
+          -81.0,
+          -27.0
+        ],
+        [
+          39.0,
+          -85.0,
+          -22.0
+        ],
+        [
+          5.0,
+          -69.0,
+          -14.0
+        ],
+        [
+          14.0,
+          -70.0,
+          -19.0
+        ],
+        [
+          24.0,
+          -71.0,
+          -23.0
+        ],
+        [
+          32.0,
+          -73.0,
+          -25.0
+        ],
+        [
+          40.0,
+          -73.0,
+          -23.0
+        ],
+        [
+          9.0,
+          -59.0,
+          -11.0
+        ],
+        [
+          18.0,
+          -60.0,
+          -16.0
+        ],
+        [
+          26.0,
+          -60.0,
+          -21.0
+        ],
+        [
+          34.0,
+          -62.0,
+          -23.0
+        ],
+        [
+          43.0,
+          -64.0,
+          -23.0
+        ],
+        [
+          7.0,
+          -102.0,
+          -23.0
+        ],
+        [
+          4.0,
+          -104.0,
+          -12.0
+        ],
+        [
+          7.0,
+          -104.0,
+          1.0
+        ],
+        [
+          10.0,
+          -101.0,
+          11.0
+        ],
+        [
+          13.0,
+          -92.0,
+          28.0
+        ]
+      ],
+      "single_electrode_acc": [
+        0.21428571428571427,
+        0.21904761904761905,
+        0.2,
+        0.22857142857142856,
+        0.21428571428571427,
+        0.22380952380952382,
+        0.14761904761904762,
+        0.16666666666666666,
+        0.2,
+        0.1380952380952381,
+        0.22857142857142856,
+        0.1523809523809524,
+        0.18571428571428572,
+        0.19047619047619047,
+        0.21904761904761905,
+        0.19047619047619047,
+        0.11904761904761904,
+        0.2,
+        0.2,
+        0.18571428571428572,
+        0.26666666666666666,
+        0.24761904761904763,
+        0.1761904761904762,
+        0.18095238095238095,
+        0.19047619047619047,
+        0.20476190476190476,
+        0.19523809523809524,
+        0.16666666666666666,
+        0.23333333333333334,
+        0.19523809523809524,
+        0.30952380952380953,
+        0.23333333333333334,
+        0.16666666666666666,
+        0.2,
+        0.21904761904761905,
+        0.1619047619047619,
+        0.20952380952380953,
+        0.1761904761904762,
+        0.1380952380952381,
+        0.1761904761904762,
+        0.2,
+        0.12380952380952381,
+        0.18571428571428572,
+        0.19523809523809524,
+        0.23333333333333334,
+        0.1380952380952381,
+        0.19047619047619047,
+        0.14761904761904762,
+        0.20952380952380953,
+        0.4142857142857143,
+        0.2619047619047619,
+        0.21428571428571427,
+        0.11428571428571428,
+        0.5,
+        0.20476190476190476,
+        0.23809523809523808,
+        0.2,
+        0.3619047619047619,
+        0.28095238095238095,
+        0.32857142857142857,
+        0.18571428571428572,
+        0.7571428571428571,
+        0.6190476190476191,
+        0.5,
+        0.45714285714285713,
+        0.3380952380952381,
+        0.23809523809523808,
+        0.2714285714285714,
+        0.3047619047619048,
+        0.18095238095238095,
+        0.7666666666666667,
+        0.7380952380952381,
+        0.5666666666666667,
+        0.319047619047619,
+        0.30952380952380953,
+        0.4380952380952381,
+        0.22857142857142856,
+        0.3142857142857143,
+        0.7142857142857143,
+        0.6619047619047619,
+        0.6476190476190476,
+        0.6095238095238096,
+        0.5761904761904761,
+        0.4857142857142857,
+        0.4666666666666667,
+        0.37142857142857144,
+        0.7047619047619048,
+        0.5238095238095238,
+        0.42857142857142855,
+        0.3238095238095238,
+        0.6285714285714286,
+        0.5142857142857142,
+        0.6333333333333333,
+        0.30952380952380953,
+        0.4238095238095238,
+        0.6952380952380952,
+        0.46190476190476193,
+        0.4095238095238095,
+        0.23333333333333334,
+        0.35714285714285715,
+        0.12380952380952381,
+        0.2619047619047619,
+        0.38095238095238093,
+        0.2523809523809524,
+        0.22857142857142856,
+        0.6333333333333333,
+        0.6238095238095238,
+        0.5,
+        0.3952380952380952,
+        0.38095238095238093
+      ],
+      "hemi": "R",
+      "views": [
+        "brain_sub-01_posterior.png",
+        "brain_sub-01_lateral.png",
+        "brain_sub-01_ventral.png"
+      ],
+      "chance": 0.14285714285714285
+    },
+    "sub-02": {
+      "ch_names": [
+        "iEEG2",
+        "iEEG3",
+        "iEEG4",
+        "iEEG5",
+        "iEEG6",
+        "iEEG7",
+        "iEEG8",
+        "iEEG9",
+        "iEEG10",
+        "iEEG11",
+        "iEEG12",
+        "iEEG13",
+        "iEEG14",
+        "iEEG15",
+        "iEEG16",
+        "iEEG25",
+        "iEEG26",
+        "iEEG27",
+        "iEEG28",
+        "iEEG29",
+        "iEEG30",
+        "iEEG31",
+        "iEEG32",
+        "iEEG33",
+        "iEEG34",
+        "iEEG35",
+        "iEEG36",
+        "iEEG41",
+        "iEEG42",
+        "iEEG43",
+        "iEEG44",
+        "iEEG49",
+        "iEEG50",
+        "iEEG51",
+        "iEEG52",
+        "iEEG57",
+        "iEEG58",
+        "iEEG59",
+        "iEEG60",
+        "iEEG66",
+        "iEEG67",
+        "iEEG68",
+        "iEEG70",
+        "iEEG79",
+        "iEEG80",
+        "iEEG81",
+        "iEEG82",
+        "iEEG83",
+        "iEEG84",
+        "iEEG85",
+        "iEEG86",
+        "iEEG87",
+        "iEEG88",
+        "iEEG89",
+        "iEEG90",
+        "iEEG91",
+        "iEEG92",
+        "iEEG93",
+        "iEEG94",
+        "iEEG95",
+        "iEEG96"
+      ],
+      "coords_mm": [
+        [
+          -47.0008056759834,
+          -29.8853978514671,
+          33.6850898861878
+        ],
+        [
+          -50.7512057423592,
+          -22.8533977270126,
+          38.6850842237465
+        ],
+        [
+          -54.9704058170319,
+          -13.9461975693703,
+          44.685077428817
+        ],
+        [
+          -58.7208058834076,
+          -5.50779742002487,
+          48.685072898864
+        ],
+        [
+          -61.5336059331894,
+          4.80580276250839,
+          53.6850672364227
+        ],
+        [
+          -59.6584059000015,
+          15.5882029533386,
+          53.6850672364227
+        ],
+        [
+          -59.6584059000015,
+          25.9018031358719,
+          54.6850661039344
+        ],
+        [
+          -35.7496054768562,
+          -35.9797979593277,
+          33.6850898861878
+        ],
+        [
+          -39.9688055515289,
+          -32.229397892952,
+          40.68508195877
+        ],
+        [
+          -45.1256056427956,
+          -24.2597977519035,
+          44.685077428817
+        ],
+        [
+          -47.0008056759834,
+          -14.4149975776672,
+          50.6850706338875
+        ],
+        [
+          -49.3448057174683,
+          -5.03899741172791,
+          52.685068368911
+        ],
+        [
+          -52.1576057672501,
+          4.80580276250839,
+          58.6850615739815
+        ],
+        [
+          -48.4072057008743,
+          15.5882029533386,
+          53.6850672364228
+        ],
+        [
+          -53.095205783844,
+          24.964203119278,
+          61.6850581765167
+        ],
+        [
+          -19.8104051947594,
+          -33.1669979095459,
+          41.6850808262819
+        ],
+        [
+          -22.6232052445412,
+          -28.9477978348732,
+          50.6850706338876
+        ],
+        [
+          -26.8424053192139,
+          -22.3845977187157,
+          56.6850638389581
+        ],
+        [
+          -31.5304054021835,
+          -16.2901976108551,
+          62.6850570440286
+        ],
+        [
+          -33.8744054436684,
+          -6.4453974366188,
+          68.685050249099
+        ],
+        [
+          -32.4680054187775,
+          2.93060272932053,
+          68.685050249099
+        ],
+        [
+          -37.6248055100441,
+          14.6506029367447,
+          74.6850434541695
+        ],
+        [
+          -37.6248055100441,
+          24.495403110981,
+          73.6850445866578
+        ],
+        [
+          -16.5288051366806,
+          54.4986036419868,
+          76.6850411891931
+        ],
+        [
+          -11.372005045414,
+          45.5914034843445,
+          55.6850649714464
+        ],
+        [
+          -39.500005543232,
+          52.623403608799,
+          69.6850491166108
+        ],
+        [
+          -45.5944056510925,
+          48.8730035424232,
+          62.6850570440285
+        ],
+        [
+          -17.9352051615715,
+          63.8746038079262,
+          73.6850445866579
+        ],
+        [
+          -12.3096050620079,
+          54.4986036419868,
+          53.6850672364229
+        ],
+        [
+          -40.4376055598259,
+          61.9994037747383,
+          65.6850536465638
+        ],
+        [
+          -40.4376055598259,
+          56.3738036751747,
+          49.6850717663758
+        ],
+        [
+          -24.498405277729,
+          75.5946040153503,
+          71.6850468516344
+        ],
+        [
+          -12.7784050703049,
+          64.3434038162231,
+          50.6850706338877
+        ],
+        [
+          -38.562405526638,
+          70.9066039323807,
+          58.6850615739815
+        ],
+        [
+          -38.562405526638,
+          63.4058037996292,
+          46.6850751638406
+        ],
+        [
+          -11.372005045414,
+          80.28260409832,
+          57.6850627064699
+        ],
+        [
+          -13.2472050786018,
+          73.7194039821625,
+          47.6850740313524
+        ],
+        [
+          -34.8120054602623,
+          77.4698040485382,
+          50.6850706338876
+        ],
+        [
+          -37.1560055017471,
+          71.3754039406776,
+          41.6850808262818
+        ],
+        [
+          -58.2520058751106,
+          -18.6341976523399,
+          15.6851102709762
+        ],
+        [
+          -61.5336059331894,
+          -13.0085975527763,
+          22.6851023435585
+        ],
+        [
+          -63.8776059746742,
+          -8.78939747810364,
+          28.6850955486289
+        ],
+        [
+          -60.5960059165955,
+          17.9322029948235,
+          47.6850740313522
+        ],
+        [
+          -15.5912051200867,
+          -10.1957975029945,
+          7.68511933088244
+        ],
+        [
+          -17.4664051532745,
+          -7.8517974615097,
+          -1.31487047672331
+        ],
+        [
+          -21.6856052279472,
+          -5.50779742002487,
+          -10.3148602843291
+        ],
+        [
+          -33.8744054436684,
+          -6.4453974366188,
+          -14.3148557543761
+        ],
+        [
+          -40.4376055598259,
+          -5.50779742002487,
+          -17.3148523569114
+        ],
+        [
+          -53.564005792141,
+          -6.4453974366188,
+          -18.3148512244232
+        ],
+        [
+          -19.8104051947594,
+          -38.3237980008125,
+          -11.3148591518408
+        ],
+        [
+          -29.1864053606987,
+          -32.6981979012489,
+          -14.3148557543761
+        ],
+        [
+          -35.2808054685593,
+          -28.9477978348732,
+          -18.3148512244231
+        ],
+        [
+          -47.4696056842804,
+          -24.7285977602005,
+          -20.3148489594467
+        ],
+        [
+          -55.9080058336258,
+          -18.165397644043,
+          -16.3148534893997
+        ],
+        [
+          -60.5960059165955,
+          -11.1333975195885,
+          -10.3148602843293
+        ],
+        [
+          -62.4712059497833,
+          -6.4453974366188,
+          -3.31486821174703
+        ],
+        [
+          -69.0344060659409,
+          -1.28859734535217,
+          4.68512272834694
+        ],
+        [
+          -69.5032060742378,
+          4.33700275421143,
+          12.6851136684409
+        ],
+        [
+          -69.5032060742378,
+          9.49380284547806,
+          22.6851023435584
+        ],
+        [
+          -69.5032060742378,
+          16.5258029699326,
+          30.6850932836524
+        ],
+        [
+          -69.0344060659409,
+          18.4010030031204,
+          38.6850842237464
+        ]
+      ],
+      "single_electrode_acc": [
+        0.19047619047619047,
+        0.1357142857142857,
+        0.14047619047619048,
+        0.14523809523809525,
+        0.11904761904761904,
+        0.12857142857142856,
+        0.14523809523809525,
+        0.20714285714285716,
+        0.16666666666666666,
+        0.12857142857142856,
+        0.10476190476190476,
+        0.09761904761904762,
+        0.1523809523809524,
+        0.14285714285714285,
+        0.14761904761904762,
+        0.15476190476190477,
+        0.14523809523809525,
+        0.14285714285714285,
+        0.1595238095238095,
+        0.15,
+        0.12857142857142856,
+        0.15,
+        0.15476190476190477,
+        0.1261904761904762,
+        0.13095238095238096,
+        0.14523809523809525,
+        0.1357142857142857,
+        0.11428571428571428,
+        0.16428571428571428,
+        0.13095238095238096,
+        0.14761904761904762,
+        0.14761904761904762,
+        0.11190476190476191,
+        0.12857142857142856,
+        0.15476190476190477,
+        0.14523809523809525,
+        0.15714285714285714,
+        0.1380952380952381,
+        0.13095238095238096,
+        0.16904761904761906,
+        0.15476190476190477,
+        0.1595238095238095,
+        0.15476190476190477,
+        0.1595238095238095,
+        0.18095238095238095,
+        0.22380952380952382,
+        0.26904761904761904,
+        0.30238095238095236,
+        0.14761904761904762,
+        0.45714285714285713,
+        0.29523809523809524,
+        0.2857142857142857,
+        0.1976190476190476,
+        0.2,
+        0.17857142857142858,
+        0.11190476190476191,
+        0.15476190476190477,
+        0.14047619047619048,
+        0.14047619047619048,
+        0.14047619047619048,
+        0.17857142857142858
+      ],
+      "hemi": "L",
+      "views": [
+        "brain_sub-02_posterior.png",
+        "brain_sub-02_lateral.png",
+        "brain_sub-02_ventral.png"
+      ],
+      "chance": 0.14285714285714285
+    }
+  },
+  "contrastive": {
+    "space": "dino518",
+    "subjects": {
+      "sub-01": {
+        "spectral": {
+          "label": "Spectral (Hermes)",
+          "ridge": {
+            "two_way": 0.912326270221007,
+            "top5": 0.16666666666666666,
+            "seconds": 2.6
+          },
+          "contrastive": {
+            "two_way": 0.9309523809523811,
+            "top5": 0.19523809523809524,
+            "seconds": 36.3
+          }
+        },
+        "ecogjepa_all": {
+          "label": "ECoG-JEPA (ours)",
+          "ridge": {
+            "two_way": 0.9151970836181362,
+            "top5": 0.1619047619047619,
+            "seconds": 6.0
+          },
+          "contrastive": {
+            "two_way": 0.9320728291316528,
+            "top5": 0.15714285714285714,
+            "seconds": 98.5
+          }
+        },
+        "signal_jepa": {
+          "label": "SignalJEPA (EEG)",
+          "ridge": {
+            "two_way": 0.8420369104579631,
+            "top5": 0.11904761904761904,
+            "seconds": 1.3
+          },
+          "contrastive": {
+            "two_way": 0.872549019607843,
+            "top5": 0.08571428571428573,
+            "seconds": 26.5
+          }
+        },
+        "cbramod": {
+          "label": "CBraMod (EEG)",
+          "ridge": {
+            "two_way": 0.9084529505582137,
+            "top5": 0.12857142857142856,
+            "seconds": 2.3
+          },
+          "contrastive": {
+            "two_way": 0.9109243697478991,
+            "top5": 0.1380952380952381,
+            "seconds": 64.1
+          }
+        }
+      },
+      "sub-02": {
+        "spectral": {
+          "label": "Spectral (Hermes)",
+          "ridge": {
+            "two_way": 0.6628707807705421,
+            "top5": 0.05714285714285714,
+            "seconds": 1.8
+          },
+          "contrastive": {
+            "two_way": 0.6507936507936508,
+            "top5": 0.05238095238095238,
+            "seconds": 18.1
+          }
+        },
+        "ecogjepa_all": {
+          "label": "ECoG-JEPA (ours)",
+          "ridge": {
+            "two_way": 0.6967269007841801,
+            "top5": 0.06666666666666667,
+            "seconds": 4.3
+          },
+          "contrastive": {
+            "two_way": 0.7511387163561077,
+            "top5": 0.07380952380952381,
+            "seconds": 44.9
+          }
+        },
+        "signal_jepa": {
+          "label": "SignalJEPA (EEG)",
+          "ridge": {
+            "two_way": 0.581338788498693,
+            "top5": 0.03571428571428571,
+            "seconds": 2.2
+          },
+          "contrastive": {
+            "two_way": 0.5489302967563837,
+            "top5": 0.04047619047619048,
+            "seconds": 20.0
+          }
+        },
+        "cbramod": {
+          "label": "CBraMod (EEG)",
+          "ridge": {
+            "two_way": 0.6914422093419706,
+            "top5": 0.05714285714285714,
+            "seconds": 6.1
+          },
+          "contrastive": {
+            "two_way": 0.712008281573499,
+            "top5": 0.06428571428571428,
+            "seconds": 40.8
+          }
+        }
+      }
+    }
+  },
+  "jepa": {
+    "all": {
+      "losses": [
+        0.7753025599888392,
+        0.7493717738560268,
+        0.7465104239327567,
+        0.7436186109270368,
+        0.7434529985700334,
+        0.7424221583775111,
+        0.7416252136230469,
+        0.7402753012520926,
+        0.7394698551722936,
+        0.7389021737234933,
+        0.7382750919886998,
+        0.7382886614118304,
+        0.7377023969377791,
+        0.7375385829380581,
+        0.7373485020228795,
+        0.7369563511439732,
+        0.7365783146449498,
+        0.7363012586321149,
+        0.7359123774937221,
+        0.7359982626778739,
+        0.7354508536202568,
+        0.7355119977678571,
+        0.7353909083775112,
+        0.7348409380231585,
+        0.7347608838762556,
+        0.7352215903145927,
+        0.735356194632394,
+        0.7345812661307198,
+        0.7349222455705915,
+        0.7343155452183314
+      ],
+      "val_losses": [
+        0.759218692779541,
+        0.7506730556488037,
+        0.7487732172012329,
+        0.7477644085884094,
+        0.7462470531463623,
+        0.745766282081604,
+        0.7452125549316406,
+        0.7435199022293091,
+        0.742652177810669,
+        0.7425143718719482,
+        0.7423003315925598,
+        0.7421730160713196,
+        0.7413728833198547,
+        0.7409583330154419,
+        0.7410836815834045,
+        0.7409084439277649,
+        0.7405167818069458,
+        0.7401459217071533,
+        0.740013062953949,
+        0.7400496602058411,
+        0.7395484447479248,
+        0.7394288778305054,
+        0.7392308115959167,
+        0.7390217781066895,
+        0.7390888333320618,
+        0.7390447854995728,
+        0.7387328147888184,
+        0.7387945055961609,
+        0.738777756690979,
+        0.7387818098068237
+      ],
+      "baseline_val": 0.7731366753578186,
+      "n_params": 4810546,
+      "variant": "all",
+      "n_channels": 232
+    },
+    "sub-02": null
+  },
+  "encoders_manifest": {
+    "sub-01_run-01": {
+      "ecogjepa_all": {
+        "dim": 28160,
+        "d_model": 256
+      },
+      "signal_jepa": {
+        "model": "signal_jepa",
+        "checkpoint": "braindecode/signal-jepa_without-chans",
+        "readout": "pretrained conv feature encoder",
+        "sfreq": 128.0,
+        "band": [
+          0.5,
+          40.0
+        ],
+        "window": [
+          -0.5,
+          1.0
+        ],
+        "n_times": 192,
+        "emb_per_trial": 7040,
+        "n_params": 3458292
+      },
+      "cbramod": {
+        "model": "cbramod",
+        "checkpoint": "braindecode/cbramod-pretrained",
+        "sfreq": 250.0,
+        "band": [
+          0.3,
+          124.0
+        ],
+        "window": [
+          -0.2,
+          0.6
+        ],
+        "n_times": 200,
+        "emb_per_trial": 22000,
+        "n_params": 5078007
+      },
+      "bandwidth": {
+        "frac_below_40Hz": 0.0959249805878555,
+        "frac_below_125Hz": 0.5839347161293945,
+        "frac_below_200Hz": 0.867197285618773,
+        "total_evoked_logpower_change": 719.6417331067273
+      }
+    },
+    "sub-02_run-01": {
+      "ecogjepa_all": {
+        "dim": 15616,
+        "d_model": 256
+      },
+      "signal_jepa": {
+        "model": "signal_jepa",
+        "checkpoint": "braindecode/signal-jepa_without-chans",
+        "readout": "pretrained conv feature encoder",
+        "sfreq": 128.0,
+        "band": [
+          0.5,
+          40.0
+        ],
+        "window": [
+          -0.5,
+          1.0
+        ],
+        "n_times": 192,
+        "emb_per_trial": 3904,
+        "n_params": 3456822
+      },
+      "cbramod": {
+        "model": "cbramod",
+        "checkpoint": "braindecode/cbramod-pretrained",
+        "sfreq": 250.0,
+        "band": [
+          0.3,
+          124.0
+        ],
+        "window": [
+          -0.2,
+          0.6
+        ],
+        "n_times": 200,
+        "emb_per_trial": 12200,
+        "n_params": 5009407
+      },
+      "bandwidth": {
+        "frac_below_40Hz": 0.16563659857284713,
+        "frac_below_125Hz": 0.5710866979216719,
+        "frac_below_200Hz": 0.853124169630449,
+        "total_evoked_logpower_change": 151.20166743194272
+      }
+    },
+    "sub-02_run-02": {
+      "ecogjepa_all": {
+        "dim": 15616,
+        "d_model": 256
+      },
+      "signal_jepa": {
+        "model": "signal_jepa",
+        "checkpoint": "braindecode/signal-jepa_without-chans",
+        "readout": "pretrained conv feature encoder",
+        "sfreq": 128.0,
+        "band": [
+          0.5,
+          40.0
+        ],
+        "window": [
+          -0.5,
+          1.0
+        ],
+        "n_times": 192,
+        "emb_per_trial": 3904,
+        "n_params": 3456822
+      },
+      "cbramod": {
+        "model": "cbramod",
+        "checkpoint": "braindecode/cbramod-pretrained",
+        "sfreq": 250.0,
+        "band": [
+          0.3,
+          124.0
+        ],
+        "window": [
+          -0.2,
+          0.6
+        ],
+        "n_times": 200,
+        "emb_per_trial": 12200,
+        "n_params": 5009407
+      },
+      "bandwidth": {
+        "frac_below_40Hz": 0.16359122371042514,
+        "frac_below_125Hz": 0.5825253424711379,
+        "frac_below_200Hz": 0.8663312996773429,
+        "total_evoked_logpower_change": 144.64529838104335
+      }
+    }
+  },
+  "braintv": [
+    {
+      "sub": "sub-01",
+      "run": "01",
+      "n_frames": 1187,
+      "fps": 20,
+      "window_s": 0.5,
+      "hop_s": 0.05,
+      "t_start": 123.56454882599999,
+      "t_end": 183.01998835799998,
+      "fitted_on_trials": 105,
+      "out_of_sample": true,
+      "file": "braintv_sub-01_run-01.mp4",
+      "size_mb": 18.17
+    }
+  ],
+  "galleries": {
+    "sub-01": [
+      {
+        "stim_id": 16,
+        "condition": 1,
+        "true": "stimuli/true_16.png",
+        "recon": "stimuli/recon_sub-01_16.png",
+        "info": {
+          "kind": "noise",
+          "noise_exponent": 0.47221267223358154,
+          "contrast": 0.044597625732421875,
+          "condition": 1
+        }
+      },
+      {
+        "stim_id": 48,
+        "condition": 2,
+        "true": "stimuli/true_48.png",
+        "recon": "stimuli/recon_sub-01_48.png",
+        "info": {
+          "kind": "noise",
+          "noise_exponent": 2.1163344383239746,
+          "contrast": 0.16096624732017517,
+          "condition": 2
+        }
+      },
+      {
+        "stim_id": 70,
+        "condition": 3,
+        "true": "stimuli/true_70.png",
+        "recon": "stimuli/recon_sub-01_70.png",
+        "info": {
+          "kind": "noise",
+          "noise_exponent": 2.8330674171447754,
+          "contrast": 0.19732804596424103,
+          "condition": 3
+        }
+      },
+      {
+        "stim_id": 106,
+        "condition": 4,
+        "true": "stimuli/true_106.png",
+        "recon": "stimuli/recon_sub-01_106.png",
+        "info": {
+          "kind": "grating",
+          "spatial_freq_cpd": 0.19075952224681164,
+          "phase_rad": -1.4246207552832733,
+          "contrast": 0.4648139178752899,
+          "condition": 4
+        }
+      },
+      {
+        "stim_id": 144,
+        "condition": 5,
+        "true": "stimuli/true_144.png",
+        "recon": "stimuli/recon_sub-01_144.png",
+        "info": {
+          "kind": "grating",
+          "spatial_freq_cpd": 0.24036361825109767,
+          "phase_rad": -1.421568202561624,
+          "contrast": 0.4688085913658142,
+          "condition": 5
+        }
+      },
+      {
+        "stim_id": 165,
+        "condition": 6,
+        "true": "stimuli/true_165.png",
+        "recon": "stimuli/recon_sub-01_165.png",
+        "info": {
+          "kind": "grating",
+          "spatial_freq_cpd": 0.7197659941173454,
+          "phase_rad": -1.9519706181550773,
+          "contrast": 0.5,
+          "condition": 7
+        }
+      },
+      {
+        "stim_id": 208,
+        "condition": 7,
+        "true": "stimuli/true_208.png",
+        "recon": "stimuli/recon_sub-01_208.png",
+        "info": {
+          "kind": "grating",
+          "spatial_freq_cpd": 0.9021012196773157,
+          "phase_rad": -1.8515404790932688,
+          "contrast": 0.476367712020874,
+          "condition": 7
+        }
+      }
+    ],
+    "sub-02": [
+      {
+        "stim_id": 25,
+        "condition": 1,
+        "true": "stimuli/true_25.png",
+        "recon": "stimuli/recon_sub-02_25.png",
+        "info": {
+          "kind": "noise",
+          "noise_exponent": 2.3131461143493652,
+          "contrast": 0.27575933933258057,
+          "condition": 3
+        }
+      },
+      {
+        "stim_id": 39,
+        "condition": 2,
+        "true": "stimuli/true_39.png",
+        "recon": "stimuli/recon_sub-02_39.png",
+        "info": {
+          "kind": "grating",
+          "spatial_freq_cpd": 0.2874290532894991,
+          "phase_rad": -1.5259762099868102,
+          "contrast": 0.3022219240665436,
+          "condition": 5
+        }
+      },
+      {
+        "stim_id": 64,
+        "condition": 3,
+        "true": "stimuli/true_64.png",
+        "recon": "stimuli/recon_sub-02_64.png",
+        "info": {
+          "kind": "noise",
+          "noise_exponent": 2.531531810760498,
+          "contrast": 0.16655662655830383,
+          "condition": 3
+        }
+      },
+      {
+        "stim_id": 115,
+        "condition": 4,
+        "true": "stimuli/true_115.png",
+        "recon": "stimuli/recon_sub-02_115.png",
+        "info": {
+          "kind": "noise",
+          "noise_exponent": 2.225456476211548,
+          "contrast": 0.34216949343681335,
+          "condition": 2
+        }
+      },
+      {
+        "stim_id": 147,
+        "condition": 5,
+        "true": "stimuli/true_147.png",
+        "recon": "stimuli/recon_sub-02_147.png",
+        "info": {
+          "kind": "grating",
+          "spatial_freq_cpd": 0.2453998087311009,
+          "phase_rad": -1.530187385896025,
+          "contrast": 0.3223913908004761,
+          "condition": 4
+        }
+      },
+      {
+        "stim_id": 161,
+        "condition": 6,
+        "true": "stimuli/true_161.png",
+        "recon": "stimuli/recon_sub-02_161.png",
+        "info": {
+          "kind": "grating",
+          "spatial_freq_cpd": 0.3771207668117129,
+          "phase_rad": -1.9883780929183008,
+          "contrast": 0.395768940448761,
+          "condition": 7
+        }
+      },
+      {
+        "stim_id": 197,
+        "condition": 7,
+        "true": "stimuli/true_197.png",
+        "recon": "stimuli/recon_sub-02_197.png",
+        "info": {
+          "kind": "grating",
+          "spatial_freq_cpd": 0.36543453418659794,
+          "phase_rad": -1.563089920814985,
+          "contrast": 0.4060196578502655,
+          "condition": 6
+        }
+      }
+    ]
+  }
+}

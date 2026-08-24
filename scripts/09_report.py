@@ -77,6 +77,7 @@ def main() -> None:
     R["alignment"] = jload(paths.cache / "results_align.json")
     R["reconstruction"] = jload(paths.cache / "results_recon.json")
     R["electrodes"] = jload(paths.cache / "results_electrodes.json")
+    R["contrastive"] = jload(paths.cache / "results_contrastive.json")
     R["jepa"] = {v: jload(paths.models / f"ecogjepa_{v}_report.json")
                  for v in ("all", "sub-02")}
     R["encoders_manifest"] = jload(paths.cache / "encoders_manifest.json")
@@ -187,8 +188,18 @@ def main() -> None:
                 R["figures"][f"brain_{sub}_{v.split('_')[-1].replace('.png','')}"] = v
 
     # ---------- copy assets ---------------------------------------------------
+    # Only the figures the site actually references. Step 6 writes one PNG per
+    # gallery trial into outputs/figures for local inspection; those are served
+    # from site/public/stimuli instead, so shipping both would double the repo.
+    referenced = set(R["figures"].values())
+    for sub_e in (R.get("electrodes") or {}).values():
+        referenced.update(sub_e.get("views", []))
     for f in paths.figures.glob("*.png"):
-        shutil.copy2(f, pub / "figures" / f.name)
+        if f.name in referenced:
+            shutil.copy2(f, pub / "figures" / f.name)
+    for f in (pub / "figures").glob("*.png"):
+        if f.name not in referenced:
+            f.unlink()
     for f in paths.video.glob("*.mp4"):
         shutil.copy2(f, pub / "video" / f.name)
 

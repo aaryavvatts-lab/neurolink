@@ -80,6 +80,16 @@
     <div class="table-scroll"><table id="encoderTable"></table></div>
     <figure id="encFig"></figure>
     <div class="callout warn" id="bandwidthNote"></div>
+    <h3>Ridge regression vs the contrastive head</h3>
+    <p>
+      The brief calls for CLIP-style contrastive alignment. Run on identical folds and
+      features, it comes out roughly level with plain ridge regression — better for some
+      encoders, worse for others. Note the two are not perfectly comparable: ridge predicts
+      into DINOv2's own space, while the contrastive head is evaluated inside a 128-d space
+      it was trained to make matching easy in.
+    </p>
+    <div class="table-scroll"><table id="contrastiveTable"></table></div>
+
     <h3>Where the confusions fall</h3>
     <figure id="confusionFig"></figure>
   </div>
