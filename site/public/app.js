@@ -189,6 +189,30 @@ function encoderSection() {
       `and cannot represent the 70–200 Hz broadband gamma this task depends on.`;
   }
 
+  // The sub-02-only ECoG-JEPA means different things for each subject: for sub-02
+  // it is in-domain (unsupervised, on that subject's own recordings); for sub-01 it
+  // is a genuine transfer to a brain the model has never seen.
+  const tn = $("transferNote");
+  if (tn) {
+    const a = A.subjects["sub-01"]?.encoders?.["ecogjepa_sub-02"];
+    const b = A.subjects["sub-01"]?.encoders?.["ecogjepa_all"];
+    if (a && b) {
+      tn.innerHTML =
+        `<strong>It transfers to a brain it has never seen.</strong> The ` +
+        `"ECoG-JEPA (sub-02 only)" row was pretrained exclusively on subject 2 — other ` +
+        `hemisphere, 61 electrodes instead of 110, 1526 Hz instead of 3052 Hz — and never ` +
+        `saw subject 1's recordings at all. Used to encode subject 1 it reaches ` +
+        `<strong>${pct(a.condition.accuracy)}</strong> seven-way accuracy, against ` +
+        `${pct(b.condition.accuracy)} for the version that did train on both — a difference ` +
+        `of ${Math.abs(Math.round((a.condition.accuracy - b.condition.accuracy) * 210))} ` +
+        `trials out of 210, which is to say indistinguishable. Whatever the ` +
+        `masked-reconstruction objective learns about intracranial field potentials is not ` +
+        `specific to one person's electrode layout.`;
+    } else {
+      tn.remove();
+    }
+  }
+
   const CN = R.contrastive;
   if (CN) {
     const rows = [];

@@ -23,10 +23,11 @@ lines up with exactly that ordering:
 
 | Encoder | Family | Usable band | 7-way accuracy | RSA vs DINOv2 |
 |---|---|---|---|---|
-| SignalJEPA | off-the-shelf EEG | 0.5–40 Hz | 0.733 | +0.115 |
+| SignalJEPA | off-the-shelf EEG | 0.5–40 Hz | 0.724 | +0.115 |
 | CBraMod | off-the-shelf EEG | 0–125 Hz | 0.862 | +0.412 |
 | Spectral (Hermes decomposition) | hand-crafted | full | 0.895 | +0.143 |
-| **ECoG-JEPA** (pretrained here) | self-supervised on this ECoG | 4–200 Hz | **0.924** | **+0.646** |
+| ECoG-JEPA, both subjects | self-supervised on this ECoG | 4–200 Hz | 0.924 | +0.646 |
+| **ECoG-JEPA, sub-02 only** | **never saw this brain** | 4–200 Hz | **0.933** | +0.634 |
 
 Chance is 0.143. The EEG models are not bad models; they are the wrong instrument. Scaling
 them would not help, because the signal is filtered away before their first layer.
@@ -38,7 +39,14 @@ file. It reaches 0.924 against 0.895 for a feature set built directly from the p
 model of these signals — and its representational geometry matches DINOv2's roughly four
 times more closely.
 
-**3. Contrastive alignment does not beat ridge regression — or lose to it.** Run on
+**3. The self-supervised encoder transfers to a brain it has never seen.** The last row
+above was pretrained *exclusively* on subject 2 — other hemisphere, 61 electrodes instead of
+110, 1526 Hz instead of 3052 Hz — and never touched subject 1's recordings. Scoring subject
+1 it reaches 0.933, against 0.924 for the version that did train on both: a two-trial
+difference out of 210, i.e. indistinguishable. Whatever masked spectrogram reconstruction
+learns about intracranial field potentials is not tied to one person's electrode layout.
+
+**4. Contrastive alignment does not beat ridge regression — or lose to it.** Run on
 identical folds and features, the CLIP-style two-tower head lands within ±0.05 of ridge on
 2-way identification, winning for two encoders and losing for two. Worth stating plainly
 because the expectation going in was that ridge would win outright at n ≈ 175 training
@@ -46,13 +54,13 @@ trials. It did not; the two are level. (They are also not perfectly comparable: 
 predicts into DINOv2's own space, while the contrastive head is scored inside a 128-d space
 trained to make matching easy.)
 
-**4. DINOv2 explains no neural variance beyond a Gabor filter bank.** Partial RSA on
+**5. DINOv2 explains no neural variance beyond a Gabor filter bank.** Partial RSA on
 subject 1: DINOv2 given Gabor, ρ = +0.015 (*p* = 0.49); Gabor given DINOv2, ρ = +0.084
 (*p* = 0.003). For gratings and 1/f noise, a hand-built oriented-energy model of V1 captures
 the neural geometry at least as well as an 86 M-parameter self-supervised ViT. That is what
 the control was there to find out.
 
-**5. Category decoding is near ceiling; individual-image identification is at chance, and
+**6. Category decoding is near ceiling; individual-image identification is at chance, and
 we can say exactly why.** Every grating in this set is at the same orientation, so within a
 condition the 30 exemplars differ in **spatial phase alone**. Decoding phase from the
 cortical surface is reliably above chance but very weak (circular *r* = 0.25, *p* = 0.007),

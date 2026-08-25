@@ -18,7 +18,7 @@ ENCODER_LABELS = {
 ENCODER_FAMILY = {
     "spectral": "A: hand-crafted",
     "ecogjepa_all": "C: self-pretrained on this ECoG",
-    "ecogjepa_sub-02": "C: self-pretrained on this ECoG",
+    "ecogjepa_sub-02": "C: self-pretrained on this ECoG",   # transfer when scoring sub-01
     "signal_jepa": "B: off-the-shelf EEG foundation model",
     "cbramod": "B: off-the-shelf EEG foundation model",
 }
