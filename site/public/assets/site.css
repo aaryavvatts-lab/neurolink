@@ -77,13 +77,19 @@ code, .mono { font-family: var(--mono); font-size: .88em; }
 /* nav */
 header.top { border-bottom: 1px solid var(--line); background: var(--page);
   position: sticky; top: 0; z-index: 40; }
-.topbar { display: flex; align-items: center; gap: 1.4rem; padding: .75rem 0; flex-wrap: wrap; }
+/* brand | nav | toggle. The nav scrolls sideways rather than pushing the
+   toggle onto a second line once there are enough pages. */
+.topbar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center; gap: 1rem; padding: .75rem 0; }
 .brand { font-family: var(--serif); font-weight: 600; font-size: 1.05rem; text-decoration: none; }
 .brand span { color: var(--muted); font-family: var(--mono); font-size: .68rem;
   letter-spacing: .12em; text-transform: uppercase; display: block; }
-nav.main { display: flex; gap: 1.05rem; flex-wrap: wrap; margin-left: auto; }
-nav.main a { font-size: .9rem; color: var(--ink-2); text-decoration: none; padding: .2rem 0;
-  border-bottom: 2px solid transparent; }
+nav.main { display: flex; gap: 1.05rem; justify-content: flex-end;
+  overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
+  mask-image: linear-gradient(90deg, transparent 0, #000 1.2rem); }
+nav.main::-webkit-scrollbar { display: none; }
+nav.main a { font-size: .88rem; color: var(--ink-2); text-decoration: none; padding: .2rem 0;
+  border-bottom: 2px solid transparent; white-space: nowrap; }
 nav.main a:hover { color: var(--ink); border-bottom-color: var(--line-2); }
 nav.main a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
 .theme-btn { background: none; border: 1px solid var(--line-2); color: var(--ink-2);
@@ -222,10 +228,17 @@ ul.plain li { margin-bottom: .5em; }
   letter-spacing: .08em; text-transform: uppercase; padding: .18rem .45rem;
   border: 1px solid var(--line-2); border-radius: 4px; color: var(--muted); }
 
+@media (max-width: 900px) {
+  .topbar { grid-template-columns: 1fr auto; grid-template-areas: "brand toggle" "nav nav"; }
+  .brand { grid-area: brand; }
+  nav.main { grid-area: nav; justify-content: flex-start; gap: .9rem;
+    padding-bottom: .2rem; mask-image: none; }
+  .theme-btn { grid-area: toggle; }
+}
 @media (max-width: 720px) {
   .grid2 { grid-template-columns: 1fr; }
-  nav.main { margin-left: 0; gap: .8rem; }
   .hero { padding: 2.4rem 0 1.6rem; }
+  .grid3 { grid-template-columns: 1fr; }
   #brainCanvas { height: 380px; }
 }
 @media print {

@@ -107,8 +107,10 @@ export function barChart(host, { title, sub, series, chance, yLabel, fmt = (v) =
       g.append(s("line", { x1: cx, x2: cx, y1: y(d.ci[0]), y2: y(d.ci[1]), stroke: cssVar("--ink-2"), "stroke-width": 1.5 }));
       [d.ci[0], d.ci[1]].forEach((v) => g.append(s("line", { x1: cx - 5, x2: cx + 5, y1: y(v), y2: y(v), stroke: cssVar("--ink-2"), "stroke-width": 1.5 })));
     }
-    // Direct label: identity never rests on colour alone.
-    const val = s("text", { x: cx, y: top - 7, "text-anchor": "middle", fill: cssVar("--ink"), "font-size": 11.5, "font-weight": 600 });
+    // Direct label: identity never rests on colour alone. Sits above the error
+    // bar cap when there is one, so the two never collide.
+    const labelY = d.ci ? Math.min(top, y(d.ci[1])) - 9 : top - 7;
+    const val = s("text", { x: cx, y: labelY, "text-anchor": "middle", fill: cssVar("--ink"), "font-size": 11.5, "font-weight": 600 });
     val.textContent = fmt(d.value); g.append(val);
 
     const words = String(d.label).split(" ");

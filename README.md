@@ -1,6 +1,7 @@
 # NeuroLink — decoding visual perception from human intracranial LFP
 
-**[Live results site →](https://neurolink-ecru.vercel.app)**
+**[Live site](https://neurolink-ecru.vercel.app)** · thirteen pages, two tools that run in
+your browser, and a 3D viewer over the real brain surfaces.
 
 Two people with subdural electrode arrays over occipital cortex viewed gratings and noise
 patterns for half a second at a time. This repo reconstructs what they were looking at from
@@ -72,6 +73,19 @@ impressive at 0.167, but that number is carried almost entirely by getting the c
 right.
 
 ---
+
+## Two things on the site you can use
+
+**[Predict a response](https://neurolink-ecru.vercel.app/analyse.html)** takes any picture you
+drop in, measures it with a 2-D FFT in your browser, and predicts what visual cortex would do.
+It is aimed at somebody choosing stimuli for an experiment who wants to know whether they will
+drive gamma before booking time. Cross-validated accuracy is printed beside every prediction
+(narrowband gamma *r* = 0.957, gamma peak *r* = 0.814, broadband *r* = 0.678) and the page
+warns when your picture sits outside the range the model was fitted on. Nothing is uploaded.
+
+**[Run the decoder](https://neurolink-ecru.vercel.app/decode.html)** ships the real fitted
+weights and runs them on real held-out trials in the browser. It reproduces the Python result
+exactly: 0.8952 both sides, to four decimal places.
 
 ## What it produces
 

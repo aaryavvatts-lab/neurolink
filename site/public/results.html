@@ -185,8 +185,8 @@ function drawMain() {
   }).filter(Boolean);
   const g0 = metricOf(encs[ORDER.find(k => encs[k])], m);
   barChart(document.getElementById("mainChart"), {
-    title: metricSel.selectedOptions[0].textContent.replace(/^./, c => c.toUpperCase()),
-    sub: `${sub.replace("sub-0", "Patient ")}. Pictures in the test set never appear in training.`,
+    title: sub.replace("sub-0", "Patient ") + ", " + metricSel.selectedOptions[0].textContent,
+    sub: "Pictures in the test set never appear in training. Bars carry 95% ranges from resampling.",
     series, chance: g0.chance, yLabel: g0.label, fmt: g0.fmt,
     max: m === "top5" ? undefined : 1.0,
   });

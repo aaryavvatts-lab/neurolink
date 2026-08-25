@@ -228,7 +228,7 @@ const series = order.filter(k => encs[k]).map(k => ({
   note: encs[k].family.split(": ")[1],
 }));
 barChart(document.getElementById("encChart"), {
-  title: "Telling the seven pattern types apart, patient 1",
+  title: "Patient 1, telling the seven pattern types apart",
   sub: "Test pictures never appear in training. Bars carry 95% ranges from resampling.",
   series, chance: 1 / 7, yLabel: "share correct",
   fmt: v => (v * 100).toFixed(0) + "%", max: 1.0,
