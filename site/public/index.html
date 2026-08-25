@@ -3,203 +3,282 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NeuroLink — Decoding Vision from Intracranial Brain Signals</title>
-<meta name="description" content="Reconstructing what a person was looking at from raw ECoG, and a head-to-head test of whether EEG foundation models can see what electrodes on the brain actually record.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
-<link rel="stylesheet" href="styles.css">
+<title>NeuroLink · reading vision from electrodes on the brain</title>
+<meta name="description" content="I tried to work out what two people were looking at from electrodes resting on their visual cortex. Here is what came out, what did not, and a tool you can use on your own images.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-<button class="toggle" id="themeToggle" aria-label="Toggle colour theme">◐</button>
+<main id="main">
 
-<header class="hero">
+<div class="wrap hero">
+  <p class="eyebrow">Electrodes on the brain · Vision · OpenNeuro ds005953</p>
+  <h1>Working out what someone is looking at from the electricity in their brain</h1>
+  <p class="lede">
+    Two people had a grid of electrodes placed straight onto the back of their brain before
+    surgery. While the grid was in, they watched patterns flash on a screen, half a second at
+    a time. I tried to work out which pattern was on screen using nothing but the voltage.
+  </p>
+  <div class="stats" id="heroStats"></div>
+</div>
+
+<section>
   <div class="wrap">
-    <div class="eyebrow">Intracranial EEG · Visual decoding · OpenNeuro ds005953</div>
-    <h1>Reading vision out of the human brain</h1>
-    <p class="lede">
-      Two people had electrode arrays placed directly on their visual cortex. They watched
-      gratings and noise patterns flash by, half a second each. This is what we could
-      recover from the raw voltage — and, just as importantly, what we could not.
+    <p class="kicker">01 · What I set out to do</p>
+    <h2>The plan I started with, and where it broke</h2>
+    <p>
+      The idea I copied is popular and goes like this. Run the pictures through an image model
+      to turn each one into a list of numbers. Run the brain signal through a brain model to
+      turn that into a list of numbers too. Then learn a map from one list to the other. Once
+      you have that map, new brain data goes in and a picture comes out.
     </p>
-    <div class="split">
-      <div class="claim">
-        <h4>The pitch</h4>
-        <p>Embed videos with Meta's DINO. Embed brain signals with a brain foundation model.
-           Align the two latent spaces. Reconstruct what the person was seeing.</p>
+    <p>
+      Two things went wrong straight away, and both turned out to be more interesting than the
+      original plan.
+    </p>
+    <div class="grid2">
+      <div class="card">
+        <p class="kicker">Problem one</p>
+        <p style="margin-bottom:0">
+          The pictures are not videos or photographs. They are stripes and grainy textures.
+          Seven kinds, thirty versions of each. There is no photo to rebuild, so
+          "reconstruct the image" had to mean something else.
+        </p>
       </div>
-      <div class="reality">
-        <h4>What the data actually allows</h4>
-        <p>The stimuli are static gratings and noise, not video. And every off-the-shelf
-           "brain foundation model" is trained on scalp EEG, which cannot represent the
-           frequency band where this signal lives. Both facts became the experiment.</p>
+      <div class="card">
+        <p class="kicker">Problem two</p>
+        <p style="margin-bottom:0">
+          Every ready-made brain model I could find was trained on EEG, recorded from the
+          scalp. Those models only keep frequencies up to about 40 or 125 Hz. In this kind of
+          recording the useful signal sits above that.
+        </p>
       </div>
-    </div>
-    <div class="stats" id="heroStats"></div>
-  </div>
-</header>
-
-<section id="data">
-  <div class="wrap">
-    <div class="section-num">01 — THE RECORDING</div>
-    <h2>What was measured</h2>
-    <p id="dataPara"></p>
-    <div class="table-scroll"><table id="subjTable"></table></div>
-    <h3>The stimulus set, measured from pixels rather than trusted from a label</h3>
-    <p>Every image was characterised by its own Fourier statistics, so the reconstruction
-       target is verifiable rather than assumed. The recovered parameters match the
-       dataset's documentation exactly.</p>
-    <div class="table-scroll"><table id="stimTable"></table></div>
-    <div class="callout" id="phaseNote"></div>
-  </div>
-</section>
-
-<section id="replication">
-  <div class="wrap">
-    <div class="section-num">02 — THE GATE</div>
-    <h2>First, does the preprocessing reproduce known physiology?</h2>
-    <p>
-      Before any decoding claim is worth making, the pipeline has to recover an effect that
-      is already established. Hermes et al. showed that gratings drive a <em>narrowband
-      gamma oscillation</em> — a genuine spectral bump around 30–80 Hz — while noise patterns
-      drive broadband elevation with no peak at all. If our preprocessing cannot see that,
-      nothing downstream is trustworthy.
-    </p>
-    <figure id="spectraFig"></figure>
-    <div class="callout" id="replNote"></div>
-  </div>
-</section>
-
-<section id="encoders">
-  <div class="wrap">
-    <div class="section-num">03 — THE EXPERIMENT</div>
-    <h2>Three ways to encode a brain signal</h2>
-    <p>
-      The brief calls for a "brain foundation model." We ran three families head to head,
-      each mapped into DINOv2's image space by cross-validated ridge regression, and let
-      the comparison be the result.
-    </p>
-    <div class="table-scroll"><table id="encoderTable"></table></div>
-    <figure id="encFig"></figure>
-    <div class="callout warn" id="bandwidthNote"></div>
-    <div class="callout" id="transferNote"></div>
-    <h3>Ridge regression vs the contrastive head</h3>
-    <p>
-      The brief calls for CLIP-style contrastive alignment. Run on identical folds and
-      features, it comes out roughly level with plain ridge regression — better for some
-      encoders, worse for others. Note the two are not perfectly comparable: ridge predicts
-      into DINOv2's own space, while the contrastive head is evaluated inside a 128-d space
-      it was trained to make matching easy in.
-    </p>
-    <div class="table-scroll"><table id="contrastiveTable"></table></div>
-
-    <h3>Where the confusions fall</h3>
-    <figure id="confusionFig"></figure>
-  </div>
-</section>
-
-<section id="limits">
-  <div class="wrap">
-    <div class="section-num">04 — THE CEILING</div>
-    <h2>Category, yes. Individual image, barely.</h2>
-    <p>
-      Overall retrieval numbers flatter a decoder: getting the <em>condition</em> right
-      already narrows 210 candidates to 30. The honest test restricts the candidate pool to
-      same-condition exemplars, which differ only in spatial phase.
-    </p>
-    <div class="table-scroll"><table id="withinTable"></table></div>
-    <div class="callout" id="phaseFinding"></div>
-    <h3>Continuous stimulus parameters, decoded</h3>
-    <figure id="paramsFig"></figure>
-  </div>
-</section>
-
-<section id="recon">
-  <div class="wrap">
-    <div class="section-num">05 — RECONSTRUCTION</div>
-    <h2>Re-rendering what they saw</h2>
-    <p>
-      Rather than hallucinate pixels with a generative model that 210 trials cannot
-      constrain, we decode the stimulus's generative parameters — spatial frequency, noise
-      exponent, contrast, phase — and re-render the image from those numbers. Every pixel
-      below traces back to a decoded value.
-    </p>
-    <figure id="galleryFig"></figure>
-    <div class="gallery" id="galleryGrid"></div>
-  </div>
-</section>
-
-<section id="braintv">
-  <div class="wrap">
-    <div class="section-num">06 — BRAIN TV</div>
-    <h2>Decoding the recording continuously</h2>
-    <p id="braintvPara"></p>
-    <div id="braintvHolder"></div>
-  </div>
-</section>
-
-<section id="anatomy">
-  <div class="wrap">
-    <div class="section-num">07 — ANATOMY</div>
-    <h2>Where the signal lives</h2>
-    <p>
-      A decoder can be right for the wrong reasons. If the information is genuinely visual,
-      the informative electrodes should sit over early visual cortex rather than scatter
-      across the array. Each electrode is coloured by its own cross-validated accuracy when
-      used <em>alone</em>.
-    </p>
-    <div class="brains" id="brainFigs"></div>
-    <figure id="electrodeProfileFig"></figure>
-    <div class="callout" id="anatNote"></div>
-  </div>
-</section>
-
-<section id="explorer">
-  <div class="wrap">
-    <div class="section-num">08 — EXPLORER</div>
-    <h2>Trial by trial</h2>
-    <p>Pick any held-out trial and see the image presented, the parameters decoded from the
-       brain, and the reconstruction rendered from them.</p>
-    <div class="explorer">
-      <div class="controls">
-        <label>Subject <select id="expSub"></select></label>
-        <label>Condition <select id="expCond"></select></label>
-        <button id="expPrev">‹ Prev</button>
-        <button id="expNext">Next ›</button>
-        <button id="expRandom">Random</button>
-      </div>
-      <div class="trialview" id="expView"></div>
     </div>
   </div>
 </section>
 
-<section id="methods">
+<section>
   <div class="wrap">
-    <div class="section-num">09 — METHODS</div>
-    <h2>How this was done</h2>
-    <div id="methodsBody"></div>
-    <h3>Limitations</h3>
-    <ul id="limitations"></ul>
+    <p class="kicker">02 · The main result</p>
+    <h2>How much a model can see depends on how much of the signal it kept</h2>
+    <p>
+      I measured how much of the brain's reaction to a picture happens at each frequency. In
+      the better of the two patients, only <b id="bwBelow40">about a tenth</b> of it sits
+      below 40 Hz. That is the cutoff the SignalJEPA model was trained under. Everything above
+      is thrown away before that model gets to look.
+    </p>
+    <p>
+      So I ran four ways of turning brain signal into numbers against each other, on the same
+      trials, scored the same way. They line up in order of how much of the signal each one
+      can still see.
+    </p>
+    <div class="chart" id="encChart"></div>
+    <div class="tscroll"><table id="encTable"></table></div>
+    <p class="note flag" id="bwNote"></p>
+    <p>
+      The last row is the one I did not expect. I trained a small model on the raw recordings
+      themselves, with the frequencies left in. It never saw a single label saying which
+      picture was on screen. It beat the feature set built by hand from the published paper on
+      this exact signal.
+    </p>
+    <p>
+      <a href="results.html">All the numbers, with the tests behind them</a>
+    </p>
   </div>
 </section>
 
-<footer>
+<section>
   <div class="wrap">
-    <p><strong>Data.</strong> OpenNeuro <span class="mono" id="dsdoi"></span> — Hermes, Miller,
-      Wandell &amp; Winawer. Released CC0. This project is an independent reanalysis.</p>
-    <h3>References</h3>
-    <ul class="refs">
-      <li>Hermes D, Miller KJ, Wandell BA, Winawer J (2015). Stimulus dependence of gamma
-        oscillations in human visual cortex. <em>Cerebral Cortex</em> 25(9):2951–9.</li>
-      <li>Hermes D, Petridou N, Kay KN, Winawer J (2019). An image-computable model for the
-        stimulus selectivity of gamma oscillations. <em>eLife</em> 8:e47035.</li>
-      <li>Oquab M et al. (2023). DINOv2: Learning robust visual features without supervision.</li>
-      <li>Wang C et al. (2023). BrainBERT: Self-supervised representation learning for
-        intracranial recordings. <em>ICLR</em>.</li>
-      <li>Guetschel P et al. (2024). Signal-JEPA: self-supervised pretraining for EEG.</li>
-    </ul>
-    <p id="builtline"></p>
+    <p class="kicker">03 · Before any of that</p>
+    <h2>First I checked the signal was really there</h2>
+    <p>
+      There is a known effect in this data. Stripe patterns set off a bump in the power
+      spectrum somewhere between 30 and 80 Hz. Grainy textures do not, even though they push
+      the brain just as hard overall. If my code could not find that, nothing after it would
+      be worth reading. So I made it a test that has to pass before anything else runs.
+    </p>
+    <div class="chart" id="spectraChart"></div>
+    <p>
+      It is there. The stripes make the bump, the textures do not, and the bump slides up in
+      frequency as the stripes get finer. That last part I never tuned for. Getting it out the
+      other end is a good sign the filtering is right.
+    </p>
+    <p><a href="data.html">More about the recordings and the pictures</a></p>
   </div>
-</footer>
+</section>
 
-<script src="app.js"></script>
+<section>
+  <div class="wrap">
+    <p class="kicker">04 · Try it</p>
+    <h2>Three things on this site you can actually run</h2>
+    <div class="grid3">
+      <div class="card">
+        <h3 style="margin-top:0">Predict a response</h3>
+        <p>
+          Drop in any picture. Your browser measures it and a model fitted on the real
+          recordings predicts what the visual cortex would do. Useful if you are picking
+          stimuli for an experiment and want to know whether they will drive gamma.
+        </p>
+        <p style="margin-bottom:0"><a href="analyse.html">Open the tool</a></p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Run the decoder</h3>
+        <p>
+          Pick a real trial. The actual decoder weights load into your browser, run on that
+          trial's brain data, and draw what it thinks was on the screen. The trial was held
+          out when those weights were fitted.
+        </p>
+        <p style="margin-bottom:0"><a href="decode.html">Open the decoder</a></p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Look at the brain</h3>
+        <p>
+          Both patients' brain surfaces in 3D, with every electrode where it really sat.
+          Colour is how well that one electrode does on its own. Spin it and click a contact.
+        </p>
+        <p style="margin-bottom:0"><a href="brain.html">Open the viewer</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">05 · The honest part</p>
+    <h2>What it cannot do</h2>
+    <p>
+      Telling the seven kinds of pattern apart works well. Telling apart two pictures of the
+      same kind does not work at all, and I can say exactly why.
+    </p>
+    <p>
+      Inside one kind, the thirty versions differ in one thing only: where the stripes sit,
+      the phase. Everything else is held fixed. So picking the right one out of thirty comes
+      down entirely to whether phase can be read off the surface of the brain. It can, a
+      little. The link is real and holds up under a shuffle test, but it is weak, and weak is
+      not enough to separate thirty near-identical pictures.
+    </p>
+    <p>
+      There is a second reason, and it is a ceiling rather than a failure of the method. One
+      patient saw every picture twice. I checked how much the brain's answer to the same
+      picture repeats between the two viewings. For single trials it repeats at a correlation
+      of about 0.22. No decoder can beat the reliability of the thing it is decoding.
+    </p>
+    <p><a href="results.html#limits">The full picture, including where it fails</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">06 · Where the data came from</p>
+    <h2>Credit</h2>
+    <p>
+      None of this is my data. It was recorded by Dora Hermes, Kai Miller, Brian Wandell and
+      Jonathan Winawer, and put online under a licence that lets anyone use it. The patients
+      had the electrodes in for medical reasons, to find where their seizures start. They
+      agreed to do a task while the electrodes were in. This site is a reanalysis by a
+      student, and nothing here is medical advice.
+    </p>
+    <p><a href="references.html">Papers I leaned on</a></p>
+  </div>
+</section>
+
+</main>
+
+<script type="module">
+import { mountChrome, loadJSON, el, pct, fmt, condColor, famColor, cssVar } from "./assets/shell.js";
+import { barChart, lineChart } from "./assets/charts.js";
+mountChrome("index.html");
+
+const R = await loadJSON("results.json");
+const SP = await loadJSON("spectra.json");
+
+/* hero numbers */
+const subs = Object.values(R.dataset.subjects);
+const chans = subs.reduce((a, s) => a + s.n_good_channels, 0);
+const trials = subs.reduce((a, s) => a + s.trials_per_run * s.runs.length, 0);
+let best = null;
+for (const [sub, s] of Object.entries(R.alignment.subjects))
+  for (const [, e] of Object.entries(s.encoders))
+    if (!best || e.condition.accuracy > best.a) best = { a: e.condition.accuracy, sub };
+document.getElementById("heroStats").replaceChildren(
+  el("div", { class: "stat" }, el("b", {}, String(chans)), el("span", {}, "electrodes"), el("em", {}, "two people")),
+  el("div", { class: "stat" }, el("b", {}, String(trials)), el("span", {}, "trials"), el("em", {}, "half a second each")),
+  el("div", { class: "stat" }, el("b", {}, String(R.dataset.n_images - 1)), el("span", {}, "pictures"), el("em", {}, "7 kinds, 30 each")),
+  el("div", { class: "stat" }, el("b", {}, pct(best.a, 1)), el("span", {}, "best score"), el("em", {}, "1 in 7 by luck")));
+
+/* bandwidth number */
+const bw = Object.values(R.encoders_manifest || {}).map(v => v.bandwidth).find(Boolean);
+if (bw) {
+  document.getElementById("bwBelow40").textContent = pct(bw.frac_below_40Hz, 1);
+  document.getElementById("bwNote").innerHTML =
+    `<strong>The size of the problem.</strong> Of everything the brain does in response to a
+     picture, ${pct(bw.frac_below_40Hz, 1)} of it happens below 40 Hz and ${pct(bw.frac_below_125Hz, 1)}
+     below 125 Hz. SignalJEPA was trained under the first cutoff and CBraMod under the second.
+     Making either model bigger would not help. The part they need is already gone by the time
+     it reaches them.`;
+}
+
+/* encoder comparison */
+const sub = "sub-01";
+const encs = R.alignment.subjects[sub].encoders;
+const order = ["signal_jepa", "cbramod", "spectral", "ecogjepa_all", "ecogjepa_sub-02"];
+const series = order.filter(k => encs[k]).map(k => ({
+  label: encs[k].label, value: encs[k].condition.accuracy,
+  ci: encs[k].condition.ci, color: famColor(encs[k].family),
+  note: encs[k].family.split(": ")[1],
+}));
+barChart(document.getElementById("encChart"), {
+  title: "Telling the seven pattern types apart, patient 1",
+  sub: "Test pictures never appear in training. Bars carry 95% ranges from resampling.",
+  series, chance: 1 / 7, yLabel: "share correct",
+  fmt: v => (v * 100).toFixed(0) + "%", max: 1.0,
+});
+document.getElementById("encChart").append(el("div", { class: "legend" },
+  ["A: hand-crafted", "B: off-the-shelf EEG foundation model", "C: self-pretrained on this ECoG"]
+    .map(f => el("span", {}, el("i", { style: `background:${famColor(f)}` }),
+      f.split(": ")[1]))));
+
+/* encoder table */
+const subsList = Object.keys(R.alignment.subjects);
+const head = el("thead", {}, el("tr", {},
+  el("th", {}, "How the brain signal was turned into numbers"),
+  el("th", {}, "Frequencies it keeps"),
+  ...subsList.map(s2 => el("th", {}, s2.replace("sub-0", "patient ")))));
+const bandOf = { "signal_jepa": "0.5\u201340 Hz", "cbramod": "0\u2013125 Hz",
+                 "spectral": "everything", "ecogjepa_all": "4\u2013200 Hz",
+                 "ecogjepa_sub-02": "4\u2013200 Hz" };
+const body = el("tbody", {}, order.filter(k => encs[k]).map(k => {
+  const any = encs[k];
+  const bests = subsList.map(s2 => Math.max(...Object.values(R.alignment.subjects[s2].encoders).map(e => e.condition.accuracy)));
+  return el("tr", {},
+    el("td", {}, el("span", { class: "swatch", style: `background:${famColor(any.family)}` }), any.label),
+    el("td", {}, bandOf[k] || "n/a"),
+    ...subsList.map((s2, i) => {
+      const e2 = R.alignment.subjects[s2].encoders[k];
+      if (!e2) return el("td", {}, "n/a");
+      return el("td", { class: e2.condition.accuracy === bests[i] ? "best" : null }, pct(e2.condition.accuracy, 1));
+    }));
+}));
+document.getElementById("encTable").replaceChildren(head, body);
+
+/* spectra */
+function drawSpectra() {
+  const d = SP["sub-01"];
+  const labels = R.condition_labels;
+  const series2 = [1,2,3,4,5,6,7].map(c => ({
+    label: labels[c], values: d.conditions[c], color: condColor(c),
+  }));
+  lineChart(document.getElementById("spectraChart"), {
+    title: "What each kind of picture does to the power spectrum",
+    sub: "Patient 1, averaged over the ten electrodes that reacted most. Zero means no change from a blank grey screen.",
+    x: d.freqs, series: series2, logX: true, height: 320,
+    xLabel: "frequency (Hz)", yLabel: "change from blank screen",
+    bands: [{ from: 30, to: 80, label: "30–80 Hz" }],
+    yFmt: v => v.toFixed(2), xFmt: v => String(Math.round(v)),
+  });
+}
+drawSpectra();
+document.addEventListener("themechange", () => { drawSpectra(); });
+</script>
 </body>
 </html>

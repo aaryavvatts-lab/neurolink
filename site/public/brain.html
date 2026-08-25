@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D brain · NeuroLink</title>
+<meta name="description" content="Both patients' brain surfaces with every electrode where it really sat, coloured by how well that one contact decodes on its own.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">Viewer · drag to turn, scroll to zoom</p>
+  <h1>Where on the brain the signal actually is</h1>
+  <p class="lede">
+    These are the real brain surfaces, rebuilt from each patient's own scan, with every
+    electrode sitting where the surgeons put it. Colour is how well that single contact does
+    on its own at telling the seven pattern types apart. Click one to see its numbers.
+  </p>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="controls">
+      <label class="field">Patient
+        <select id="subSel"></select>
+      </label>
+      <label class="field">View
+        <select id="viewSel">
+          <option value="back">from behind</option>
+          <option value="side">from the side</option>
+          <option value="under">from underneath</option>
+          <option value="top">from above</option>
+        </select>
+      </label>
+      <button type="button" id="spin">Start spinning</button>
+      <button type="button" id="reset">Reset</button>
+    </div>
+
+    <div class="grid2" style="grid-template-columns:1.7fr 1fr;gap:1.2rem;align-items:start">
+      <div>
+        <canvas id="brainCanvas" aria-label="Rotatable 3D brain with electrodes"></canvas>
+        <div id="glFallback" hidden>
+          <p class="note flag">
+            Your browser could not start 3D graphics, so here are fixed pictures of the same
+            thing instead. Everything they show is also in the table and chart below.
+          </p>
+          <div class="grid3" id="fallbackImgs"></div>
+        </div>
+        <div class="legend" id="colorLegend" style="margin-top:.7rem"></div>
+        <p style="font-size:.83rem;color:var(--ink-2);margin-top:.5rem">
+          Keyboard: tab to the canvas, then arrow keys to turn it and plus or minus to zoom.
+        </p>
+      </div>
+      <div>
+        <div class="card">
+          <p class="kicker">Selected contact</p>
+          <div class="kv" id="pickKv">
+            <div><span>none yet</span><span>click a dot</span></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:1rem">
+          <p class="kicker">This patient</p>
+          <div class="kv" id="subKv"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart" id="rankChart"></div>
+    <p class="note" id="anatNote"></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">Why this matters</p>
+    <h2>A check that the result is about vision</h2>
+    <p>
+      A decoder can be right for the wrong reason. If it were picking up on something in the
+      equipment, or on the patient shifting in bed, the useful electrodes would be scattered
+      anywhere. They are not. They sit in a tight patch at the very back of the head, over the
+      first few stops in the visual system, and contacts further forward sit at chance.
+    </p>
+    <p>
+      The two patients had grids on opposite sides, different sizes, and different recording
+      speeds. The pattern holds in both.
+    </p>
+    <p>
+      One caveat on the pictures. Surface positions like these come from lining up a scan taken
+      before surgery with one taken after, and the brain shifts a little once the skull is
+      open. A contact may sit a few millimetres from where it is drawn.
+    </p>
+    <p><a href="results.html">The numbers behind the colours</a></p>
+  </div>
+</section>
+</main>
+
+<script type="module">
+import * as THREE from "./lib/three.module.min.js";
+import { mountChrome, loadJSON, el, fmt, pct, cssVar } from "./assets/shell.js";
+import { barChart } from "./assets/charts.js";
+mountChrome("brain.html");
+
+const B = await loadJSON("brain.json");
+const subs = Object.keys(B);
+const subSel = document.getElementById("subSel");
+subs.forEach(s => subSel.append(el("option", { value: s }, s.replace("sub-0", "Patient "))));
+
+const canvas = document.getElementById("brainCanvas");
+
+/* Some machines have WebGL turned off or blocked. Fall back to the rendered
+   stills rather than showing a blank rectangle. */
+let renderer = null;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+} catch (err) {
+  showFallback(err);
+}
+function showFallback() {
+  canvas.hidden = true;
+  document.getElementById("spin").disabled = true;
+  document.getElementById("viewSel").disabled = true;
+  document.getElementById("reset").disabled = true;
+  const box = document.getElementById("glFallback");
+  box.hidden = false;
+  const sub = document.getElementById("subSel").value || "sub-01";
+  document.getElementById("fallbackImgs").replaceChildren(
+    ...["posterior", "lateral", "ventral"].map(v =>
+      el("figure", { style: "margin:0" },
+        el("img", { src: `figures/brain_${sub}_${v}.png`, loading: "lazy",
+          alt: `${sub.replace("sub-0", "Patient ")} brain seen from ${v === "posterior" ? "behind" : v === "lateral" ? "the side" : "underneath"}, electrodes coloured by how well each one decodes alone.` }),
+        el("figcaption", {}, v === "posterior" ? "from behind" : v === "lateral" ? "from the side" : "from underneath"))));
+}
+if (!renderer) { /* stills are up; the charts below still build */ }
+if (renderer) renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 1, 4000);
+const root = new THREE.Group();
+scene.add(root);
+
+const key = new THREE.DirectionalLight(0xffffff, 1.5);
+key.position.set(-1, 0.7, 1.2);
+const fill = new THREE.DirectionalLight(0xffffff, 0.55);
+fill.position.set(1, -0.4, -0.9);
+scene.add(key, fill, new THREE.AmbientLight(0xffffff, 0.55));
+
+let current = null, spinning = false;
+let yaw = 0, pitch = 0, dist = 320;
+
+/* one hue, light to dark, matching the site's sequential ramp */
+const RAMP = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"];
+function rampColor(t) {
+  const i = Math.max(0, Math.min(RAMP.length - 1, Math.round(t * (RAMP.length - 1))));
+  return new THREE.Color(RAMP[i]);
+}
+
+function build(sub) {
+  while (root.children.length) {
+    const c = root.children.pop();
+    c.geometry?.dispose(); c.material?.dispose();
+  }
+  const d = B[sub];
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(d.vertices, 3));
+  geo.setAttribute("normal", new THREE.Float32BufferAttribute(d.normals, 3));
+  geo.setIndex(d.faces);
+  const dark = getComputedStyle(document.documentElement).getPropertyValue("--page").trim() === "#100f0d"
+    || document.documentElement.getAttribute("data-theme") === "dark"
+    || (!document.documentElement.getAttribute("data-theme") && matchMedia("(prefers-color-scheme: dark)").matches);
+  const cortex = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({
+    color: dark ? 0x9a938a : 0xd8d2c9, side: THREE.DoubleSide, flatShading: false,
+  }));
+  root.add(cortex);
+
+  const accs = d.electrodes.map(e => e.acc);
+  const lo = Math.min(...accs), hi = Math.max(...accs);
+  const sphere = new THREE.SphereGeometry(2.4, 20, 16);
+  d.electrodes.forEach((e, i) => {
+    const m = new THREE.Mesh(sphere, new THREE.MeshLambertMaterial({
+      color: rampColor((e.acc - lo) / (hi - lo || 1)),
+    }));
+    m.position.set(e.xyz[0], e.xyz[1], e.xyz[2]);
+    m.userData = { i, ...e, lo, hi };
+    root.add(m);
+  });
+
+  const c = d.centre;
+  root.position.set(-c[0], -c[1], -c[2]);
+  current = { sub, d, lo, hi };
+  setView("back", d.hemi);
+  if (renderer) renderer.setClearColor(new THREE.Color(cssVar("--surface")), 1);
+  else showFallback();
+
+  /* legend */
+  document.getElementById("colorLegend").replaceChildren(
+    el("span", {}, "worse ", ...RAMP.map(c2 =>
+      el("i", { style: `background:${c2};width:1.3rem;border-radius:0` })), " better"),
+    el("span", {}, `${pct(lo, 0)} to ${pct(hi, 0)} correct, chance ${pct(d.chance, 0)}`));
+
+  const sorted = [...d.electrodes].sort((a, b) => b.acc - a.acc);
+  document.getElementById("subKv").replaceChildren(
+    el("div", {}, el("span", {}, "side of the head"), el("span", {}, d.hemi === "R" ? "right" : "left")),
+    el("div", {}, el("span", {}, "contacts used"), el("span", {}, String(d.electrodes.length))),
+    el("div", {}, el("span", {}, "best single contact"), el("span", {}, pct(hi, 1))),
+    el("div", {}, el("span", {}, "middle contact"), el("span", {}, pct(sorted[Math.floor(sorted.length / 2)].acc, 1))),
+    el("div", {}, el("span", {}, "by luck alone"), el("span", {}, pct(d.chance, 1))));
+
+  barChart(document.getElementById("rankChart"), {
+    title: "Every contact on its own, best first",
+    sub: `${sub.replace("sub-0", "Patient ")}. Each bar is one electrode used alone to tell the seven kinds apart.`,
+    series: sorted.slice(0, 24).map(e => ({
+      label: e.name, value: e.acc, color: `#${rampColor((e.acc - lo) / (hi - lo || 1)).getHexString()}`,
+    })),
+    chance: d.chance, yLabel: "share correct", max: Math.min(1, hi * 1.2),
+    fmt: v => (v * 100).toFixed(0) + "%", height: 250,
+  });
+
+  const anat = document.getElementById("anatNote");
+  anat.innerHTML = `<strong>Read the shape, not just the best number.</strong> In
+    ${sub.replace("sub-0", "patient ")} the strongest contact gets ${pct(hi, 1)} on its own,
+    and the middle one gets ${pct(sorted[Math.floor(sorted.length / 2)].acc, 1)} against
+    ${pct(d.chance, 1)} by luck. The good ones are neighbours on the grid, not scattered.
+    That is what you would expect if they are sitting over a patch of visual cortex, and not
+    what you would expect from noise in the equipment.`;
+}
+
+function setView(which, hemi) {
+  const side = hemi === "R" ? 1 : -1;
+  const map = {
+    back: [0, 0], side: [side * Math.PI / 2, 0],
+    under: [0, -Math.PI / 2 + 0.25], top: [0, Math.PI / 2 - 0.25],
+  };
+  [yaw, pitch] = map[which] || map.back;
+}
+
+function resize() {
+  if (!renderer) return;
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (!w || !h) return;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(canvas);
+
+function frame() {
+  if (!renderer) return;
+  if (spinning) yaw += 0.004;
+  camera.position.set(
+    dist * Math.cos(pitch) * Math.sin(yaw),
+    dist * Math.sin(pitch),
+    dist * Math.cos(pitch) * Math.cos(yaw));
+  camera.up.set(0, 1, 0);
+  camera.lookAt(0, 0, 0);
+  key.position.copy(camera.position).multiplyScalar(0.01).add(new THREE.Vector3(-40, 30, 40));
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+/* drag, wheel, touch, keyboard */
+let dragging = false, lx = 0, ly = 0;
+canvas.addEventListener("pointerdown", e => { dragging = true; lx = e.clientX; ly = e.clientY; canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener("pointerup", e => { dragging = false; canvas.releasePointerCapture(e.pointerId); });
+canvas.addEventListener("pointermove", e => {
+  if (!dragging) return;
+  yaw -= (e.clientX - lx) * 0.008;
+  pitch = Math.max(-1.45, Math.min(1.45, pitch + (e.clientY - ly) * 0.008));
+  lx = e.clientX; ly = e.clientY;
+});
+canvas.addEventListener("wheel", e => {
+  e.preventDefault();
+  dist = Math.max(150, Math.min(700, dist + e.deltaY * 0.4));
+}, { passive: false });
+canvas.tabIndex = 0;
+canvas.addEventListener("keydown", e => {
+  const k = { ArrowLeft: () => yaw += 0.12, ArrowRight: () => yaw -= 0.12,
+              ArrowUp: () => pitch = Math.min(1.45, pitch + 0.1),
+              ArrowDown: () => pitch = Math.max(-1.45, pitch - 0.1),
+              "+": () => dist = Math.max(150, dist - 25), "=": () => dist = Math.max(150, dist - 25),
+              "-": () => dist = Math.min(700, dist + 25) }[e.key];
+  if (k) { e.preventDefault(); k(); }
+});
+
+/* click to pick an electrode */
+const ray = new THREE.Raycaster();
+canvas.addEventListener("click", e => {
+  const r = canvas.getBoundingClientRect();
+  const p = new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1,
+                              -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(p, camera);
+  const hits = ray.intersectObjects(root.children.slice(1), false);
+  if (!hits.length) return;
+  const u = hits[0].object.userData;
+  document.getElementById("pickKv").replaceChildren(
+    el("div", {}, el("span", {}, "contact"), el("span", {}, u.name)),
+    el("div", {}, el("span", {}, "on its own"), el("span", {}, pct(u.acc, 1))),
+    el("div", {}, el("span", {}, "by luck"), el("span", {}, pct(current.d.chance, 1))),
+    el("div", {}, el("span", {}, "times better"), el("span", {}, fmt(u.acc / current.d.chance, 1) + "×")),
+    el("div", {}, el("span", {}, "position (mm)"),
+      el("span", {}, u.xyz.map(v => v.toFixed(0)).join(", "))));
+});
+
+subSel.onchange = () => build(subSel.value);
+document.getElementById("viewSel").onchange = e => setView(e.target.value, current.d.hemi);
+document.getElementById("spin").onclick = e => {
+  spinning = !spinning;
+  e.target.textContent = spinning ? "Stop spinning" : "Start spinning";
+};
+document.getElementById("reset").onclick = () => { dist = 320; setView("back", current.d.hemi); };
+document.addEventListener("themechange", () => build(subSel.value));
+
+build(subs[0]);
+resize();
+frame();
+if (matchMedia("(prefers-reduced-motion: reduce)").matches) spinning = false;
+</script>
+</body>
+</html>

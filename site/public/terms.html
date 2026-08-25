@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms of use · NeuroLink</title>
+<meta name="description" content="What you can do with this site and what it does not promise.">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">Terms and conditions</p>
+  <h1>Terms of use</h1>
+  <p class="lede">What you can do with this site and what it does not promise.</p>
+  <p class="mono" style="color:var(--muted);font-size:.8rem">Last updated 24 August 2026.</p>
+</div>
+<section><div class="wrap narrow">
+
+<h2>What this is</h2>
+<p>
+  A student research project that presents a reanalysis of a public brain recording, plus two
+  tools that run in your browser. Using the site means you accept what is written here.
+</p>
+
+<h2>This is not medical advice</h2>
+<p>
+  Nothing on this site is medical advice, a diagnosis, or a medical device. It is not approved
+  by any regulator and has never been tested for clinical use. The recordings come from two
+  patients having epilepsy surgery, and results from two people do not tell you anything about
+  yourself or anyone else. If you have a health question, ask a doctor.
+</p>
+
+<h2>What the tools do and do not promise</h2>
+<p>
+  The response tool predicts what visual cortex might do given a picture. It was fitted on 210
+  trials from one person who was looking at stripes and grainy textures. Its accuracy is printed
+  next to every prediction, and it warns you when your picture sits outside what it learned.
+  Treat its output as a rough guide for planning, not as a measurement.
+</p>
+<p>
+  The decoder tool replays a real model on real trials. It shows what that model produced. It
+  does not read minds, it cannot be pointed at a living person, and it only works on the
+  specific recordings shipped with the page.
+</p>
+
+<h2>Using the code and the results</h2>
+<p>
+  The code is on GitHub under the MIT licence, so you can use it, change it and build on it,
+  including commercially, as long as you keep the copyright notice. The text and figures on
+  this site may be reused with credit.
+</p>
+<p>
+  The underlying recordings are not mine to license. They were released under CC0 by the people
+  who collected them, which places them in the public domain. If you use them in your own work,
+  cite the original papers on the <a href="references.html">references page</a>. That is a
+  courtesy the licence does not require and the field expects anyway.
+</p>
+
+<h2>No warranty</h2>
+<p>
+  The site is provided as it is. I do not promise it will be available, that it is free of
+  mistakes, or that any number on it is right. I have tried hard to make it right, I have
+  written down the mistakes I found, and I will fix ones that are reported. That is the extent
+  of what I can offer.
+</p>
+
+<h2>Liability</h2>
+<p>
+  To the extent the law allows, I am not liable for any loss arising from using this site or
+  anything on it. Nothing here limits liability for things that cannot legally be limited.
+</p>
+
+<h2>Reporting a problem</h2>
+<p>
+  If you find an error, a broken link, or something you think is wrong,
+  <a href="https://github.com/aaryavvatts-lab/neurolink/issues" rel="noopener">open an issue</a>.
+  Corrections are welcome and I would rather know.
+</p>
+
+<h2>Governing terms</h2>
+<p>
+  These terms may change. The date at the top says when they last did, and previous versions
+  are in the repository history.
+</p>
+</div></section>
+</main>
+<script type="module">
+import { mountChrome } from "./assets/shell.js";
+mountChrome("terms.html");
+</script>
+</body>
+</html>

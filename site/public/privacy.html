@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy · NeuroLink</title>
+<meta name="description" content="What this site collects, which is almost nothing, and what happens to anything you put into it.">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">Privacy policy</p>
+  <h1>Privacy</h1>
+  <p class="lede">What this site collects, which is almost nothing, and what happens to anything you put into it.</p>
+  <p class="mono" style="color:var(--muted);font-size:.8rem">Last updated 24 August 2026.</p>
+</div>
+<section><div class="wrap narrow">
+
+<h2>The short version</h2>
+<p>
+  This site does not have accounts, does not use cookies, does not run analytics, and does not
+  send anything you do here to anyone. Pictures you drop into the tools stay on your own
+  device. There is no server doing any of the work.
+</p>
+
+<h2>Who runs this</h2>
+<p>
+  A student project by Aaryav Sharma. It is a reanalysis of a public brain recording. It is not
+  a company, not a product, and there is nothing to buy. You can reach me through the
+  <a href="https://github.com/aaryavvatts-lab/neurolink/issues" rel="noopener">issues page</a>
+  on the code repository.
+</p>
+
+<h2>What is stored on your device</h2>
+<p>
+  Two things, both in your browser and both under your control:
+</p>
+<ul class="plain">
+  <li><b>Your light or dark choice.</b> Saved under the name <code>neurolink.theme</code> so the
+    site looks the same next time.</li>
+  <li><b>Whether you dismissed the notice at the bottom.</b> Saved as
+    <code>neurolink.cookieNotice</code> so it does not keep reappearing.</li>
+</ul>
+<p>
+  Neither is a cookie. Both use local storage, which means they never travel with a request and
+  no server ever sees them. Clearing your browser data for this site removes both.
+</p>
+
+<h2>What happens to a picture you upload</h2>
+<p>
+  Nothing leaves your device. When you drop a picture into the response tool, your browser
+  draws it onto a hidden canvas, measures it, and multiplies those measurements by a small set
+  of numbers it downloaded with the page. The picture is never sent anywhere and is never
+  written to storage. Close the tab and it is gone.
+</p>
+<p>
+  You can check this yourself. Open your browser developer tools, go to the network tab, and
+  drop a picture in. You will see no upload.
+</p>
+
+<h2>Server logs</h2>
+<p>
+  The site is hosted on Vercel. Like any web host, their servers record ordinary request
+  information when a page is fetched: the address requested, an IP address, a timestamp, and
+  the browser user agent string. I have not enabled Vercel Analytics or any other product that
+  builds a profile from that, and I have no dashboard showing me who visited. What Vercel keeps
+  and for how long is covered by
+  <a href="https://vercel.com/legal/privacy-policy" rel="noopener">their privacy policy</a>.
+</p>
+
+<h2>Other sites</h2>
+<p>
+  This site loads no fonts, scripts, images or trackers from anywhere else. Everything it needs
+  is served from the same address, including the 3D library. Links out to papers and to GitHub
+  are ordinary links, and following one takes you to a site with its own policy.
+</p>
+
+<h2>Children</h2>
+<p>
+  There is nothing here aimed at children and nothing collected from anyone, so there is no
+  age-related data handling to describe.
+</p>
+
+<h2>Your rights</h2>
+<p>
+  Rules like the GDPR and the UK GDPR give you rights over personal data held about you,
+  including asking to see it or have it deleted. I do not hold any personal data about you, so
+  there is nothing for me to show or delete. If you want the two local storage entries gone,
+  clearing site data in your browser does it immediately and does not need my involvement.
+</p>
+
+<h2>Patient data</h2>
+<p>
+  The brain recordings shown here came from two people who agreed to have their data shared
+  publicly. It was released under a licence that puts it in the public domain. Nothing on this
+  site identifies them. The brain surfaces in the 3D viewer have had the facial features
+  removed by the people who released the data, which is standard practice so a scan cannot be
+  matched back to a face.
+</p>
+
+<h2>Changes</h2>
+<p>
+  If this policy changes, the date at the top changes with it, and the old version stays in the
+  git history of the repository where anyone can read it.
+</p>
+</div></section>
+</main>
+<script type="module">
+import { mountChrome } from "./assets/shell.js";
+mountChrome("privacy.html");
+</script>
+</body>
+</html>

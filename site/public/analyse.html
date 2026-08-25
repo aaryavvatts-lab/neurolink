@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predict a response · NeuroLink</title>
+<meta name="description" content="Drop in a picture. Your browser measures it and a model fitted on real brain recordings predicts what visual cortex would do.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">Tool · runs on your device</p>
+  <h1>Predict what a picture does to visual cortex</h1>
+  <p class="lede">
+    Drop in any image. Your browser measures five things about it, then a model fitted on the
+    real recordings predicts how the visual cortex would react. Nothing is uploaded. The
+    picture never leaves your device.
+  </p>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="grid2" style="align-items:start;gap:1.4rem">
+      <div>
+        <div class="drop" id="drop" tabindex="0" role="button"
+             aria-label="Choose an image, or drop one here">
+          <p class="big">Drop a picture here</p>
+          <p class="small">or click to choose one. JPG, PNG, GIF or WebP.</p>
+          <input type="file" id="file" accept="image/*" hidden>
+        </div>
+        <p class="sub" style="font-size:.85rem;color:var(--ink-2);margin-top:.8rem">
+          Or start from one of the pictures the patients actually saw:
+        </p>
+        <div class="controls" style="margin-bottom:.6rem">
+          <label class="field">Kind
+            <select id="presetCond"></select>
+          </label>
+          <button type="button" id="randomPreset">Pick one</button>
+        </div>
+        <label class="field" style="margin-top:.6rem">
+          Screen width in degrees: <span id="degOut" class="mono">25</span>
+          <input type="range" id="deg" min="4" max="60" step="1" value="25">
+        </label>
+        <p style="font-size:.84rem;color:var(--ink-2)">
+          How wide the picture was on the viewer's screen, measured as an angle. The originals
+          filled about 25 degrees. This matters because spatial frequency depends on it.
+        </p>
+      </div>
+
+      <div>
+        <div class="card" id="viewCard" hidden>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+            <div>
+              <p class="kicker">Your picture</p>
+              <canvas id="preview" width="256" height="256"
+                      style="width:100%;border-radius:6px;border:1px solid var(--line)"></canvas>
+            </div>
+            <div>
+              <p class="kicker">Its frequency map</p>
+              <canvas id="spec" width="128" height="128"
+                      style="width:100%;image-rendering:pixelated;border-radius:6px;border:1px solid var(--line)"></canvas>
+              <p style="font-size:.74rem;color:var(--muted);margin:.4rem 0 0">
+                Bright away from the centre means fine detail. A bright pair of blobs means
+                stripes at one angle.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="card" id="measured" hidden style="margin-top:1rem">
+          <p class="kicker">What your browser measured</p>
+          <div class="kv" id="kvMeasured"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="prediction" hidden>
+  <div class="wrap">
+    <p class="kicker">The prediction</p>
+    <h2>What the visual cortex would probably do</h2>
+    <p>
+      These come from a straight-line model fitted on patient 1's recordings, checked by
+      holding pictures out of training. The accuracy of each line is printed beside it, because
+      a prediction that is right 96% of the time and one that is right 68% of the time should
+      not be read the same way.
+    </p>
+    <div class="grid2" style="gap:1.2rem;align-items:start">
+      <div class="card">
+        <p class="kicker">Predicted response</p>
+        <div id="predBars"></div>
+        <div class="kv" id="predKv" style="margin-top:.9rem"></div>
+      </div>
+      <div class="card">
+        <p class="kicker">Closest thing the patients saw</p>
+        <div id="nearest"></div>
+      </div>
+    </div>
+    <div class="chart" id="calChart"></div>
+    <p class="note" id="verdict"></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">How it works</p>
+    <h2>What is happening when you drop a file in</h2>
+    <p>
+      The picture is cropped square, shrunk to 256 by 256 and turned to grey. Your browser runs
+      a Fourier transform on it, which splits the picture into how much of it is coarse and how
+      much is fine, and at which angles. From that it reads off five numbers: the strongest
+      spatial frequency, how much the energy points one way, how fast the power falls off with
+      frequency, the contrast and the average brightness.
+    </p>
+    <p>
+      Those five numbers go into the model. It was fitted on 210 trials from patient 1, using
+      the same five measurements taken from the pictures they actually saw. Fitting used a
+      split where a picture in the test set never appeared in training, so the accuracy figures
+      are what you would get on a picture the model has not met.
+    </p>
+    <p>
+      The weakness worth knowing: the training pictures were stripes and grainy textures. A
+      photograph of a face is nothing like those. The model will still give you an answer, and
+      that answer is an extrapolation. Treat it as a rough guide outside the range it learned,
+      and read the warning the tool shows when your picture sits far outside that range.
+    </p>
+    <p><a href="methods.html">The full method</a> · <a href="decode.html">The decoder, going the other way</a></p>
+  </div>
+</section>
+</main>
+
+<script type="module">
+import { mountChrome, loadJSON, el, fmt, pct, cssVar, condColor } from "./assets/shell.js";
+import { toGray, analyse, predict } from "./assets/imagestats.js";
+import { probBars, scatter } from "./assets/charts.js";
+mountChrome("analyse.html");
+
+const FW = await loadJSON("forward.json");
+const ST = await loadJSON("stimuli.json");
+const MODEL = FW["sub-01"];
+const labels = ST.labels;
+let degrees = 25, lastMeasure = null;
+
+/* preset picker */
+const condSel = document.getElementById("presetCond");
+condSel.append(el("option", { value: "any" }, "any kind"));
+for (let c = 1; c <= 7; c++) condSel.append(el("option", { value: String(c) }, labels[c]));
+
+document.getElementById("randomPreset").onclick = () => {
+  const want = condSel.value;
+  // Only offer presets that ship at full size: measuring an upscaled thumbnail
+  // would not match how the model's training images were measured.
+  const pool = ST.stimuli.filter(s => s.cond <= 7 && s.full &&
+    (want === "any" || String(s.cond) === want));
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  const img = new Image();
+  img.onload = () => run(img, `${labels[pick.cond]} (picture ${pick.id})`);
+  img.src = `stimfull/${pick.id}.png`;
+};
+
+/* file input + drag and drop */
+const drop = document.getElementById("drop"), file = document.getElementById("file");
+drop.onclick = () => file.click();
+drop.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); file.click(); } };
+file.onchange = () => file.files[0] && loadFile(file.files[0]);
+["dragenter", "dragover"].forEach(k => drop.addEventListener(k, e => {
+  e.preventDefault(); drop.classList.add("over");
+}));
+["dragleave", "drop"].forEach(k => drop.addEventListener(k, e => {
+  e.preventDefault(); drop.classList.remove("over");
+}));
+drop.addEventListener("drop", e => {
+  const f = e.dataTransfer?.files?.[0];
+  if (f && f.type.startsWith("image/")) loadFile(f);
+});
+function loadFile(f) {
+  const url = URL.createObjectURL(f);
+  const img = new Image();
+  img.onload = () => { run(img, f.name); URL.revokeObjectURL(url); };
+  img.onerror = () => { alert("That file could not be read as an image."); URL.revokeObjectURL(url); };
+  img.src = url;
+}
+
+const degIn = document.getElementById("deg");
+degIn.oninput = () => {
+  degrees = +degIn.value;
+  document.getElementById("degOut").textContent = degrees;
+  if (lastMeasure) run(lastMeasure.source, lastMeasure.name);
+};
+
+function run(source, name) {
+  const { gray, canvas } = toGray(source);
+  lastMeasure = { source, name };
+  const m = analyse(gray, degrees);
+
+  document.getElementById("viewCard").hidden = false;
+  document.getElementById("measured").hidden = false;
+  const pv = document.getElementById("preview");
+  pv.getContext("2d").drawImage(canvas, 0, 0);
+
+  /* spectrum picture */
+  if (m.spectrum) {
+    const c = document.getElementById("spec"), ctx = c.getContext("2d");
+    const im = ctx.createImageData(m.spectrum.size, m.spectrum.size);
+    const rng = (m.spectrum.max - m.spectrum.min) || 1;
+    for (let i = 0; i < m.spectrum.data.length; i++) {
+      const t = Math.max(0, Math.min(1, (m.spectrum.data[i] - m.spectrum.min) / rng));
+      const v = Math.round(255 * Math.pow(t, 1.6));
+      im.data[i*4] = v; im.data[i*4+1] = v; im.data[i*4+2] = v; im.data[i*4+3] = 255;
+    }
+    ctx.putImageData(im, 0, 0);
+  }
+
+  const kv = document.getElementById("kvMeasured");
+  const row = (k, v) => el("div", {}, el("span", {}, k), el("span", {}, v));
+  kv.replaceChildren(
+    row("file", name.length > 26 ? name.slice(0, 24) + "…" : name),
+    row("strongest detail", m.blank ? "n/a" : `${fmt(m.spatialFreq, 2)} cycles per degree`),
+    row("points one way", m.blank ? "n/a" : fmt(m.orientConc, 2) + " of 1"),
+    row("angle", m.blank || m.orientConc < 0.25 ? "no clear angle" : `${fmt(m.orientDeg, 0)}°`),
+    row("falloff with frequency", m.blank ? "n/a" : fmt(m.noiseExponent, 2)),
+    row("contrast", fmt(m.rmsContrast, 3)),
+    row("average brightness", fmt(m.meanLum, 3)));
+
+  if (m.blank) {
+    document.getElementById("prediction").hidden = true;
+    return;
+  }
+  document.getElementById("prediction").hidden = false;
+  showPrediction(m);
+}
+
+function showPrediction(m) {
+  const p = predict(MODEL, m);
+  const acc = MODEL.accuracy;
+  const obs = MODEL.observed, tt = MODEL.trial_type;
+
+  /* Put each prediction on the scale of what was actually seen in the recordings. */
+  const stat = (k) => {
+    const col = obs.map(r => r[k]);
+    const lo = Math.min(...col), hi = Math.max(...col);
+    return { lo, hi, frac: Math.max(0, Math.min(1, (p[k] - lo) / (hi - lo || 1))) };
+  };
+  const names = ["Broadband gamma", "Narrowband gamma", "Gamma peak"];
+  probBars(document.getElementById("predBars"), {
+    items: MODEL.targets.map((t, k) => ({
+      label: names[k], value: stat(k).frac,
+      color: k === 1 ? cssVar("--grat-3") : cssVar("--noise-2"),
+    })),
+  });
+
+  const kv = document.getElementById("predKv");
+  const unit = ["log power change", "strength", "Hz"];
+  kv.replaceChildren(...MODEL.targets.map((t, k) => el("div", {},
+    el("span", {}, names[k] + ` (r = ${fmt(acc[t].r, 2)})`),
+    el("span", {}, `${fmt(p[k], k === 2 ? 1 : 3)} ${unit[k]}`))));
+
+  /* nearest real stimulus in the five measured numbers */
+  const feats = (s) => [Math.log10(Math.max(s.sf ?? 0.04, 1e-3)), s.conc,
+                        s.alpha ?? 0, s.contrast, 0.5];
+  const mine = [Math.log10(Math.max(m.spatialFreq, 1e-3)), m.orientConc,
+                m.noiseExponent, m.rmsContrast, m.meanLum];
+  const sd = MODEL.x_std;
+  let bestS = null, bestD = Infinity;
+  ST.stimuli.filter(s => s.cond <= 7).forEach(s => {
+    const f = feats(s);
+    let d = 0;
+    for (let i = 0; i < 5; i++) d += ((f[i] - mine[i]) / sd[i]) ** 2;
+    if (d < bestD) { bestD = d; bestS = s; }
+  });
+  const dist = Math.sqrt(bestD);
+  document.getElementById("nearest").replaceChildren(
+    el("div", { style: "display:flex;gap:.9rem;align-items:center" },
+      el("img", { src: `stim/${bestS.id}.png`, width: 96, height: 96, alt: labels[bestS.cond],
+                  style: "border-radius:6px;border:1px solid var(--line)" }),
+      el("div", {},
+        el("p", { style: "margin:0 0 .2rem;font-weight:600" }, labels[bestS.cond]),
+        el("p", { style: "margin:0;font-size:.85rem;color:var(--ink-2)" },
+          `picture ${bestS.id}, distance ${fmt(dist, 2)}`))));
+
+  /* calibration: how the model did on held-out pictures */
+  const pts = MODEL.observed.map((r, i) => ({
+    x: r[1], y: MODEL.predicted[i][1], color: condColor(tt[i]),
+    label: labels[tt[i]],
+  }));
+  scatter(document.getElementById("calChart"), {
+    title: "How well this model did on pictures it had not seen",
+    sub: `Narrowband gamma, patient 1. Each dot is one held-out trial. r = ${fmt(acc.gamma_amp.r, 3)}.`,
+    points: pts, xLabel: "what actually happened", yLabel: "what the model predicted",
+    height: 330, fmt: v => v.toFixed(2),
+  });
+  document.getElementById("calChart").append(el("div", { class: "legend" },
+    [1,2,3,4,5,6,7].map(c => el("span", {}, el("i", { style: `background:${condColor(c)}` }), labels[c]))));
+
+  /* honest warning when the picture sits outside the training range */
+  const v = document.getElementById("verdict");
+  const far = dist > 4;
+  const strong = p[1] > Math.max(...MODEL.observed.map(r => r[1])) * 0.35;
+  v.className = far ? "note flag" : "note";
+  v.innerHTML = far
+    ? `<strong>Careful with this one.</strong> Your picture sits well outside the range the
+       model was fitted on (distance ${fmt(dist, 1)}, where most training pictures sit under 2).
+       The numbers above are an extrapolation. The training set was stripes and grainy
+       textures, so anything with objects, faces or sharp edges is being guessed at.`
+    : (strong
+      ? `<strong>This looks like a picture that would drive narrowband gamma.</strong> It sits
+         close to the kind of stripe patterns that produced the strongest oscillation in the
+         recordings. If you were choosing a stimulus to get a gamma response, this one is a
+         reasonable bet.`
+      : `<strong>This looks like a picture that would not drive much narrowband gamma.</strong>
+         It sits nearer the grainy textures, which raised broad activity without producing a
+         clear bump in the 30 to 80 Hz range.`);
+}
+
+/* start with something on screen */
+document.getElementById("randomPreset").click();
+</script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results · NeuroLink</title>
+<meta name="description" content="Every number from the project, with the shuffle tests and ranges behind them, including the parts that did not work.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">Results</p>
+  <h1>All the numbers, including the ones I did not like</h1>
+  <p class="lede">
+    Every figure here comes with a shuffle test and a range. The shuffle test asks how often a
+    score this good turns up when the answers are scrambled. If a number has no test beside
+    it, do not trust it.
+  </p>
+</div>
+
+<section id="encoders">
+  <div class="wrap">
+    <p class="kicker">01 · Four ways of reading the signal</p>
+    <h2>Telling the seven kinds apart</h2>
+    <p>
+      Same trials, same split, same scoring. The only thing that changes is how the brain
+      signal was turned into numbers before a plain linear model saw it.
+    </p>
+    <div class="controls">
+      <label class="field">Patient
+        <select id="subSel"></select>
+      </label>
+      <label class="field">Score
+        <select id="metricSel">
+          <option value="condition">telling the seven kinds apart</option>
+          <option value="two_way">picking the right picture out of two</option>
+          <option value="top5">right picture in its top five of 210</option>
+        </select>
+      </label>
+    </div>
+    <div class="chart" id="mainChart"></div>
+    <div class="tscroll"><table id="mainTable"></table></div>
+    <p class="note flag" id="bwNote"></p>
+  </div>
+</section>
+
+<section id="confusion">
+  <div class="wrap">
+    <p class="kicker">02 · Where it goes wrong</p>
+    <h2>The mistakes are the ones a visual system would make</h2>
+    <div class="chart" id="confChart"></div>
+    <p>
+      Almost every error lands on a neighbour. A pattern gets read as a slightly finer or
+      slightly coarser version of itself, or one grainy texture gets read as another. Very few
+      errors cross between stripes and textures, which are the two groups the brain treats
+      most differently.
+    </p>
+  </div>
+</section>
+
+<section id="transfer">
+  <div class="wrap">
+    <p class="kicker">03 · The result I did not expect</p>
+    <h2>A model that has never seen your brain still works on it</h2>
+    <p id="transferPara"></p>
+    <div class="chart" id="jepaChart"></div>
+    <p>
+      The training used no labels at all. It read the raw recordings and tried to fill in
+      pieces it had been shown with gaps punched in them. It never saw an event file and never
+      learned which picture was on screen at any moment.
+    </p>
+  </div>
+</section>
+
+<section id="params">
+  <div class="wrap">
+    <p class="kicker">04 · Reading numbers off the signal</p>
+    <h2>What can be read directly</h2>
+    <p>
+      Instead of trying to name the picture, this asks for its properties. How fine is the
+      detail, how fast does the texture fall off, how much contrast is there. Each one is
+      scored against pictures the model never saw.
+    </p>
+    <div class="tscroll"><table id="paramTable"></table></div>
+    <p class="note" id="phaseNote"></p>
+  </div>
+</section>
+
+<section id="rsa">
+  <div class="wrap">
+    <p class="kicker">05 · A test the image model failed</p>
+    <h2>Does a modern vision model add anything here?</h2>
+    <p>
+      DINOv2 is a large vision model trained on 142 million photographs. I compared how it
+      arranges these pictures against how the brain arranges them, and then asked whether it
+      still matched once I removed everything a simple 1960s model of visual cortex already
+      explains.
+    </p>
+    <div class="tscroll"><table id="rsaTable"></table></div>
+    <p class="note" id="rsaNote"></p>
+  </div>
+</section>
+
+<section id="contrastive">
+  <div class="wrap">
+    <p class="kicker">06 · Two ways to join the spaces</p>
+    <h2>Ridge against the contrastive method</h2>
+    <p>
+      The approach I copied uses a contrastive setup, the kind behind CLIP: push each trial's
+      brain code towards its own picture's code and away from everyone else's. I expected the
+      plain linear method to win at this sample size. It did not. They come out level.
+    </p>
+    <div class="tscroll"><table id="contTable"></table></div>
+    <p class="note">
+      Worth saying they are not scored on quite the same footing. Ridge has to hit DINOv2's
+      own space. The contrastive model is measured inside a space it was trained to make
+      matching easy in. Both are tested on pictures neither had seen, so neither is cheating,
+      but the comparison flatters the second one a little.
+    </p>
+  </div>
+</section>
+
+<section id="limits">
+  <div class="wrap">
+    <p class="kicker">07 · The ceiling</p>
+    <h2>What this cannot do, and why</h2>
+    <p>
+      Telling the seven kinds apart works. Picking the right one of thirty pictures of the same
+      kind does not. Here is the evidence, in the order I found it.
+    </p>
+    <div class="tscroll"><table id="withinTable"></table></div>
+    <p id="ceilingPara"></p>
+    <h3>Everything I would want a reader to hold against this</h3>
+    <ul class="plain">
+      <li>Two patients. One of them gives much weaker results than the other, and I show them
+        separately rather than averaging the difference away.</li>
+      <li>The pictures are stripes and grainy textures. Nothing here shows any of it would
+        work on photographs or faces, and the tool on this site warns you when your picture
+        sits outside the range it learned.</li>
+      <li>The reconstruction is not general. It reads a handful of numbers off the signal and
+        redraws a picture from them. It cannot draw something it was not told how to draw.</li>
+      <li>The two ready-made EEG models are being used outside what they were built for.
+        Different recording method, different speed, and a half second response where one of
+        them needs at least a second and a half of signal. Their poor showing here says they
+        do not fit this problem. It does not say they are bad at what they were made for.</li>
+      <li>Patient 2's grid lost 35 of 96 contacts to the clinical bad list before I touched
+        anything.</li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<script type="module">
+import { mountChrome, loadJSON, el, fmt, pct, pval, famColor, condColor } from "./assets/shell.js";
+import { barChart, matrix, lineChart } from "./assets/charts.js";
+mountChrome("results.html");
+
+const R = await loadJSON("results.json");
+const A = R.alignment;
+const labels = R.condition_labels;
+const subs = Object.keys(A.subjects);
+const ORDER = ["signal_jepa", "cbramod", "spectral", "ecogjepa_all", "ecogjepa_sub-02"];
+
+const subSel = document.getElementById("subSel");
+subs.forEach(s => subSel.append(el("option", { value: s }, s.replace("sub-0", "Patient "))));
+const metricSel = document.getElementById("metricSel");
+
+function metricOf(e, m) {
+  if (m === "condition") return { v: e.condition.accuracy, ci: e.condition.ci, chance: 1/7, fmt: v => (v*100).toFixed(0)+"%", label: "share correct" };
+  const sp = e.spaces?.dino518 || e.spaces?.dino224;
+  if (!sp) return null;
+  if (m === "two_way") return { v: sp.two_way, chance: 0.5, fmt: v => v.toFixed(2), label: "share of pairs won" };
+  return { v: sp.top5, chance: 5/210, fmt: v => (v*100).toFixed(1)+"%", label: "share in top five" };
+}
+
+function drawMain() {
+  const sub = subSel.value, m = metricSel.value;
+  const encs = A.subjects[sub].encoders;
+  const series = ORDER.filter(k => encs[k]).map(k => {
+    const g = metricOf(encs[k], m);
+    return g && { label: encs[k].label, value: g.v, ci: g.ci, color: famColor(encs[k].family),
+                  note: encs[k].family.split(": ")[1] };
+  }).filter(Boolean);
+  const g0 = metricOf(encs[ORDER.find(k => encs[k])], m);
+  barChart(document.getElementById("mainChart"), {
+    title: metricSel.selectedOptions[0].textContent.replace(/^./, c => c.toUpperCase()),
+    sub: `${sub.replace("sub-0", "Patient ")}. Pictures in the test set never appear in training.`,
+    series, chance: g0.chance, yLabel: g0.label, fmt: g0.fmt,
+    max: m === "top5" ? undefined : 1.0,
+  });
+  document.getElementById("mainChart").append(el("div", { class: "legend" },
+    ["A: hand-crafted","B: off-the-shelf EEG foundation model","C: self-pretrained on this ECoG"]
+      .map(f => el("span", {}, el("i", { style: `background:${famColor(f)}` }), f.split(": ")[1]))));
+}
+
+function drawTable() {
+  const head = el("thead", {}, el("tr", {},
+    el("th", {}, "How the signal was encoded"), el("th", {}, "Numbers per trial"),
+    ...subs.flatMap(s => [el("th", {}, s.replace("sub-0","P") + " seven kinds"),
+                          el("th", {}, s.replace("sub-0","P") + " one of two"),
+                          el("th", {}, s.replace("sub-0","P") + " shuffle test")])));
+  const bestByMetric = subs.map(s => Math.max(...Object.values(A.subjects[s].encoders).map(e => e.condition.accuracy)));
+  const body = el("tbody", {}, ORDER.filter(k => A.subjects[subs[0]].encoders[k] || A.subjects[subs[1]]?.encoders[k]).map(k => {
+    const any = subs.map(s => A.subjects[s].encoders[k]).find(Boolean);
+    return el("tr", {},
+      el("td", {}, el("span", { class: "swatch", style: `background:${famColor(any.family)}` }), any.label),
+      el("td", {}, any.dim.toLocaleString()),
+      ...subs.flatMap((s, i) => {
+        const e = A.subjects[s].encoders[k];
+        if (!e) return [el("td",{},"n/a"),el("td",{},"n/a"),el("td",{},"n/a")];
+        const sp = e.spaces?.dino518 || e.spaces?.dino224;
+        return [
+          el("td", { class: e.condition.accuracy === bestByMetric[i] ? "best" : null }, pct(e.condition.accuracy,1)),
+          el("td", {}, fmt(sp?.two_way, 3)),
+          el("td", {}, pval(e.condition.p)),
+        ];
+      }));
+  }));
+  document.getElementById("mainTable").replaceChildren(head, body);
+}
+
+subSel.onchange = () => { drawMain(); drawConf(); };
+metricSel.onchange = drawMain;
+
+/* bandwidth */
+const bw = Object.values(R.encoders_manifest || {}).map(v => v.bandwidth).find(Boolean);
+if (bw) document.getElementById("bwNote").innerHTML =
+  `<strong>Why the order comes out like that.</strong> Of everything the brain does in
+   response to a picture, only ${pct(bw.frac_below_40Hz,1)} happens below 40 Hz and
+   ${pct(bw.frac_below_125Hz,1)} below 125 Hz. SignalJEPA was trained under the first limit,
+   CBraMod under the second. The two models I built keep the lot. The scores follow that
+   order in both patients, which is what you would expect if bandwidth is the thing that
+   matters and not model size.`;
+
+/* confusion */
+function drawConf() {
+  const sub = subSel.value;
+  const encs = A.subjects[sub].encoders;
+  const bestKey = Object.keys(encs).reduce((a,b) => encs[a].condition.accuracy >= encs[b].condition.accuracy ? a : b);
+  matrix(document.getElementById("confChart"), {
+    title: `Which kind gets read as which`,
+    sub: `${sub.replace("sub-0","Patient ")}, using ${encs[bestKey].label}.`,
+    values: encs[bestKey].condition.confusion,
+    labels: [1,2,3,4,5,6,7].map(c => labels[c]),
+  });
+}
+
+/* transfer + jepa curve */
+const p1 = A.subjects["sub-01"]?.encoders;
+if (p1?.["ecogjepa_sub-02"] && p1?.["ecogjepa_all"]) {
+  const a = p1["ecogjepa_sub-02"].condition.accuracy, b = p1["ecogjepa_all"].condition.accuracy;
+  document.getElementById("transferPara").innerHTML =
+    `I trained the same model twice. Once on both patients, and once on patient 2 alone. The
+     second one has never seen patient 1's brain: different side of the head, 61 contacts
+     instead of 110, and half the recording speed. Used on patient 1 it scores
+     <b>${pct(a,1)}</b>, against <b>${pct(b,1)}</b> for the one that did train on patient 1.
+     That gap is ${Math.abs(Math.round((a-b)*210))} trials out of 210, which is to say there is
+     no real gap. Whatever it learns about signals from inside the skull is not tied to one
+     person's grid.`;
+}
+const jep = R.jepa?.all;
+if (jep) {
+  lineChart(document.getElementById("jepaChart"), {
+    title: "Training the model with no labels",
+    sub: `${(jep.n_params/1e6).toFixed(1)} million numbers, learning to fill in gaps in recordings from ${jep.n_channels} contacts.`,
+    x: jep.val_losses.map((_, i) => i + 1),
+    series: [
+      { label: "on data it trained on", values: jep.losses, color: famColor("A: hand-crafted") },
+      { label: "on data held back", values: jep.val_losses, color: famColor("C: self-pretrained on this ECoG") },
+      { label: "just guessing the average", values: jep.val_losses.map(() => jep.baseline_val), color: "var(--muted)" },
+    ],
+    xLabel: "pass through the data", yLabel: "how wrong it was", height: 260,
+    yFmt: v => v.toFixed(3), xFmt: v => String(Math.round(v)),
+  });
+}
+
+/* parameters */
+const rec = R.reconstruction;
+if (rec) {
+  const names = { log_spatial_freq: "how fine the detail is", noise_exponent: "how fast it falls off",
+                  rms_contrast: "contrast", orient_concentration: "how much it points one way",
+                  phase_rad: "where the stripes sit (phase)" };
+  const rows = [];
+  for (const [sub, s] of Object.entries(rec.subjects)) {
+    for (const [k, v] of Object.entries(s.scores.all)) {
+      if (!names[k]) continue;
+      const r = v.r ?? v.circular_r;
+      rows.push(el("tr", {},
+        el("td", {}, sub.replace("sub-0", "Patient ")),
+        el("td", {}, names[k]),
+        el("td", {}, r === null || r === undefined ? "nothing to read" : fmt(r, 3)),
+        el("td", {}, pval(v.p))));
+    }
+  }
+  document.getElementById("paramTable").replaceChildren(
+    el("thead", {}, el("tr", {}, ["Patient","What was read off","How close","Shuffle test"].map(h=>el("th",{},h)))),
+    el("tbody", {}, rows));
+
+  const g = rec.subjects["sub-01"]?.scores?.gratings_only?.phase_rad;
+  if (g) document.getElementById("phaseNote").innerHTML =
+    `<strong>Phase is the interesting one.</strong> Looking only at the stripe pictures, where
+     phase is the single thing that separates the thirty versions, the link between what was
+     shown and what was read off is ${fmt(g.circular_r,3)} with ${pval(g.p)}. Real, and it
+     survives shuffling. Also far too weak to pick one picture out of thirty. Broadband gamma
+     behaves like a cell that does not care where the stripes sit, only that they are there,
+     so this is the answer the biology predicts.`;
+}
+
+/* rsa */
+const pr = A.subjects["sub-01"]?.partial_rsa;
+if (pr) {
+  document.getElementById("rsaTable").replaceChildren(
+    el("thead", {}, el("tr", {}, ["Comparison","Match","Shuffle test","Reading"].map(h=>el("th",{},h)))),
+    el("tbody", {},
+      el("tr", {}, el("td", {}, "DINOv2, after removing the Gabor model"),
+        el("td", {}, fmt(pr.dino_given_gabor.rho_partial, 3)),
+        el("td", {}, pval(pr.dino_given_gabor.p)),
+        el("td", {}, pr.dino_given_gabor.p < 0.05 ? "adds something" : "adds nothing")),
+      el("tr", {}, el("td", {}, "Gabor model, after removing DINOv2"),
+        el("td", {}, fmt(pr.gabor_given_dino.rho_partial, 3)),
+        el("td", {}, pval(pr.gabor_given_dino.p)),
+        el("td", {}, pr.gabor_given_dino.p < 0.05 ? "adds something" : "adds nothing"))));
+  document.getElementById("rsaNote").innerHTML =
+    `<strong>The old model wins this one.</strong> Once the Gabor model is accounted for,
+     DINOv2 explains nothing further about how the brain arranges these pictures
+     (${pval(pr.dino_given_gabor.p)}). Going the other way, the Gabor model still explains
+     something DINOv2 misses (${pval(pr.gabor_given_dino.p)}). For stripes and grainy
+     textures, a filter bank built decades ago captures the brain's arrangement at least as
+     well as a vision model with 86 million numbers in it. That is what I put the old model in
+     for, and I would have reported it either way.`;
+}
+
+/* contrastive */
+const CN = R.contrastive;
+if (CN) {
+  const rows = [];
+  for (const [sub, encs] of Object.entries(CN.subjects))
+    for (const [, r] of Object.entries(encs)) {
+      const dd = r.contrastive.two_way - r.ridge.two_way;
+      rows.push(el("tr", {},
+        el("td", {}, sub.replace("sub-0","Patient ")), el("td", {}, r.label),
+        el("td", {}, fmt(r.ridge.two_way,3)), el("td", {}, fmt(r.contrastive.two_way,3)),
+        el("td", { class: dd > 0 ? "best" : null }, (dd>=0?"+":"") + fmt(dd,3))));
+    }
+  document.getElementById("contTable").replaceChildren(
+    el("thead", {}, el("tr", {}, ["Patient","Encoder","Ridge","Contrastive","Difference"].map(h=>el("th",{},h)))),
+    el("tbody", {}, rows));
+}
+
+/* within condition + ceiling */
+const wrows = [];
+for (const [sub, s] of Object.entries(A.subjects))
+  for (const [, e] of Object.entries(s.encoders)) {
+    const sp = e.spaces?.dino518 || e.spaces?.dino224;
+    const w = sp?.within_condition;
+    if (!w) continue;
+    wrows.push(el("tr", {},
+      el("td", {}, sub.replace("sub-0","Patient ")), el("td", {}, e.label),
+      el("td", {}, pct(sp.top1,1)), el("td", {}, pct(sp.top5,1)),
+      el("td", {}, `${fmt(sp.median_rank,0)} of ${sp.n_candidates}`),
+      el("td", {}, pct(w.top1,1)), el("td", {}, pct(w.chance_top1,1))));
+  }
+document.getElementById("withinTable").replaceChildren(
+  el("thead", {}, el("tr", {}, ["Patient","Encoder","Right first time","In top five","Typical place","Same kind only","By luck"].map(h=>el("th",{},h)))),
+  el("tbody", {}, wrows));
+
+const nc = R.alignment.noise_ceiling_physiological;
+if (nc) {
+  const b = nc.features.broadband;
+  document.getElementById("ceilingPara").innerHTML =
+    `There is a hard limit underneath all of this. Patient 2 saw every picture twice, so I can
+     ask how much the brain's own answer repeats. Take the strongest signal, broadband gamma on
+     the ten contacts that reacted most, and compare the two viewings of the same picture. They
+     agree at ${fmt(b.r,3)}, with a range of ${fmt(b.ci[0],2)} to ${fmt(b.ci[1],2)} and
+     ${pval(b.p)}. Narrowband gamma agrees at ${fmt(nc.features.gamma_amp.r,3)}. Alpha, which
+     should not carry picture information here, agrees at ${fmt(nc.features.alpha.r,3)} and
+     fails its test, which is a useful sign the measure is working. No decoder can be more
+     reliable than the thing it is reading.`;
+}
+
+drawMain(); drawTable(); drawConf();
+document.addEventListener("themechange", () => { drawMain(); drawConf(); });
+</script>
+</body>
+</html>

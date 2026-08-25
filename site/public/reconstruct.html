@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reconstructions · NeuroLink</title>
+<meta name="description" content="What the decoder draws from brain signal alone, side by side with what was really on the screen, plus a video decoding the recording continuously.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">Reconstructions</p>
+  <h1>Redrawing the picture from the brain signal</h1>
+  <p class="lede">
+    There is no photograph to rebuild here, so "reconstruct" has to mean something honest. The
+    decoder reads a handful of numbers off the signal, and the picture is redrawn from those
+    numbers and nothing else. Every pixel below traces back to something the model said.
+  </p>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">01 · Side by side</p>
+    <h2>One of each kind</h2>
+    <p>
+      Top row is what was on the screen. Bottom row is drawn from numbers read off the brain,
+      on trials the model had never seen.
+    </p>
+    <figure>
+      <img src="figures/gallery_sub-01.png" alt="Seven pictures the patient saw on the top row, with the decoder's redrawn version of each underneath.">
+      <figcaption>
+        Patient 1. The kind of pattern, how fine it is, and the contrast all come through. Where
+        the stripes sit does not, which is why the bars in the bottom row rarely line up with
+        the ones above them even when everything else matches.
+      </figcaption>
+    </figure>
+    <p>
+      <a href="decode.html">Run this yourself on any of the 210 trials</a>
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">02 · Continuous decoding</p>
+    <h2>Brain TV</h2>
+    <p>
+      No trial timing is used in this video. The decoder gets handed half a second of raw
+      voltage every fifty milliseconds and has to say what is on the screen. The model was
+      fitted on the first half of the run, and everything you see comes from the second half,
+      so none of it was in training.
+    </p>
+    <div class="card" style="padding:.7rem">
+      <video id="tv" controls playsinline preload="metadata"
+             style="width:100%;border-radius:8px;background:#000;display:block"
+             src="video/braintv_sub-01_run-01.mp4">
+        <p>Your browser cannot play this video.
+           <a href="video/braintv_sub-01_run-01.mp4">Download it instead</a>.</p>
+      </video>
+    </div>
+    <p style="font-size:.86rem;color:var(--ink-2);margin-top:.7rem">
+      Left is the real screen. Middle is the reconstruction. Right is how sure the model is
+      about each of the seven kinds. The trace underneath is broadband gamma from the ten
+      contacts that reacted most, with grey bands marking when a picture was actually up. There
+      is no sound.
+    </p>
+    <p class="note">
+      Watch the trace and the bars together. The gamma lifts a moment after each grey band
+      starts, and the bars swing to the right answer just behind it. When the screen goes blank
+      the model has nothing to go on and the bars scatter, which is the correct thing for it to
+      do.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">03 · What is being read off</p>
+    <h2>Numbers, not pixels</h2>
+    <p>
+      Rather than trying to guess a whole image, the model predicts a few properties and the
+      picture is rebuilt from them. Each dot below is one trial the model had not seen.
+    </p>
+    <figure>
+      <img src="figures/params_sub-01.png" alt="Three scatter plots showing how closely the decoded spatial frequency, falloff and contrast match the true values for each trial.">
+      <figcaption>
+        Patient 1, using the hand-built feature set. The dashed line is a perfect answer. The
+        model I trained without labels does slightly better than this on all three.
+        <a href="results.html#params">The numbers</a>.
+      </figcaption>
+    </figure>
+    <div class="chart" id="paramChart"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">04 · Being straight about it</p>
+    <h2>Why this is not general image reconstruction</h2>
+    <p>
+      Work that rebuilds photographs from brain scans usually has thousands of trials and a
+      generative model that already knows what photographs look like. There are 210 trials here
+      and the pictures are stripes and grainy textures. A generative model would fill in
+      detail it invented, and that detail would look convincing while meaning nothing.
+    </p>
+    <p>
+      So the drawing is made by a renderer that can only produce stripes or textures, driven by
+      numbers the model actually predicted. It cannot draw a face, and it will not pretend to.
+      The honest description is that it recovers the properties of what was seen, not the
+      image, and it recovers some properties far better than others.
+    </p>
+    <p><a href="methods.html">How the drawing is made</a> · <a href="results.html#limits">Where it fails</a></p>
+  </div>
+</section>
+</main>
+
+<script type="module">
+import { mountChrome, loadJSON, el, fmt, pval, condColor } from "./assets/shell.js";
+import { barChart } from "./assets/charts.js";
+mountChrome("reconstruct.html");
+
+const R = await loadJSON("results.json");
+const rec = R.reconstruction;
+if (rec?.subjects?.["sub-01"]) {
+  const sc = rec.subjects["sub-01"].scores.all;
+  const names = { log_spatial_freq: "how fine the detail is", noise_exponent: "how fast it falls off",
+                  rms_contrast: "contrast", orient_concentration: "points one way",
+                  phase_rad: "where stripes sit" };
+  const series = Object.entries(names).map(([k, label], i) => {
+    const v = sc[k]; if (!v) return null;
+    const r = v.r ?? v.circular_r;
+    return { label, value: Math.abs(r ?? 0),
+             color: k === "phase_rad" ? condColor(4) : condColor(2),
+             note: pval(v.p) };
+  }).filter(Boolean);
+  barChart(document.getElementById("paramChart"), {
+    title: "How well each property can be read off the signal",
+    sub: `Patient 1, using ${rec.encoder.replace("_", " ")}. Bars are how closely the decoded value tracks the real one, on pictures held out of training.`,
+    series, yLabel: "closeness", max: 1.0, fmt: v => v.toFixed(2), height: 250,
+  });
+  document.getElementById("paramChart").append(el("p", { class: "sub", style: "margin-top:.5rem" },
+    "Where the stripes sit is the odd one out, and it is the only thing that separates the "
+    + "thirty versions of each stripe pattern. That is the whole reason individual pictures "
+    + "cannot be told apart."));
+}
+</script>
+</body>
+</html>

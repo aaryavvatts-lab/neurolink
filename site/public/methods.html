@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methods · NeuroLink</title>
+<meta name="description" content="Every step from raw voltage to the numbers on this site, including the mistakes I found and fixed along the way.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">Methods</p>
+  <h1>How this was actually done</h1>
+  <p class="lede">
+    Enough detail to argue with. All of it runs from one command, and the whole thing is on
+    GitHub.
+  </p>
+</div>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">01</p>
+    <h2>Cleaning the recording</h2>
+    <p>
+      Mains hum at 60 Hz and its multiples are filtered out. Contacts are dropped if the people
+      who collected the data marked them bad, or if my own check flags them. My check looks at
+      four things: whether a contact is flat, whether its variance is far from the rest of the
+      grid, whether it is dominated by mains hum, and whether it has spikes far larger than
+      anything else on the array.
+    </p>
+    <p>
+      That last one I got wrong the first time. I used a fixed cutoff on the largest spike, and
+      it threw away 33 of 118 contacts. Over four minutes of brain recording a peak twelve to
+      eighteen times the typical size is completely ordinary, so the cutoff was flagging normal
+      data. Scoring each contact against the rest of its own grid instead brought it down to 8,
+      and 7 of those were the same ones the data collectors had already marked.
+    </p>
+    <p>
+      What is left is re-referenced against the average of all the good contacts, then cut into
+      windows from 200 ms before each picture to 700 ms after.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">02</p>
+    <h2>Splitting the spectrum in two</h2>
+    <p>
+      There are two different things happening in the same frequency range and they need
+      separating. One is a real oscillation, a bump around 30 to 80 Hz that stripes set off.
+      The other is a broad lift across all high frequencies that goes up whenever the brain is
+      busy. If you just measure total power in the gamma range you mix them, and a decoder
+      handed that one number cannot tell a stripe pattern from a grainy one.
+    </p>
+    <p>
+      So each trial's spectrum is fitted with two parts added together: a straight line in log
+      space, which is the broad lift, plus a bump. The slope of the line is fixed for each
+      contact using that contact's own blank-screen recordings, which lets the two parts move
+      independently from trial to trial. The bump is only allowed to sit between 30 and 80 Hz.
+      This follows the model in Hermes and colleagues' work on the same signal.
+    </p>
+    <p>
+      One practical note. Given where the bump sits and how wide it is, the rest of the fit is
+      a straight line problem with an exact answer. So instead of running a slow search for
+      every one of the 23,000 spectra, I sweep a grid over the bump's position and width and
+      solve the rest in closed form for all spectra at once. Same answer, roughly a hundred
+      times faster, and it cannot get stuck in the wrong place the way a search can.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">03</p>
+    <h2>The model I trained with no labels</h2>
+    <p>
+      This is a transformer with about 4.8 million numbers in it. It reads the recording as a
+      picture of frequency against time, has patches of that picture blanked out, and has to
+      fill them back in. It never sees which stimulus was on screen. It never opens the event
+      file.
+    </p>
+    <p>
+      The blanking is done in blocks, not scattered dots. Neighbouring pieces of a
+      spectrogram look almost the same, so scattered dots can be filled in by copying a
+      neighbour and the model learns nothing. Whole strips of time and whole bands of frequency
+      force it to use longer range structure.
+    </p>
+    <p>
+      The important choice is the sample rate. It runs at 512 samples a second, which keeps
+      everything up to 200 Hz. That is the whole point. The ready-made models throw that range
+      away before they start.
+    </p>
+    <p>
+      It gets 4.4 percent better at filling in gaps than simply guessing the average, which
+      sounds small and is. Brain recordings are mostly noise and most of what is missing
+      genuinely cannot be recovered. The number that matters is not the filling-in score, it is
+      whether what it learned is useful afterwards, and it is.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">04</p>
+    <h2>Keeping the scoring honest</h2>
+    <p>
+      Splits are made by picture, not by trial. Every picture is either wholly in the training
+      part or wholly in the test part, and each split checks this itself and stops the run if
+      it finds an overlap. Scaling and dimension reduction are fitted inside the training part
+      only, never on everything at once.
+    </p>
+    <p>
+      Every headline number gets a shuffle test. I scramble which answer belongs to which trial
+      a thousand times and see how often a score that good turns up by accident. Ranges come
+      from resampling the trials. Where a score has a level you would get by luck, that level
+      is printed next to it rather than left for you to work out.
+    </p>
+    <p>
+      Retrieval is reported twice, once against all 210 pictures and once against only the
+      thirty of the same kind. The first number alone cannot tell apart "found the picture"
+      from "found the category", and on this data it is almost entirely the second.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">05</p>
+    <h2>Three bugs worth naming</h2>
+    <p>
+      Each of these produced confident, wrong numbers before I caught it. I am listing them
+      because a methods section that reports no mistakes is not describing real work.
+    </p>
+    <h3>A filter that multiplied instead of filtering</h3>
+    <p>
+      To feed the ready-made EEG models I first had to bandpass the signal the way they expect.
+      I built the filter in the obvious form, and at these sample rates the low edge sits at a
+      normalised frequency near two ten-thousandths, where that form falls apart numerically.
+      Instead of filtering, it multiplied the signal by about ten to the power of 105. Rebuilding
+      it in second order sections fixed it. Left alone it would have fed those models garbage
+      and made the main comparison on this site meaningless.
+    </p>
+    <h3>A model that ignored its own input</h3>
+    <p>
+      The SignalJEPA checkpoint I used ships without the part that encodes electrode position,
+      which is exactly what its name says. So that part starts random, and it gets added after
+      the trained layers. On this data the full model's output changed by four hundredths of a
+      thousandth of its own size from trial to trial, and did not change at all when I scaled
+      the input by fifty. It was reporting the random part, not the signal. Reading out from
+      the trained layers directly fixed it.
+    </p>
+    <h3>A ceiling that gave a perfect score to a model that did nothing</h3>
+    <p>
+      I measured how repeatable each encoder was across two viewings of the same picture, and
+      SignalJEPA came out at exactly 1.000. That should have been impossible. The measure was
+      comparing patterns without first removing what every picture had in common, so a model
+      that returned nearly the same answer no matter what it saw scored perfectly. Centring the
+      measure fixed it and dropped the score to near zero, which is the honest answer.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">06</p>
+    <h2>The tools on this site</h2>
+    <p>
+      Both tools run entirely in your browser. Nothing is uploaded and there is no server doing
+      the work.
+    </p>
+    <p>
+      The response tool measures your picture with a Fourier transform on a 512 by 512 crop,
+      matching what the Python pipeline does, then applies a linear model whose weights are in
+      a small file this page downloads. I checked the browser's measurements against the Python
+      ones on one picture of each kind: contrast matches exactly, detail matches exactly, and
+      the falloff number is within 0.24 at worst.
+    </p>
+    <p>
+      The decoder tool ships the real fitted weights. To make sure the browser version is not
+      an approximation, I ran it over all 210 trials and compared against what the Python model
+      says. Both give 0.8952. Same answer to four decimal places.
+    </p>
+    <p>
+      <a href="https://github.com/aaryavvatts-lab/neurolink" rel="noopener">All the code</a>
+      · <a href="references.html">What I built on</a>
+    </p>
+  </div>
+</section>
+</main>
+<script type="module">
+import { mountChrome } from "./assets/shell.js";
+mountChrome("methods.html");
+</script>
+</body>
+</html>

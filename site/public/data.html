@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The data · NeuroLink</title>
+<meta name="description" content="Where the recordings came from, what the patients saw, and the things about this dataset that caught me out.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">The recordings</p>
+  <h1>Where this data came from</h1>
+  <p class="lede">
+    Two people waiting for epilepsy surgery had a grid of electrodes placed on the surface of
+    their brain so doctors could find where their seizures start. While the grid was in, they
+    agreed to watch some patterns on a screen.
+  </p>
+  <div class="stats" id="dsStats"></div>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">01 · The task</p>
+    <h2>What the patients did</h2>
+    <p>
+      A picture appeared for half a second, then the screen went blank grey for half a second,
+      then the next picture. That repeated 420 times per run. There was a small dot in the
+      middle of the screen that changed colour at random moments, and the job was to keep
+      looking at the dot. One patient pressed a button when it changed. The other did not,
+      because pressing the button made them look away.
+    </p>
+    <p>
+      The pictures filled about 25 degrees of the visual field, which is roughly what a dinner
+      plate covers at arm's length.
+    </p>
+    <div class="tscroll"><table id="subTable"></table></div>
+    <p class="note">
+      Patient 2's grid had 35 of its 96 contacts marked bad by the people who collected the
+      data, mostly because they sat over the part of the brain the seizures came from. That
+      leaves 61 usable contacts against patient 1's 110, and it shows in every result on this
+      site. I report the two separately rather than pooling them.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">02 · The pictures</p>
+    <h2>Seven kinds, thirty of each</h2>
+    <p>
+      Four of the seven are stripes, getting finer each time. The other three are grainy
+      textures, getting smoother each time. I did not take the labels on trust. I measured
+      every picture myself, straight from the pixels, and the numbers came out matching what
+      the dataset says they should be.
+    </p>
+    <div class="controls">
+      <label class="field">Show
+        <select id="galCond"></select>
+      </label>
+      <span class="badge" id="galCount"></span>
+    </div>
+    <div class="thumbs" id="gallery"></div>
+    <div class="card" id="stimDetail" style="margin-top:1rem" hidden></div>
+    <div class="tscroll"><table id="stimTable"></table></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">03 · What caught me out</p>
+    <h2>Three things about this data I got wrong at first</h2>
+
+    <h3>The bad channel list is real, and I nearly ignored it</h3>
+    <p>
+      I first looked at only the first few columns of the channel file and concluded nothing
+      was marked bad. There is a status column further along, and it marks 7 contacts in one
+      patient and 35 in the other. Before I noticed, I had written my own detector that finds
+      broken contacts from the signal itself. When I finally compared the two lists, my
+      detector had found exactly the same 7 contacts in patient 1, plus one more. That was a
+      good sign for the detector, and a lesson about reading the whole file.
+    </p>
+
+    <h3>The two patients name their electrodes differently</h3>
+    <p>
+      In patient 1 the recording calls a contact "1" while the position file calls the same
+      contact "iEEG1". In patient 2 both files say "iEEG1". If you join the two files on the
+      name, patient 1 silently comes out with no positions at all. Everything has to be
+      reduced to the number at the end first.
+    </p>
+
+    <h3>All the stripes point the same way</h3>
+    <p>
+      This one changed the whole project. I assumed the thirty versions of each stripe pattern
+      would differ in angle. They do not. Every stripe picture in the set is at the same
+      angle, to within a rounding error. What changes between the thirty is where the stripes
+      sit, the phase, and nothing else.
+    </p>
+    <p>
+      That means telling two pictures of the same kind apart is not a question of whether the
+      brain signal carries angle or fineness. It is only a question of whether it carries
+      phase. That single fact explains the main limit of this whole project, and I would have
+      missed it if I had trusted the labels instead of measuring.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">04 · Getting it yourself</p>
+    <h2>The data is public</h2>
+    <p>
+      It sits on OpenNeuro as dataset ds005953, released under CC0, which means anyone can use
+      it for anything without asking. The code on this site fetches it with a one line script.
+      I did not collect any of it and I have no connection to the people who did.
+    </p>
+    <p>
+      The patients gave permission for their recordings to be shared. Nothing on this site
+      identifies anyone, and the brain surfaces shown in the viewer are stripped of the facial
+      features that would make a scan identifiable.
+    </p>
+    <p>
+      <a href="https://openneuro.org/datasets/ds005953" rel="noopener">The dataset on OpenNeuro</a>
+      · <a href="references.html">The papers behind it</a>
+    </p>
+  </div>
+</section>
+</main>
+
+<script type="module">
+import { mountChrome, loadJSON, el, fmt, pct, condColor } from "./assets/shell.js";
+mountChrome("data.html");
+
+const R = await loadJSON("results.json");
+const ST = await loadJSON("stimuli.json");
+const labels = ST.labels;
+const d = R.dataset;
+
+const subs = Object.entries(d.subjects);
+document.getElementById("dsStats").replaceChildren(
+  el("div", { class: "stat" }, el("b", {}, String(subs.length)), el("span", {}, "patients"), el("em", {}, "both awake")),
+  el("div", { class: "stat" }, el("b", {}, String(subs.reduce((a,[,s])=>a+s.n_good_channels,0))),
+    el("span", {}, "contacts used"), el("em", {}, "after bad ones dropped")),
+  el("div", { class: "stat" }, el("b", {}, String(d.n_images - 1)), el("span", {}, "pictures"), el("em", {}, "plus a blank")),
+  el("div", { class: "stat" }, el("b", {}, d.stimulus_duration_s + " s"), el("span", {}, "each"), el("em", {}, "then blank for the same")));
+
+document.getElementById("subTable").replaceChildren(
+  el("thead", {}, el("tr", {}, ["Patient","Side of head","Runs","Samples per second","Contacts used","Marked bad","Trials per run"].map(h=>el("th",{},h)))),
+  el("tbody", {}, subs.map(([k, s]) => el("tr", {},
+    el("td", {}, k.replace("sub-0", "Patient ")),
+    el("td", {}, s.hemi === "R" ? "right" : "left"),
+    el("td", {}, String(s.runs.length)),
+    el("td", {}, Math.round(s.sfreq).toLocaleString()),
+    el("td", {}, String(s.n_good_channels)),
+    el("td", {}, String(s.n_bad_channels)),
+    el("td", {}, String(s.trials_per_run))))));
+
+/* stimulus parameter table */
+const sp = R.stimulus_parameters || [];
+document.getElementById("stimTable").replaceChildren(
+  el("thead", {}, el("tr", {}, ["Kind","How many","Detail (cyc/deg)","Falloff","Contrast","Points one way","Spread of phase"].map(h=>el("th",{},h)))),
+  el("tbody", {}, sp.map(s => el("tr", {},
+    el("td", {}, el("span", { class: "swatch", style: `background:${condColor(s.condition)}` }), s.label),
+    el("td", {}, String(s.n)),
+    el("td", {}, s.condition >= 4 ? fmt(s.spatial_freq_cpd, 2) : "no single value"),
+    el("td", {}, fmt(s.noise_exponent, 2)),
+    el("td", {}, fmt(s.rms_contrast, 3)),
+    el("td", {}, fmt(s.orient_concentration, 2)),
+    el("td", {}, s.condition >= 4 ? fmt(s.phase_sd_rad, 2) + " rad" : "n/a")))));
+
+/* gallery */
+const galCond = document.getElementById("galCond");
+galCond.append(el("option", { value: "any" }, "all kinds"));
+for (let c = 1; c <= 7; c++) galCond.append(el("option", { value: String(c) }, labels[c]));
+const gallery = document.getElementById("gallery");
+const detail = document.getElementById("stimDetail");
+
+function fillGallery() {
+  const want = galCond.value;
+  const list = ST.stimuli.filter(s => s.cond <= 7 && (want === "any" || String(s.cond) === want));
+  document.getElementById("galCount").textContent = `${list.length} pictures`;
+  gallery.replaceChildren(...list.map(s => {
+    const b = el("button", { class: "thumb", type: "button", "aria-pressed": "false",
+      title: `${labels[s.cond]}, picture ${s.id}` },
+      el("img", { src: `stim/${s.id}.png`, loading: "lazy", alt: `${labels[s.cond]}, picture ${s.id}` }));
+    b.onclick = () => {
+      gallery.querySelectorAll(".thumb").forEach(t => t.setAttribute("aria-pressed", "false"));
+      b.setAttribute("aria-pressed", "true");
+      detail.hidden = false;
+      detail.replaceChildren(
+        el("div", { style: "display:flex;gap:1.1rem;align-items:flex-start;flex-wrap:wrap" },
+          el("img", { src: `stim/${s.id}.png`, width: 150, height: 150, alt: "",
+            style: "border-radius:6px;border:1px solid var(--line)" }),
+          el("div", { style: "min-width:15rem" },
+            el("p", { style: "margin:0 0 .4rem;font-weight:600" },
+              el("span", { class: "swatch", style: `background:${condColor(s.cond)}` }),
+              `${labels[s.cond]}, picture ${s.id}`),
+            el("div", { class: "kv" },
+              el("div", {}, el("span", {}, "detail"), el("span", {}, s.sf === null ? "n/a" : fmt(s.sf, 2) + " cyc/deg")),
+              el("div", {}, el("span", {}, "falloff"), el("span", {}, s.alpha === null ? "n/a" : fmt(s.alpha, 2))),
+              el("div", {}, el("span", {}, "contrast"), el("span", {}, fmt(s.contrast, 3))),
+              el("div", {}, el("span", {}, "points one way"), el("span", {}, fmt(s.conc, 2))),
+              el("div", {}, el("span", {}, "phase"), el("span", {}, s.phase === null ? "n/a" : fmt(s.phase, 2) + " rad"))),
+            el("p", { style: "margin:.7rem 0 0;font-size:.85rem" },
+              el("a", { href: "analyse.html" }, "Run this through the response tool")))));
+    };
+    return b;
+  }));
+}
+galCond.onchange = fillGallery;
+fillGallery();
+</script>
+</body>
+</html>

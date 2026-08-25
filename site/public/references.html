@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>References · NeuroLink</title>
+<meta name="description" content="The papers and datasets this project is built on, with links.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">References</p>
+  <h1>What this is built on</h1>
+  <p class="lede">
+    Everything below is a real paper with a working link. I have read the parts I lean on and
+    said in the text where each one is used.
+  </p>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2>The data</h2>
+    <ul class="refs">
+      <li>Hermes D, Miller KJ, Wandell BA, Winawer J (2025).
+        <em>iEEG_visual</em>, OpenNeuro dataset ds005953, version 1.0.0. Released CC0.
+        <a href="https://doi.org/10.18112/openneuro.ds005953.v1.0.0" rel="noopener">doi:10.18112/openneuro.ds005953.v1.0.0</a>
+      </li>
+    </ul>
+
+    <h2>Where the gamma story comes from</h2>
+    <ul class="refs">
+      <li>Hermes D, Miller KJ, Wandell BA, Winawer J (2015). Stimulus dependence of gamma
+        oscillations in human visual cortex. <em>Cerebral Cortex</em> 25(9), 2951–2959.
+        <a href="https://doi.org/10.1093/cercor/bhu091" rel="noopener">doi:10.1093/cercor/bhu091</a>
+        <br><span style="color:var(--ink-2)">The paper behind this dataset. It is the source of
+        the result I use as a gate: stripes set off a narrow gamma bump, grainy textures do not.</span>
+      </li>
+      <li>Hermes D, Petridou N, Kay KN, Winawer J (2019). An image-computable model for the
+        stimulus selectivity of gamma oscillations.
+        <a href="https://doi.org/10.1101/583567" rel="noopener">doi:10.1101/583567</a>
+        <br><span style="color:var(--ink-2)">Where the two-part spectrum model comes from: a
+        straight line plus a bump, with the slope fixed per contact from its own baseline.</span>
+      </li>
+      <li>Ray S, Maunsell JHR (2011). Different origins of gamma rhythm and high-gamma activity
+        in macaque visual cortex. <em>PLoS Biology</em> 9(4), e1000610.
+        <a href="https://doi.org/10.1371/journal.pbio.1000610" rel="noopener">doi:10.1371/journal.pbio.1000610</a>
+        <br><span style="color:var(--ink-2)">The reason the two parts have to be separated
+        rather than summed. They come from different things.</span>
+      </li>
+      <li>Shirhatti V, Ravishankar P, Ray S (2022). Gamma oscillations in primate primary visual
+        cortex are severely attenuated by small stimulus discontinuities.
+        <em>PLoS Biology</em> 20(6), e3001666.
+        <a href="https://doi.org/10.1371/journal.pbio.3001666" rel="noopener">doi:10.1371/journal.pbio.3001666</a>
+      </li>
+      <li>Brunet NM, Fries P (2019). Human visual cortical gamma reflects natural image
+        structure. <em>NeuroImage</em> 200, 635–643.
+        <a href="https://doi.org/10.1016/j.neuroimage.2019.06.051" rel="noopener">doi:10.1016/j.neuroimage.2019.06.051</a>
+      </li>
+    </ul>
+
+    <h2>What these recordings are and how well they decode</h2>
+    <ul class="refs">
+      <li>Buzsáki G, Anastassiou CA, Koch C (2012). The origin of extracellular fields and
+        currents: EEG, ECoG, LFP and spikes. <em>Nature Reviews Neuroscience</em> 13, 407–420.
+        <a href="https://doi.org/10.1038/nrn3241" rel="noopener">doi:10.1038/nrn3241</a>
+      </li>
+      <li>Kanth ST, Ray S (2020). Electrocorticogram (ECoG) is highly informative in primate
+        visual cortex. <em>Journal of Neuroscience</em> 40(12), 2430–2444.
+        <a href="https://doi.org/10.1523/jneurosci.1368-19.2020" rel="noopener">doi:10.1523/JNEUROSCI.1368-19.2020</a>
+        <br><span style="color:var(--ink-2)">Useful for setting expectations: this kind of
+        recording decodes visual stimuli better than several finer-grained alternatives.</span>
+      </li>
+      <li>Dubey A, Ray S (2019). Cortical electrocorticogram (ECoG) is a local signal.
+        <em>Journal of Neuroscience</em> 39(22), 4299–4311.
+        <a href="https://doi.org/10.1523/jneurosci.2917-18.2019" rel="noopener">doi:10.1523/JNEUROSCI.2917-18.2019</a>
+      </li>
+    </ul>
+
+    <h2>The models I used or copied the idea from</h2>
+    <ul class="refs">
+      <li>Oquab M, Darcet T, Moutakanni T, and colleagues (2023). DINOv2: learning robust
+        visual features without supervision.
+        <a href="https://doi.org/10.48550/arxiv.2304.07193" rel="noopener">arXiv:2304.07193</a>
+        <br><span style="color:var(--ink-2)">The image model whose space I map the brain
+        signals into.</span>
+      </li>
+      <li>Wang C, Subramaniam V, Yaari A, and colleagues (2023). BrainBERT: self-supervised
+        representation learning for intracranial recordings. <em>ICLR</em>.
+        <a href="https://doi.org/10.48550/arxiv.2302.14367" rel="noopener">arXiv:2302.14367</a>
+        <br><span style="color:var(--ink-2)">The recipe I followed for the model I trained
+        myself: blank out patches of a spectrogram and learn to fill them in.</span>
+      </li>
+      <li>Jiang W-B, Zhao L-M, Lu B-L (2024). Large Brain Model for learning generic
+        representations with tremendous EEG data in BCI.
+        <a href="https://doi.org/10.48550/arxiv.2405.18765" rel="noopener">arXiv:2405.18765</a>
+        <br><span style="color:var(--ink-2)">One of the scalp EEG foundation models. Included
+        for context on what that family is trained on.</span>
+      </li>
+      <li>Ye J, Collinger JL, Wehbe L, Gaunt R (2023). Neural Data Transformer 2: multi-context
+        pretraining for neural spiking activity.
+        <a href="https://doi.org/10.1101/2023.09.18.558113" rel="noopener">doi:10.1101/2023.09.18.558113</a>
+      </li>
+    </ul>
+
+    <h2>Software</h2>
+    <ul class="refs">
+      <li>MNE-Python, for reading and filtering the recordings.</li>
+      <li>Braindecode, for the ready-made EEG model checkpoints.</li>
+      <li>PyTorch, scikit-learn, SciPy, NumPy, nibabel and PyVista for everything else.</li>
+      <li>three.js for the 3D viewer on this site.</li>
+    </ul>
+
+    <p style="margin-top:2rem">
+      Papers were found with FastTrack Literature Open, which searches OpenAlex. Nothing on
+      this page is invented, and every link resolves. If one breaks, please
+      <a href="https://github.com/aaryavvatts-lab/neurolink/issues" rel="noopener">open an issue</a>.
+    </p>
+  </div>
+</section>
+</main>
+<script type="module">
+import { mountChrome } from "./assets/shell.js";
+mountChrome("references.html");
+</script>
+</body>
+</html>

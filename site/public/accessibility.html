@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility · NeuroLink</title>
+<meta name="description" content="What I have done to make this usable, what is tested, and where it still falls short.">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">Accessibility statement</p>
+  <h1>Accessibility</h1>
+  <p class="lede">What I have done to make this usable, what is tested, and where it still falls short.</p>
+  <p class="mono" style="color:var(--muted);font-size:.8rem">Last updated 24 August 2026.</p>
+</div>
+<section><div class="wrap narrow">
+
+<h2>What I am aiming for</h2>
+<p>
+  WCAG 2.2 at level AA. I believe most of the site meets it. I am one student without a
+  screen reader user to test with, so treat this as an honest account rather than a
+  certificate.
+</p>
+
+<h2>What is in place</h2>
+<ul class="plain">
+  <li>A skip link to the main content, first in the tab order on every page.</li>
+  <li>Real headings in order, one h1 per page, and landmarks so a screen reader can jump
+    around.</li>
+  <li>Every control reachable and usable with the keyboard alone, with a visible outline on
+    whatever has focus.</li>
+  <li>The 3D viewer takes arrow keys to turn the brain and plus or minus to zoom, so it does
+    not need a mouse or a trackpad.</li>
+  <li>Colour is never the only thing carrying meaning. Charts have direct labels and legends,
+    and every chart has a table or a written summary beside it saying the same thing in
+    words.</li>
+  <li>Chart palettes were checked with a tool that simulates the common kinds of colour
+    blindness, not chosen by eye. Ordered scales use one hue getting darker, which stays
+    readable in greyscale.</li>
+  <li>Body text is 16.5 pixels with generous line spacing and a measure of about 40
+    characters, and the layout reflows down to a 320 pixel wide screen without a horizontal
+    scrollbar.</li>
+  <li>Animation respects the reduce motion setting. If you have it on, the brain will not spin
+    on its own and scrolling does not animate.</li>
+  <li>Light and dark are both designed rather than one being an automatic inversion, and both
+    were contrast checked.</li>
+  <li>Images that carry information have alt text. Images that repeat what the text already
+    says are marked so a screen reader skips them.</li>
+</ul>
+
+<h2>Where it falls short</h2>
+<p>
+  Being straight about this matters more than claiming full compliance.
+</p>
+<ul class="plain">
+  <li><b>The 3D brain viewer.</b> It draws to a canvas, which a screen reader cannot read. The
+    same information is on the same page as a sorted bar chart and a table of numbers, so
+    nothing is only available in the 3D view. Even so, the viewer itself is not accessible and
+    I do not want to pretend otherwise.</li>
+  <li><b>Chart tooltips.</b> They appear on hover and on keyboard focus, but the numbers they
+    show are also in the tables underneath, because a tooltip is not a good way to deliver
+    information to someone using a screen reader.</li>
+  <li><b>The video on the results pages.</b> It has no captions. There is no speech in it, and
+    the surrounding text describes what it shows, but a caption track would still be
+    better.</li>
+  <li><b>Not tested with real assistive technology.</b> I have checked with keyboard only, with
+    the browser zoomed to 200 percent, in forced colours mode, and with a contrast checker. I
+    have not sat down with someone who uses a screen reader daily. That is the gap I would most
+    like to close.</li>
+</ul>
+
+<h2>Tell me if something does not work</h2>
+<p>
+  If any part of this site keeps you from getting at something,
+  <a href="https://github.com/aaryavvatts-lab/neurolink/issues" rel="noopener">open an issue</a>
+  and say what you were using and what happened. I will fix what I can and say so here if I
+  cannot.
+</p>
+
+<h2>Technical notes</h2>
+<p>
+  Static HTML, CSS and JavaScript. No framework. The site needs JavaScript to draw the charts
+  and run the tools, since both do their work in your browser rather than on a server. The
+  written text on every page is in the HTML and readable without it.
+</p>
+</div></section>
+</main>
+<script type="module">
+import { mountChrome } from "./assets/shell.js";
+mountChrome("accessibility.html");
+</script>
+</body>
+</html>

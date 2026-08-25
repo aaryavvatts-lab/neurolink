@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run the decoder · NeuroLink</title>
+<meta name="description" content="Pick a real trial. The trained decoder loads into your browser, runs on that trial's brain data, and draws what it thinks was on the screen.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🧠</text></svg>">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main id="main">
+<div class="wrap hero">
+  <p class="eyebrow">Tool · real weights, real trials</p>
+  <h1>Run the decoder yourself</h1>
+  <p class="lede">
+    Pick any of patient 1's 210 trials. The trained weights load into this page, multiply
+    that trial's brain measurements, and the answer is drawn on the right. Every trial you can
+    pick was held out when the weights that decode it were fitted.
+  </p>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="controls">
+      <label class="field">Kind of picture
+        <select id="condSel"></select>
+      </label>
+      <label class="field">Trial
+        <select id="trialSel"></select>
+      </label>
+      <button type="button" id="prev">Previous</button>
+      <button type="button" id="next">Next</button>
+      <button type="button" id="rand" class="primary">Pick a random one</button>
+    </div>
+
+    <div class="grid3" style="align-items:start">
+      <div class="card">
+        <p class="kicker">What was on the screen</p>
+        <img id="trueImg" alt="" width="256" height="256"
+             style="width:100%;border-radius:6px;border:1px solid var(--line);display:block">
+        <p id="trueLabel" style="margin:.6rem 0 0;font-weight:600"></p>
+      </div>
+      <div class="card">
+        <p class="kicker">What the decoder drew</p>
+        <canvas id="reconCanvas" width="256" height="256"
+                style="width:100%;border-radius:6px;border:1px solid var(--line);display:block"></canvas>
+        <p id="reconLabel" style="margin:.6rem 0 0;font-weight:600"></p>
+      </div>
+      <div class="card">
+        <p class="kicker">How sure it was</p>
+        <div id="postBars"></div>
+        <p class="kicker" style="margin-top:1rem">Numbers it read out</p>
+        <div class="kv" id="paramKv"></div>
+      </div>
+    </div>
+
+    <p class="note" id="callout"></p>
+
+    <div class="chart" id="brainFeat"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="kicker">What you are looking at</p>
+    <h2>How the decoder works</h2>
+    <p>
+      For each trial the brain signal has already been turned into a list of numbers, eight
+      per electrode across 110 electrodes. Those describe how much power there was in each
+      frequency range, how strong the gamma bump was and where it peaked, and how the raw
+      voltage moved right after the picture appeared.
+    </p>
+    <p>
+      The decoder is a straight line through those numbers. Multiply the list by a matrix, add
+      an offset, and out come six values: how fine the stripes were, how fast the texture fell
+      off with frequency, the contrast, how much it pointed one way, and two numbers that
+      together give the phase. A second model of the same shape gives the seven probabilities
+      on the right. The drawing is made from those numbers and nothing else.
+    </p>
+    <p>
+      The weights were fitted six times, each time leaving a sixth of the pictures out. When
+      you pick a trial, the page uses the weights from the round where that trial's picture was
+      in the held-out part. So the answer on screen is a real prediction, not a replay of
+      something the model already had the answer to.
+    </p>
+    <p>
+      Watch what it gets right. The kind of pattern and how fine it is come through clearly.
+      Where the stripes sit is mostly wrong, and that is not a bug in the tool. It is the
+      thing this signal barely carries.
+      <a href="results.html#limits">More on why</a>.
+    </p>
+  </div>
+</section>
+</main>
+
+<script type="module">
+import { mountChrome, loadJSON, el, fmt, pct, cssVar, condColor } from "./assets/shell.js";
+import { probBars, lineChart } from "./assets/charts.js";
+import { drawGrating, drawNoise, runDecoder, decodedParams } from "./assets/render.js";
+mountChrome("decode.html");
+
+const D = await loadJSON("decoder.json");
+const labels = D.condition_labels;
+let list = D.trials, idx = 0;
+
+const condSel = document.getElementById("condSel");
+condSel.append(el("option", { value: "any" }, "all kinds"));
+for (let c = 1; c <= 7; c++) condSel.append(el("option", { value: String(c) }, labels[c]));
+const trialSel = document.getElementById("trialSel");
+
+function refill() {
+  const want = condSel.value;
+  list = D.trials.filter(t => want === "any" || String(t.cond) === want);
+  trialSel.replaceChildren(...list.map((t, i) =>
+    el("option", { value: String(i) }, `picture ${t.stim_id}`)));
+  idx = 0; show();
+}
+condSel.onchange = refill;
+trialSel.onchange = () => { idx = +trialSel.value; show(); };
+document.getElementById("prev").onclick = () => { idx = (idx - 1 + list.length) % list.length; show(); };
+document.getElementById("next").onclick = () => { idx = (idx + 1) % list.length; show(); };
+document.getElementById("rand").onclick = () => { idx = Math.floor(Math.random() * list.length); show(); };
+
+function show() {
+  const t = list[idx];
+  if (!t) return;
+  trialSel.value = String(idx);
+
+  document.getElementById("trueImg").src = `stim/${t.stim_id}.png`;
+  document.getElementById("trueImg").alt = labels[t.cond];
+  document.getElementById("trueLabel").textContent = labels[t.cond];
+
+  const vec = runDecoder(D, t);
+  const p = decodedParams(D, vec, t.post);
+  const canvas = document.getElementById("reconCanvas");
+  const ctx = canvas.getContext("2d");
+  if (p.isGrating) drawGrating(ctx, 256, { sfCpd: p.sfCpd, phase: p.phase, contrast: p.contrast });
+  else drawNoise(ctx, 256, { alpha: p.alpha, contrast: p.contrast, seed: t.stim_id });
+  document.getElementById("reconLabel").textContent = labels[p.cond];
+
+  probBars(document.getElementById("postBars"), {
+    items: [1,2,3,4,5,6,7].map(c => ({
+      label: labels[c], value: t.post[c - 1], color: condColor(c),
+      highlight: c === t.cond,
+    })),
+  });
+
+  const truth = {};
+  D.cols.forEach((c, i) => { truth[c] = t.true[i]; });
+  const row = (k, a, b) => el("div", {}, el("span", {}, k), el("span", {}, `${a}  →  ${b}`));
+  document.getElementById("paramKv").replaceChildren(
+    el("div", { style: "border-bottom:1px solid var(--line);font-size:.72rem;color:var(--muted)" },
+      el("span", {}, "shown"), el("span", {}, "decoded")),
+    row("detail (cyc/deg)", fmt(Math.pow(10, truth.log_spatial_freq), 2), fmt(p.sfCpd, 2)),
+    row("falloff", fmt(truth.noise_exponent, 2), fmt(p.alpha, 2)),
+    row("contrast", fmt(truth.rms_contrast, 3), fmt(p.contrast, 3)),
+    row("points one way", fmt(truth.orient_concentration, 2), fmt(p.conc, 2)),
+    row("phase (rad)", fmt(t.phase_true, 2), fmt(p.phase, 2)));
+
+  const right = p.cond === t.cond;
+  const c = document.getElementById("callout");
+  c.className = right ? "note" : "note flag";
+  const phaseErr = Math.abs(Math.atan2(Math.sin(p.phase - t.phase_true), Math.cos(p.phase - t.phase_true)));
+  c.innerHTML = right
+    ? `<strong>It got the kind right.</strong> Phase was off by ${fmt(phaseErr, 2)} radians
+       out of a possible ${fmt(Math.PI, 2)}. That is the part this signal struggles with, so
+       the stripes in the drawing will rarely line up with the ones on the left even when
+       everything else matches.`
+    : `<strong>It got this one wrong.</strong> It said ${labels[p.cond]} when the screen
+       showed ${labels[t.cond]}. Look at the bars: the mistakes almost always land on a
+       neighbour, a slightly finer or coarser version of the right answer, rather than
+       somewhere random.`;
+
+  drawFeatures(t);
+}
+
+/* the eight measurements per electrode, drawn across the array */
+function drawFeatures(t) {
+  const names = ["broadband", "gamma strength", "gamma peak", "alpha", "beta",
+                 "80–200 Hz power", "early voltage", "later voltage"];
+  const nCh = D.n_features / names.length;
+  const pickTwo = [0, 1];
+  const x = Array.from({ length: nCh }, (_, i) => i + 1);
+  lineChart(document.getElementById("brainFeat"), {
+    title: "What the decoder was handed for this trial",
+    sub: `Two of the eight measurements, across all ${nCh} electrodes. This is the entire input.`,
+    x, height: 240, xLabel: "electrode", yLabel: "change from blank screen",
+    series: pickTwo.map((k, j) => ({
+      label: names[k],
+      values: t.x.slice(k * nCh, (k + 1) * nCh),
+      color: j === 0 ? cssVar("--noise-2") : cssVar("--grat-3"),
+    })),
+    yFmt: v => v.toFixed(2), xFmt: v => String(Math.round(v)),
+  });
+}
+
+refill();
+</script>
+</body>
+</html>
